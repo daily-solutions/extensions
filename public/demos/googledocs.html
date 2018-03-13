@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Daily.co Iframe Demo</title>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer"></div>
+
+    <script type="module">
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "chad-hq";
+      const room = urlParams.get("room") || "extensions";
+      const docId = urlParams.get("doc") || "1anDzy3sjYvQF1AzTussECEjtCJYW99rj2Vwv7WVG1MU";
+      
+      import daily from "../extensions/core.js";
+      import docs from "../extensions/googledocs.js";
+
+      docs.configure({ docId });
+
+      window.main = async function () {
+        window.call = daily.createFrame(dailyContainer, {
+          url: `https://${domain}.daily.co/${room}`,
+          dailyConfig: {
+            experimentalChromeVideoMuteLightOff: true,
+          },
+        });
+
+        await call.join();
+      };
+    </script>
+  </body>
+</html>

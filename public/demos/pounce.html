@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>Daily.co Iframe Demo</title>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <style></style>
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer">
+      <div id="waiting" style="text-align: center">Waiting for others...</div>
+    </div>
+
+    <script type="module">
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "chad-hq";
+      const room = urlParams.get("room") || "extensions";
+      const waiting = document.querySelector("#waiting");
+
+      import daily from "../extensions/core.js";
+      import socketiostate from "../extensions/socketiostate.js";
+      socketiostate.configure({
+        url: `wss://daily-extensions-server.glitch.me/${domain}/${room}`,
+      });
+
+      import pounce from "../extensions/pounce.js";
+
+      window.main = async function () {
+        pounce.onJoin(async () => {
+          waiting.style.display = "none";
+
+          window.call = daily.createFrame(dailyContainer, {
+            url: `https://${domain}.daily.co/${room}`,
+            dailyConfig: {
+              experimentalChromeVideoMuteLightOff: true,
+            },
+          });
+
+          await call.join();
+        });
+        pounce.onSolo(async () => {
+          await call.destroy();
+                    waiting.style.display = "block";
+
+        });
+      };
+    </script>
+  </body>
+</html>

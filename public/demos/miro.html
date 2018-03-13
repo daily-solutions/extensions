@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Daily.co Iframe Demo</title>
+    <!-- script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script -->
+    <script
+      type="text/javascript"
+      src="https://miro.com/app/static/boardsPicker.1.0.js"
+    ></script>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer"></div>
+
+    <script type="module">
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "chad-hq";
+      const room = urlParams.get("room") || "extensions";
+      const clientId = urlParams.get("clientId") || "3458764524487567450";
+      const anonymous = urlParams.get("anonymous") === "true";
+      
+      import daily from "../extensions/core.js";
+      import miro from "../extensions/miro.js";
+      
+      miro.configure({ clientId, anonymous });
+
+      window.main = async function () {
+        window.call = daily.createFrame(dailyContainer, {
+          url: `https://${domain}.daily.co/${room}`,
+          dailyConfig: {
+            experimentalChromeVideoMuteLightOff: true,
+          },
+        });
+
+        await call.join();
+      };
+    </script>
+  </body>
+</html>
