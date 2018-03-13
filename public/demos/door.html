@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Daily.co Door Demo</title>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <style></style>
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer">
+      <div id="waiting" style="text-align: center">
+        The door to this room is closed right now. We'll connect you as soon as
+        it opens!
+      </div>
+    </div>
+
+    <script type="module">
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "chad-hq";
+      const room = urlParams.get("room") || "extensions";
+      const waiting = document.querySelector("#waiting");
+
+      import daily from "../extensions/core.js";
+      import door from "../extensions/door.js";
+
+      window.main = async function () {
+        door.onceOpen(async () => {
+          waiting.style.display = "none";
+
+          window.call = daily.createFrame(dailyContainer, {
+            url: `https://${domain}.daily.co/${room}`,
+            dailyConfig: {
+              experimentalChromeVideoMuteLightOff: true,
+            },
+          });
+          await call.join();
+        });
+        door.connect({ domain, room });
+      };
+    </script>
+  </body>
+</html>
