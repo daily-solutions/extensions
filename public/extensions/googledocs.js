@@ -11,12 +11,11 @@ export default {
 };
 
 function setIframeUrl() {
-  
   iframeEl.src = `https://docs.google.com/document/d/${props.docId}/edit`;
 }
 
 function getTokenFromServer() {
-  return fetch('https://daily-miro.glitch.me/jwt');
+  return fetch("https://daily-miro.glitch.me/jwt");
 }
 
 daily.beforeCreateFrame((parentEl, properties) => {
@@ -26,7 +25,8 @@ daily.beforeCreateFrame((parentEl, properties) => {
   }
 
   properties.customTrayButtons.toggle = {
-    iconPath: "https://cdn.glitch.global/dcb584f3-95aa-4929-82e0-ca6ee9b2b12f/docs.png",
+    iconPath:
+      "https://cdn.glitch.global/dcb584f3-95aa-4929-82e0-ca6ee9b2b12f/docs.png",
     label: "Docs",
     tooltip: "Docs",
   };

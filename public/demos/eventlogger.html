@@ -10,7 +10,7 @@
       import eventlogger from "../extensions/eventlogger.js";
       const domain = urlParams.get("domain") || "chad-hq";
       const room = urlParams.get("room") || "extensions";
-      
+
       window.main = async function () {
         window.call = daily.createFrame(dailyContainer, {
           url: `https://${domain}.daily.co/${room}`,

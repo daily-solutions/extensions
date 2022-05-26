@@ -19,24 +19,28 @@ $ npm start
 
 [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/daily-demos/extensions)
 
-All demos support using your own Daily domain and room by passing URL params:
+### Try hosted versions
 
-`http://localhost:3000/demos/miro.html?domain=yourdomain&room=yourroom`
+This repo is auto-deployed to Render, so you can try the extension demo pages at https://daily-extensions.onrender.com. All demos support using your own Daily domain and room by passing URL params:
 
-Many also support additional URL params. Look at the source code for specifics.
+`https://daily-extensions.onrender.com/demos/miro.html?domain=yourdomain&room=yourroom`
 
-- **[Iframe Embed](https://daily-extensions.glitch.me/demos/iframe.html): Put any webpage you want beside Prebuilt.**
-- **[Miro Whiteboard](https://daily-extensions.glitch.me/demos/miro.html)**, powered by the `Miro` extension. (The board is read-only for now; I'm working on it.)
-- **[Whiteboard.chat](https://daily-extensions.glitch.me/demos/wc.html)**, powered by the `WhiteboardChat` extension. You'll need to [join as a teacher](https://daily-extensions.glitch.me/demos/wc.html?teacher=true) to open or close the board.
-- **[Excalidraw Whiteboard](https://daily-extensions.glitch.me/demos/mediaplayer.html)**: Currently using a single, fixed board, pending some API work.
-- **[Remote Media Playback](https://daily-extensions.glitch.me/demos/mediaplayer.html)**: Unfortunately, remote media playback uses custom track types, so you can't see or hear the video in Prebuilt. But if you open a separate page with a Call Object mode implementation and automatic track subscription, you'll see and hear the video.
-- **[Event Logger](https://daily-extensions.glitch.me/demos/eventlogger.html)**: A simple demo of the Event Logger extension, which adds additional helpful console messages.
+(If you use the default room and domain in the demo file, you might make some new friends!)
 
-### Daily Extensions Server (very alpha)
+Many also support additional URL params. Check the source code for specifics.
 
-Some extensions need to share state information outside the context of a Daily call. Since there isn't a great way to do that with daily-js directly, these extensions require a [very basic socket.io server](https://glitch.com/edit/#!/daily-extensions-server?path=server.js%3A1%3A0) to function.
+## Current Extensions and Demos
 
-- **["Pouncing"](https://daily-extensions.glitch.me/demos/pounce.html)** For use cases where two participants might join a room at very different times, and you don't want to pay for the first user being connected to the meeting alone. The first user that visits this page will see a "Waiting for others" message. When a second person opens the page, they will both join the Daily room. When one of them leaves (so the participant count goes back down to 1), the remaining person will exit the call and go back to the waiting screen.
+- **[Iframe Embed](https://daily-extensions.onrender.com/demos/iframe.html): Put any webpage you want beside Prebuilt.**
+- **[Miro Whiteboard](https://daily-extensions.onrender.com/demos/miro.html)**, powered by the `Miro` extension. (The board is read-only for now; I'm working on it.)
+- **[Whiteboard.chat](https://daily-extensions.onrender.com/demos/wc.html)**, powered by the `WhiteboardChat` extension. You'll need to [join as a teacher](https://daily-extensions.onrender.com/demos/wc.html?teacher=true) to open or close the board.
+- **[Excalidraw Whiteboard](https://daily-extensions.onrender.com/demos/mediaplayer.html)**: Currently using a single, fixed board, pending some API work.
+- **[Remote Media Playback](https://daily-extensions.onrender.com/demos/mediaplayer.html)**: Unfortunately, remote media playback uses custom track types, so you can't see or hear the video in Prebuilt. But if you open a separate page with a Call Object mode implementation and automatic track subscription, you'll see and hear the video.
+- **[Event Logger](https://daily-extensions.onrender.com/demos/eventlogger.html)**: A simple demo of the Event Logger extension, which adds additional helpful console messages.
+
+Some extensions need to share state information outside the context of a Daily call. Since there isn't a great way to do that with daily-js directly, these extensions require a very basic socket.io server to function. You can see that in server.js.
+
+- **["Pouncing"](https://daily-extensions.onrender.com/demos/pounce.html)** For use cases where two participants might join a room at very different times, and you don't want to pay for the first user being connected to the meeting alone. The first user that visits this page will see a "Waiting for others" message. When a second person opens the page, they will both join the Daily room. When one of them leaves (so the participant count goes back down to 1), the remaining person will exit the call and go back to the waiting screen.
 - **[Breakout Rooms](about:blank)**: Coming soon!
 
 ## Using Extensions
@@ -73,8 +77,8 @@ Here's an example that uses the `Miro` extension, which requires a bit of config
       const domain = urlParams.get("domain");
       const room = urlParams.get("room");
 
-      import daily from "./extensions.core.js";
-      import miro from "./extensions.miro.js";
+      import daily from "../extensions/core.js";
+      import miro from "../extensions/miro.js";
 
       miro.configure({ clientId: "yourclientid" });
 
@@ -144,3 +148,7 @@ daily.afterCreateFrame(async (c) => {
 **`beforeJoin()` and `afterJoin()`** _(coming soon)_
 
 These hooks will execute just before and after the top-level app calls `join()`. Keep in mind this is a different use case than waiting for the `joined-meeting` event, which be what you actually want. You can set up a listener for this event in the `afterCreateFrame()` function.
+
+## Contributing
+
+We'd be happy to have you contribute to Daily Extensions! To get started, check out our [Contributing Guide](CONTRIBUTING.md).

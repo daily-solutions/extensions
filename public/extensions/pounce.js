@@ -5,12 +5,12 @@ let callback, soloCallback;
 
 socketiostate.onStateUpdate((s) => {
   state = s;
-  if(state.clients > 1 && pounced === false) {
-    console.log('got a state with >1 participant; time to go')
+  if (state.clients > 1 && pounced === false) {
+    console.log("got a state with >1 participant; time to go");
     go();
   }
-  
-  if(state.clients == 1 && pounced === true) {
+
+  if (state.clients == 1 && pounced === true) {
     stop();
   }
 });
@@ -27,10 +27,10 @@ function stop() {
 
 let self;
 export default self = {
-  onJoin: function(cb) {
+  onJoin: function (cb) {
     callback = cb;
   },
-  onSolo: function(cb) {
+  onSolo: function (cb) {
     soloCallback = cb;
-  }
-}
+  },
+};

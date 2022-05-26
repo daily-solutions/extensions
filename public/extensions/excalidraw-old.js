@@ -11,9 +11,9 @@ export default {
 };
 
 function setIframeUrl() {
-  iframeEl.src = "https://excalidraw.com/#room=3f6286f430ba3c0a119d,ARc0_KYIgN7lAOToWVYxRQ";
+  iframeEl.src =
+    "https://excalidraw.com/#room=3f6286f430ba3c0a119d,ARc0_KYIgN7lAOToWVYxRQ";
 }
-
 
 daily.beforeCreateFrame((parentEl, properties) => {
   // TODO: maybe namespace shared resources like tray buttons?
@@ -56,7 +56,6 @@ daily.afterCreateFrame(async (c) => {
         callstate.updateCallState({ open: !callstate.state.open });
 
         break;
-      
     }
   });
 });

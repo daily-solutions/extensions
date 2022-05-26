@@ -7,7 +7,6 @@
       src="https://miro.com/app/static/boardsPicker.1.0.js"
     ></script>
     <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
-
   </head>
   <body onload="main()">
     <div id="dailyContainer"></div>
@@ -18,10 +17,10 @@
       const room = urlParams.get("room") || "extensions";
       const clientId = urlParams.get("clientId") || "3458764524487567450";
       const anonymous = urlParams.get("anonymous") === "true";
-      
+
       import daily from "../extensions/core.js";
       import miro from "../extensions/miro.js";
-      
+
       miro.configure({ clientId, anonymous });
 
       window.main = async function () {
