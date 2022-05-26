@@ -1,6 +1,6 @@
 # Daily Extensions
 
-This Glitch project is a playground for building Daily Extensions, which are vanilla JS files that extend the functionality of Prebuilt. Want to put a whiteboard next to Prebuilt in your app? Try the Miro or Whiteboard.chat extension. Want to use CometChat instead of Daily's built-in chat? There's an extension for that (soon).
+Extensions are JavaScript modules that extend the functionality of Prebuilt. Want to put a whiteboard next to Prebuilt in your app? Try the Miro or Whiteboard.chat extension. Want to use CometChat instead of Daily's built-in chat? There's an extension for that (soon).
 
 ## Try Them Now
 
