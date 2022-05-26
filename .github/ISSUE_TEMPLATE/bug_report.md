@@ -1,38 +1,41 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
-labels: ''
+title: BUG
+labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+<!-- If you're experiencing a bug while on a Daily call, before filing a bug report, please try these troubleshooting steps: https://help.daily.co/en/articles/2303117-top-troubleshooting-tips -->
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+# Expected behavior
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+<!-- Please share a clear and concise description of what you expected to happen. -->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+# Describe the bug (unexpected behavior)
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+<!-- A clear and concise description of what the bug is. -->
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+# Steps to reproduce
 
-**Additional context**
-Add any other context about the problem here.
+<!-- 1. Go to '...' -->
+<!-- 2. Click on '....' -->
+<!-- 3. Scroll down to '....' -->
+<!-- 4. See error -->
+
+# Screenshots
+
+<!-- If applicable, add screenshots to help explain your problem. -->
+
+# System information 
+
+<!-- Please tell us as much as you can about your setup. Because of how video calls can vary across browsers and devices,  this information will help us troubleshoot your issue faster. --> 
+
+* Device:
+* OS, version:
+* Browser, version:
+
+# Additional context
+
+<!-- Add any other context about the problem or helpful links here. -->
