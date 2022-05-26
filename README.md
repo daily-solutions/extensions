@@ -4,9 +4,22 @@ Extensions are JavaScript modules that extend the functionality of Prebuilt. Wan
 
 ## Try Them Now
 
+The extensions and demos live in the `/public` directory. This repo includes a simple Express server app that serves the files for local development. The server also provides some websocket functionality for a few extensions. The easiest way to get started is to clone the repo:
+
+```
+$ git@github.com:daily-demos/extensions.git
+$ cd extensions
+$ npm i
+$ npm start
+```
+
 All demos support using your own Daily domain and room by passing URL params:
 
-`https://daily-extensions.glitch.me/demos/miro.html?domain=yourdomain&room=yourroom`
+`http://localhost:3000/demos/miro.html?domain=yourdomain&room=yourroom`
+
+### Versions
+
+This repo is also mirrored to [Glitch](https://daily-extensions.glitch.me), so you can try live versions of the extension demos from the links below.
 
 Many also support additional URL params. Look at the source code for specifics.
 
