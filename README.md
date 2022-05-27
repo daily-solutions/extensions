@@ -40,7 +40,8 @@ Many also support additional URL params. Check the source code for specifics.
 
 Some extensions need to share state information outside the context of a Daily call. Since there isn't a great way to do that with daily-js directly, these extensions require a very basic socket.io server to function. You can see that in server.js.
 
-- **["Pouncing"](https://daily-extensions.onrender.com/demos/pounce.html)** For use cases where two participants might join a room at very different times, and you don't want to pay for the first user being connected to the meeting alone. The first user that visits this page will see a "Waiting for others" message. When a second person opens the page, they will both join the Daily room. When one of them leaves (so the participant count goes back down to 1), the remaining person will exit the call and go back to the waiting screen.
+- **["Pouncing"](https://daily-extensions.onrender.com/demos/pounce.html)**: For use cases where two participants might join a room at very different times, and you don't want to pay for the first user being connected to the meeting alone. The first user that visits this page will see a "Waiting for others" message. When a second person opens the page, they will both join the Daily room. When one of them leaves (so the participant count goes back down to 1), the remaining person will exit the call and go back to the waiting screen.
+- **[Door](https://daily-extensions.onrender.com/demos/door.html)**: Adds a button to the toolbar that opens or closes the "door" to the room. When the door is closed, anyone who tries to join the room will see a message tell them the door is closed. If someone currently in the meeting clicks the button to open the door, anyone who is waiting will immediately `join()` the call.
 - **[Breakout Rooms](about:blank)**: Coming soon!
 
 ## Using Extensions
