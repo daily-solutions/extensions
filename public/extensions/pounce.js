@@ -1,19 +1,8 @@
-import socketiostate from "./socketiostate.js";
-let state;
+import Socket from "./socketiostate.js";
+let state, props, socket;
 let pounced = false;
 let callback, soloCallback;
-
-socketiostate.onStateUpdate((s) => {
-  state = s;
-  if (state.clients > 1 && pounced === false) {
-    console.log("got a state with >1 participant; time to go");
-    go();
-  }
-
-  if (state.clients == 1 && pounced === true) {
-    stop();
-  }
-});
+let key = "pounce";
 
 function go() {
   pounced = true;
@@ -27,6 +16,22 @@ function stop() {
 
 let self;
 export default self = {
+  connect: function (p) {
+    props = p;
+    let key = `${p.domain}/${p.room}/pounce`;
+    socket = new Socket({ key });
+    socket.onStateUpdate((s) => {
+      state = s;
+      if (state.clients > 1 && pounced === false) {
+        go();
+      }
+
+      if (state.clients == 1 && pounced === true) {
+        stop();
+      }
+    });
+    socket.connect();
+  },
   onJoin: function (cb) {
     callback = cb;
   },

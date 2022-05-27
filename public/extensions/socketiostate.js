@@ -1,58 +1,50 @@
 import daily from "./core.js";
 import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
-let state = {};
-let updateHandlers = [];
-let call = {};
 
-let props, socket;
+export default class Socket {
+  constructor({ hostname = "", key = "" } = {}) {
+    this.hostname = hostname;
+    this.key = key;
 
-function applyStateUpdate(newState) {
-  // also used internally when we receive a state update
-  // from the messaging channel.
-  Object.assign(state, newState);
-  for (var i = 0; i < updateHandlers.length; i++) {
-    // try calling handlers with just the updated state
-    // to make change detection logic easier
-    updateHandlers[i](newState);
+    this.updateHandlers = [];
+    this.state = {};
+  }
+
+  _applyStateUpdate(ns) {
+    // also used internally when we receive a state update
+    // from the messaging channel.
+    Object.assign(this.state, ns);
+    for (var i = 0; i < this.updateHandlers.length; i++) {
+      // try calling handlers with just the updated state
+      // to make change detection logic easier
+      this.updateHandlers[i](ns);
+    }
+  }
+
+  _broadcastStateUpdate(newState) {
+    this.socket.emit("update", newState);
+  }
+
+  connect({ hostname = this.hostname, key = this.key } = {}) {
+    this.socket = io(this.hostname + "/" + this.key);
+    // listen for requests for state from new peers
+    this.socket.on("state", (msg) => {
+      this._applyStateUpdate(msg);
+    });
+  }
+
+  onStateUpdate(callback) {
+    this.updateHandlers.push(callback);
+  }
+
+  updateState(newState, broadcast = true) {
+    this._applyStateUpdate(newState);
+    if (broadcast) {
+      this._broadcastStateUpdate(newState);
+    }
+  }
+
+  state() {
+    return this.state;
   }
 }
-
-function broadcastStateUpdate(newState) {
-  socket.emit("update", newState);
-}
-
-export default {
-  configure: function (p) {
-    props = p;
-    socket = io(props.url);
-    // listen for requests for state from new peers
-    socket.on("state", (msg) => {
-      console.log("got state update from socket:", msg);
-      applyStateUpdate(msg);
-    });
-  },
-
-  onStateUpdate: function (callback) {
-    updateHandlers.push(callback);
-    // go ahead and send the current state
-    callback(state);
-  },
-
-  updateState: function (newState, broadcast = true) {
-    // used for an extension to request a state update,
-    // which will also get broadcast to everybody else on the call.
-    applyStateUpdate(newState);
-    if (broadcast) {
-      broadcastStateUpdate(newState);
-    }
-  },
-
-  state,
-};
-
-daily.beforeCreateFrame((parentEl, properties) => {
-  // do this before in case the socket's telling us what
-  // room to connect to, etc
-
-  return [parentEl, properties];
-});

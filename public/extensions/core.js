@@ -12,10 +12,6 @@ export default {
   createFrame: function (one, two) {
     let parentEl = one;
     let properties = two;
-    console.log(
-      "about to call before handlers, which are:",
-      beforeCreateFrameHandlers
-    );
     // your subclass should replace this if you need to do stuff
     // before the call frame is created
     for (let i = 0; i < beforeCreateFrameHandlers.length; i++) {
@@ -23,12 +19,9 @@ export default {
       // TODO: probably need to check argument count or something
       [parentEl, properties] = bcfh(parentEl, properties);
     }
-    console.log(
-      "about to create the frame for real, properties are ",
-      properties
-    );
+
     call = DailyIframe.createFrame(parentEl, properties);
-    console.log("after create, this.call is", call);
+
     // now call all the after-stuff
     for (let i = 0; i < afterCreateFrameHandlers.length; i++) {
       let acfh = afterCreateFrameHandlers[i];

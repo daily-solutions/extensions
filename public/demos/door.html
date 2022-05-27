@@ -1,12 +1,15 @@
 <html>
   <head>
-    <title>Daily.co Iframe Demo</title>
+    <title>Daily.co Door Demo</title>
     <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
     <style></style>
   </head>
   <body onload="main()">
     <div id="dailyContainer">
-      <div id="waiting" style="text-align: center">Waiting for others...</div>
+      <div id="waiting" style="text-align: center">
+        The room insn't allowing new participants right now. We'll connect you
+        as soon as it does!
+      </div>
     </div>
 
     <script type="module">
@@ -16,10 +19,10 @@
       const waiting = document.querySelector("#waiting");
 
       import daily from "../extensions/core.js";
-      import pounce from "../extensions/pounce.js";
+      import door from "../extensions/door.js";
 
       window.main = async function () {
-        pounce.onJoin(async () => {
+        door.onceOpen(async () => {
           waiting.style.display = "none";
 
           window.call = daily.createFrame(dailyContainer, {
@@ -28,14 +31,9 @@
               experimentalChromeVideoMuteLightOff: true,
             },
           });
-
           await call.join();
         });
-        pounce.onSolo(async () => {
-          await call.destroy();
-          waiting.style.display = "block";
-        });
-        pounce.connect({ domain, room });
+        door.connect({ domain, room });
       };
     </script>
   </body>
