@@ -152,10 +152,3 @@ These hooks will execute just before and after the top-level app calls `join()`.
 ## Contributing
 
 We'd be happy to have you contribute to Daily Extensions! To get started, check out our [Contributing Guide](CONTRIBUTING.md).
-
-## Daily Internal Resources
-
-If you don't work for Daily, these links won't work for you. :)
-
-- [Linear](https://linear.app/dailyco/project/extensions-1a16fe2df1b5/SOL)
-- [Notion](https://www.notion.so/dailyco/Daily-Extensions-53b9f3de528247439526de1e9e333f4a)
