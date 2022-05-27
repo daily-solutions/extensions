@@ -19,8 +19,6 @@
       const waiting = document.querySelector("#waiting");
 
       import daily from "../extensions/core.js";
-      import socketiostate from "../extensions/socketiostate.js";
-
       import door from "../extensions/door.js";
 
       window.main = async function () {
@@ -35,9 +33,7 @@
           });
           await call.join();
         });
-        socketiostate.connect({
-          url: `/${domain}/${room}`,
-        });
+        door.connect({ domain, room });
       };
     </script>
   </body>

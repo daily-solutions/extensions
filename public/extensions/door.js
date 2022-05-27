@@ -1,7 +1,8 @@
 import daily from "./core.js";
-import socketiostate from "./socketiostate.js";
+import Socket from "./socketiostate.js";
 
 let state, call;
+let socket;
 let pounced = false;
 let openCallback, closeCallback, onceOpenCallback;
 let openCallbacks = [];
@@ -26,24 +27,10 @@ let buttons = {
     tooltip: "Toggle Door",
   },
 };
-socketiostate.onStateUpdate(key, (s) => {
-  state = s;
-  console.log("door stateupdate state is ", state);
-  if (!state["doorState"]) {
-    // nobody's here yet; handle as open to work around
-    // an initialization bug right now
-  } else if (state["doorState"] === "open") {
-    handleOpen();
-  } else if (state["doorState"] === "closed") {
-    handleClosed();
-  }
-});
 
 function handleOpen() {
-  console.log("handleopen");
   // switch button here when bug is fixed
   for (var i = openCallbacks.length - 1; i >= 0; i--) {
-    console.log("handleopen loop, opencallbacks i is ", openCallbacks[i]);
     openCallbacks[i]["cb"]();
     if (openCallbacks[i].once === true) {
       openCallbacks.splice(1, i);
@@ -94,11 +81,27 @@ daily.afterCreateFrame(async (c) => {
 
 let self;
 export default self = {
+  connect: function (p) {
+    props = p;
+    let key = `${p.domain}/${p.room}/door`;
+    socket = new Socket({ key });
+    socket.onStateUpdate((s) => {
+      state = s;
+      if (state.clients == 1 && !state["doorState"]) {
+        // nobody's here yet; open the door
+        self.open();
+      } else if (state["doorState"] === "open") {
+        handleOpen();
+      } else if (state["doorState"] === "closed") {
+        handleClosed();
+      }
+    });
+    socket.connect();
+  },
   onOpen: function (cb) {
     openCallbacks.unshift({ cb, once: false });
   },
   onceOpen: function (cb) {
-    console.log("onceopen");
     openCallbacks.unshift({ cb, once: true });
   },
   onClose: function (cb) {
@@ -108,9 +111,9 @@ export default self = {
     closeCallbacks.unshift({ cb, once: true });
   },
   open: function () {
-    socketiostate.updateState("door", { doorState: "open" });
+    socket.updateState({ doorState: "open" });
   },
   close: function () {
-    socketiostate.updateState("door", { doorState: "closed" });
+    socket.updateState({ doorState: "closed" });
   },
 };

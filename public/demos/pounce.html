@@ -16,11 +16,6 @@
       const waiting = document.querySelector("#waiting");
 
       import daily from "../extensions/core.js";
-      import socketiostate from "../extensions/socketiostate.js";
-      socketiostate.configure({
-        url: `/${domain}/${room}`,
-      });
-
       import pounce from "../extensions/pounce.js";
 
       window.main = async function () {
@@ -40,6 +35,7 @@
           await call.destroy();
           waiting.style.display = "block";
         });
+        pounce.connect({ domain, room });
       };
     </script>
   </body>

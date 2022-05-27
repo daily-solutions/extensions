@@ -12,43 +12,26 @@ const io = new Server(server, {
 let state = {};
 
 // "nsp" is the socket namespace. Most single-room
-// extensions set this to ${domain}/${room}.
+// extensions set this to ${domain}/${room}/${extensionName}.
 
 io.of(/^\/.*$/).on("connection", (socket) => {
   const nsp = socket.nsp.name;
   console.log("a user connected to: ", nsp);
   if (!(nsp in state)) {
-    state[nsp] = {
-      pounce: {},
-      door: { doorState: "open" },
-    };
+    state[nsp] = {};
   }
-
-  if (!state[nsp]["pounce"]) {
-    state[nsp]["pounce"] = {};
-  }
-
-  state[nsp]["pounce"].clients = socket.nsp.sockets.size;
-  console.log("emitting state:", state[nsp]);
-  // send this listener the whole state
-  socket.emit("state", state[nsp]);
-  // send everybody the pounce state count update
-  socket.nsp.emit("state", { pounce: state[nsp]["pounce"] });
+  state[nsp].clients = socket.nsp.sockets.size;
+  // send everybody the state, because the count updated
+  socket.nsp.emit("state", state[nsp]);
 
   socket.on("disconnect", (e) => {
-    console.log("client disconnected");
-    state[nsp]["pounce"].clients = socket.nsp.sockets.size;
-    socket.nsp.emit("state", { pounce: state[nsp]["pounce"] });
-    // handle a room that was closed but is now empty
-    if (socket.nsp.sockets.size == 0) {
-      state[nsp]["door"]["doorState"] = "open";
-    }
+    state[nsp].clients = socket.nsp.sockets.size;
+    socket.nsp.emit("state", state[nsp]);
   });
 
   socket.on("update", (msg) => {
-    console.log("sending update:", msg);
     Object.assign(state[nsp], msg);
-    socket.nsp.emit("state", msg);
+    socket.nsp.emit("state", state[nsp]);
   });
 });
 
