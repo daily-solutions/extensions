@@ -2,11 +2,11 @@ import socketiostate from "./socketiostate.js";
 let state;
 let pounced = false;
 let callback, soloCallback;
+let key = "pounce";
 
-socketiostate.onStateUpdate((s) => {
+socketiostate.onStateUpdate(key, (s) => {
   state = s;
   if (state.clients > 1 && pounced === false) {
-    console.log("got a state with >1 participant; time to go");
     go();
   }
 
@@ -16,6 +16,7 @@ socketiostate.onStateUpdate((s) => {
 });
 
 function go() {
+  console.log("go");
   pounced = true;
   callback();
 }
@@ -28,6 +29,7 @@ function stop() {
 let self;
 export default self = {
   onJoin: function (cb) {
+    console.log("onjoin");
     callback = cb;
   },
   onSolo: function (cb) {
