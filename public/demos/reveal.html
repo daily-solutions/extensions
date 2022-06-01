@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>Daily.co Reveal.js Demo</title>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer"></div>
+
+    <script type="module">
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "chad-hq";
+      const room = urlParams.get("room") || "howdy";
+      const presenter = urlParams.get("presenter") === "true";
+
+      import daily from "../extensions/core.js";
+      import reveal from "../extensions/reveal.js";
+      //iframe.configure({ showUrl: false });
+      reveal.configure({ presenter });
+      window.main = async function () {
+        window.call = daily.createFrame(dailyContainer, {
+          url: `https://${domain}.daily.co/${room}`,
+          dailyConfig: {
+            experimentalChromeVideoMuteLightOff: true,
+          },
+        });
+
+        await call.join();
+      };
+    </script>
+  </body>
+</html>

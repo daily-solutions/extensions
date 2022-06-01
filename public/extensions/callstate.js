@@ -17,6 +17,8 @@ function applyStateUpdate(key = "", newState) {
   if (!state[key]) {
     state[key] = {};
   }
+  console.log("applying new state:", key, newState);
+
   Object.assign(state[key], newState);
   if (!updateHandlers[key]) {
     updateHandlers[key] = [];
@@ -31,6 +33,8 @@ function applyStateUpdate(key = "", newState) {
 function broadcastStateUpdate(key, newState) {
   var ns = {};
   ns[key] = newState;
+  console.log("broadcasting state update:", key, newState);
+
   call.sendAppMessage({ message: "update-call-state", state: ns });
 }
 
