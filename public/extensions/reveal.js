@@ -12,12 +12,6 @@ let defaultButtons = {
     label: "Present",
     tooltip: "Present",
   },
-  /*close: {
-	iconPath:
-	  "https://cdn.glitch.global/dcb584f3-95aa-4929-82e0-ca6ee9b2b12f/globe.svg",
-	label: "Close",
-	tooltip: "Close Iframe",
-  },*/
 };
 
 // configure defaults that can be
@@ -37,6 +31,8 @@ function handlePresentButton() {
     selectUrl();
   }
 }
+
+function handleShowHideButton() {}
 
 let self;
 export default self = {
@@ -119,7 +115,6 @@ function handleHide() {
 }
 
 daily.beforeCreateFrame((parentEl, properties) => {
-  // TODO: maybe namespace shared resources like tray buttons?
   if (props.presenter) {
     if (!properties.customTrayButtons) {
       properties.customTrayButtons = {};
@@ -182,6 +177,8 @@ daily.afterCreateFrame(async (c) => {
     switch (e.button_id) {
       case "present":
         handlePresentButton();
+        break;
+      case "stopScreen":
         break;
       case "close":
         self.close();
