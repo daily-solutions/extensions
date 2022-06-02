@@ -47,5 +47,3 @@ export default {
     afterCreateFrameHandlers.push(handler);
   },
 };
-// foo bar test 2444444
-// abcd
