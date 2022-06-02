@@ -12,6 +12,12 @@ let defaultButtons = {
     label: "Present",
     tooltip: "Present",
   },
+  viewerToggle: {
+    iconPath:
+      "https://cdn.glitch.global/dcb584f3-95aa-4929-82e0-ca6ee9b2b12f/globe.svg",
+    label: "Toggle",
+    tooltip: "Viewer Toggle",
+  },
 };
 
 // configure defaults that can be
@@ -29,6 +35,14 @@ function handlePresentButton() {
     callstate.updateCallState("iframe", { open: false });
   } else {
     selectUrl();
+  }
+}
+
+function handleViewerToggle() {
+  if (callstate.state.iframe?.viewerHide === true) {
+    callstate.updateCallState("iframe", { viewerHide: false });
+  } else {
+    callstate.updateCallState("iframe", { viewerHide: true });
   }
 }
 
@@ -171,12 +185,20 @@ daily.afterCreateFrame(async (c) => {
     if ("open" in state) {
       state.open === true ? handleShow() : handleHide();
     }
+    if ("viewerHide" in state) {
+      if (!props.presenter) {
+        state.viewerHide === true ? handleHide() : handleShow();
+      }
+    }
   });
 
   call.on("custom-button-click", (e) => {
     switch (e.button_id) {
       case "present":
         handlePresentButton();
+        break;
+      case "viewerToggle":
+        handleViewerToggle();
         break;
       case "stopScreen":
         break;
