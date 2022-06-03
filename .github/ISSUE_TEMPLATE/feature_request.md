@@ -3,7 +3,7 @@ name: Feature request
 about: Tell us if there's a feature you'd like to add or change that would be helpful.
 title: '[FEATURE-REQUEST]'
 labels: enhancement
-assignees: kimberleejohnson
+assignees: chadbailey59
 ---
 
 # Feature request
