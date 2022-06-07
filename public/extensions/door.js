@@ -12,6 +12,7 @@ let closeCallbacks = [];
 let props = {
   room: "", // used to build the presence socket namespace key.
   domain: "", // used to build the presence socket namespace key.
+  teacher: false, // used to only show the door button to the teacher.
 };
 let key = "door";
 
@@ -96,16 +97,19 @@ function handleClosed() {
 }
 
 daily.beforeCreateFrame((parentEl, properties) => {
-  if (!properties.customTrayButtons) {
-    properties.customTrayButtons = {};
+  if (props.teacher === true) {
+    if (!properties.customTrayButtons) {
+      properties.customTrayButtons = {};
+    }
+    let button =
+      state.doorState === "closed"
+        ? { openDoor: buttons.openDoor }
+        : { closeDoor: buttons.closeDoor };
+    Object.assign(properties.customTrayButtons, {
+      toggleDoor: buttons.toggleDoor,
+    }); // use button var when bug is fixed
   }
-  let button =
-    state.doorState === "closed"
-      ? { openDoor: buttons.openDoor }
-      : { closeDoor: buttons.closeDoor };
-  Object.assign(properties.customTrayButtons, {
-    toggleDoor: buttons.toggleDoor,
-  }); // use button when bug is fixed
+
   return [parentEl, properties];
 });
 
