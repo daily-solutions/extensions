@@ -2,6 +2,17 @@
   <head>
     <title>Daily.co Iframe Demo</title>
     <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <!--
+    This demo shows how you can use an Excalidraw-powered whiteboard in a Daily Prebuilt room.
+
+    You can use this extension with your own Daily domain and room with query params. You can also
+    set the Excalidraw board session by visiting https://excalidraw.com, clicking "Live Collaboration",
+    and starting a live session. You'll get a URL that looks like "https://excalidraw.com/#room={longstring}". Set that longstring to the "board" param:
+    `excalidraw.html?domain=yourdomain&room=yourroom&board={longstring}`
+    
+    To try it, open this page in a browser tab, then click the "Draw" button in the toolbar. You
+    should see a whiteboard appear on the left side.
+    -->
   </head>
   <body onload="main()">
     <div id="dailyContainer"></div>

@@ -1,6 +1,7 @@
 import daily from "./core.js";
 import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
 
+/* Public interface */
 export default class Socket {
   constructor({ hostname = "", key = "" } = {}) {
     this.hostname = hostname;

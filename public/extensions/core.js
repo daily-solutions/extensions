@@ -1,10 +1,8 @@
-let xns = [];
 let afterCreateFrameHandlers = [];
 let beforeCreateFrameHandlers = [];
-let call = {};
-// call extensions in the order they were received
+let call;
 
-/* start flexpanel */
+/* Public interface */
 export default {
   /* DailyIframe overrides
      TODO: Return a proxy object that allows for call object extension */

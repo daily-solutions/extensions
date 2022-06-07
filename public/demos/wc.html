@@ -3,6 +3,19 @@
     <title>Daily.co Iframe Demo</title>
     <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
     <style></style>
+    <!--
+    This demo shows how you can use an Whiteboard.chat board in a Daily Prebuilt room.
+    
+    You can use this extension with your own Daily domain and room with query params. You can also
+    use your own Whiteboard.chat account by setting the `key` param to your API key from the
+    whiteboard.chat site. Obviously, in production you'd want to hide that key. You'll also need
+    someone to join using the `teacher` param set to true to be able to start the boards:
+    `wc.html?domain=yourdomain&room=yourroom&key={yourkey}&teacher=true`
+    
+    To try it, open this page in a browser tab, making sure to add `teacher=true` to the URL. Then
+    click the "Boards" button in the toolbar. You can join in other tabs without `teacher=true` to
+    see the boards appear and disappear for the students.
+    -->
   </head>
   <body onload="main()">
     <div id="dailyContainer"></div>

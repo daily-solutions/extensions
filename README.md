@@ -4,17 +4,6 @@ Extensions are JavaScript modules that extend the functionality of Prebuilt. Wan
 
 ## Try Them Now
 
-### Run them yourself
-
-The extensions and demos live in the `/public` directory. This repo includes a simple Express server app that serves the files for local development. The server also provides some websocket functionality for a few extensions. The easiest way to get started is to clone the repo:
-
-```
-$ git@github.com:daily-demos/extensions.git
-$ cd extensions
-$ npm i
-$ npm start
-```
-
 ### Remix them on Glitch
 
 [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/daily-demos/extensions)
@@ -29,7 +18,7 @@ This repo is auto-deployed to Render, so you can try the extension demo pages at
 
 Many also support additional URL params. Check the source code for specifics.
 
-## Current Extensions and Demos
+## Current Extensions and Demos: Client-Side Only
 
 - **[Iframe Embed](https://daily-extensions.onrender.com/demos/iframe.html): Put any webpage you want beside Prebuilt.**
 - **[Miro Whiteboard](https://daily-extensions.onrender.com/demos/miro.html)**, powered by the `Miro` extension. (The board is read-only for now; I'm working on it.)
@@ -38,11 +27,26 @@ Many also support additional URL params. Check the source code for specifics.
 - **[Remote Media Playback](https://daily-extensions.onrender.com/demos/mediaplayer.html)**: Unfortunately, remote media playback uses custom track types, so you can't see or hear the video in Prebuilt. But if you open a separate page with a Call Object mode implementation and automatic track subscription, you'll see and hear the video.
 - **[Event Logger](https://daily-extensions.onrender.com/demos/eventlogger.html)**: A simple demo of the Event Logger extension, which adds additional helpful console messages.
 
+You can try these extensions with the hosted versions linked above, or clone the repo and open them directly from the `/public` directory.
+
+## Current Extensions and Demos: Server-Backed
+
 Some extensions need to share state information outside the context of a Daily call. Since there isn't a great way to do that with daily-js directly, these extensions require a very basic socket.io server to function. You can see that in server.js.
 
 - **["Pouncing"](https://daily-extensions.onrender.com/demos/pounce.html)**: For use cases where two participants might join a room at very different times, and you don't want to pay for the first user being connected to the meeting alone. The first user that visits this page will see a "Waiting for others" message. When a second person opens the page, they will both join the Daily room. When one of them leaves (so the participant count goes back down to 1), the remaining person will exit the call and go back to the waiting screen.
 - **[Door](https://daily-extensions.onrender.com/demos/door.html)**: Adds a button to the toolbar that opens or closes the "door" to the room. When the door is closed, anyone who tries to join the room will see a message tell them the door is closed. If someone currently in the meeting clicks the button to open the door, anyone who is waiting will immediately `join()` the call.
 - **[Breakout Rooms](about:blank)**: Coming soon!
+
+To try these extensions on your own computer, you'll need a simple Express server app that provides some websocket functionality. The easiest way to get started is to clone the repo:
+
+```
+$ git@github.com:daily-demos/extensions.git
+$ cd extensions
+$ npm i
+$ npm start
+```
+
+This same app also serves the demo files from the `/public` directory, so you can open the iframe demo by visiting `http://localhost:3000/demos/iframe.html`, for example.
 
 ## Using Extensions
 

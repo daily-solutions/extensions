@@ -7,7 +7,12 @@ let pounced = false;
 let openCallback, closeCallback, onceOpenCallback;
 let openCallbacks = [];
 let closeCallbacks = [];
-let props = { room: "", domain: "" };
+
+/* Defaults */
+let props = {
+  room: "", // used to build the presence socket namespace key.
+  domain: "", // used to build the presence socket namespace key.
+};
 let key = "door";
 
 let buttons = {
@@ -27,6 +32,48 @@ let buttons = {
     tooltip: "Toggle Door",
   },
 };
+
+/* Public interface */
+let self;
+export default self = {
+  connect: function (p) {
+    props = p;
+    let key = `${p.domain}/${p.room}/door`;
+    socket = new Socket({ key });
+    socket.onStateUpdate((s) => {
+      state = s;
+      if (state.clients == 1 && !state["doorState"]) {
+        // nobody's here yet; open the door
+        self.open();
+      } else if (state["doorState"] === "open") {
+        handleOpen();
+      } else if (state["doorState"] === "closed") {
+        handleClosed();
+      }
+    });
+    socket.connect();
+  },
+  onOpen: function (cb) {
+    openCallbacks.unshift({ cb, once: false });
+  },
+  onceOpen: function (cb) {
+    openCallbacks.unshift({ cb, once: true });
+  },
+  onClose: function (cb) {
+    closeCallbacks.unshift({ cb, once: false });
+  },
+  onceClose: function (cb) {
+    closeCallbacks.unshift({ cb, once: true });
+  },
+  open: function () {
+    socket.updateState({ doorState: "open" });
+  },
+  close: function () {
+    socket.updateState({ doorState: "closed" });
+  },
+};
+
+/* Private implementation */
 
 function handleOpen() {
   // switch button here when bug is fixed
@@ -78,42 +125,3 @@ daily.afterCreateFrame(async (c) => {
     }
   });
 });
-
-let self;
-export default self = {
-  connect: function (p) {
-    props = p;
-    let key = `${p.domain}/${p.room}/door`;
-    socket = new Socket({ key });
-    socket.onStateUpdate((s) => {
-      state = s;
-      if (state.clients == 1 && !state["doorState"]) {
-        // nobody's here yet; open the door
-        self.open();
-      } else if (state["doorState"] === "open") {
-        handleOpen();
-      } else if (state["doorState"] === "closed") {
-        handleClosed();
-      }
-    });
-    socket.connect();
-  },
-  onOpen: function (cb) {
-    openCallbacks.unshift({ cb, once: false });
-  },
-  onceOpen: function (cb) {
-    openCallbacks.unshift({ cb, once: true });
-  },
-  onClose: function (cb) {
-    closeCallbacks.unshift({ cb, once: false });
-  },
-  onceClose: function (cb) {
-    closeCallbacks.unshift({ cb, once: true });
-  },
-  open: function () {
-    socket.updateState({ doorState: "open" });
-  },
-  close: function () {
-    socket.updateState({ doorState: "closed" });
-  },
-};

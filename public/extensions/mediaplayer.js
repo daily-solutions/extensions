@@ -23,6 +23,47 @@ let mediaPauseButton = {
   tooltip: "Pause Video",
 };
 
+export default {};
+
+daily.beforeCreateFrame((parentEl, properties) => {
+  if (!properties.customTrayButtons) {
+    properties.customTrayButtons = {};
+  }
+  properties.customTrayButtons.mediaStart = mediaStartButton;
+
+  return [parentEl, properties];
+});
+
+daily.afterCreateFrame((c) => {
+  call = c;
+
+  call.on("remote-media-player-started", (e) => handleStarted(e));
+  call.on("remote-media-player-stopped", (e) => handleStopped());
+  call.on("remote-media-player-error", (e) => handleStopped());
+  call.on("remote-media-player-updated", (e) => {
+    e.remoteMediaPlayerState.state === "paused"
+      ? handlePaused()
+      : handleResumed();
+  });
+
+  call.on("custom-button-click", (e) => {
+    switch (e.button_id) {
+      case "mediaStart":
+        start();
+        break;
+      case "mediaResume":
+        resume();
+        break;
+      case "mediaPause":
+        pause();
+        break;
+      case "mediaStop":
+        stop();
+        break;
+    }
+  });
+});
+
 function start() {
   let url = prompt(
     "Enter a URL for playback",
@@ -78,44 +119,3 @@ function handleResumed() {
 async function close() {
   call.setCustomTrayButtons({ mediaStart: mediaStartButton });
 }
-
-daily.beforeCreateFrame((parentEl, properties) => {
-  if (!properties.customTrayButtons) {
-    properties.customTrayButtons = {};
-  }
-  properties.customTrayButtons.mediaStart = mediaStartButton;
-
-  return [parentEl, properties];
-});
-
-daily.afterCreateFrame((c) => {
-  call = c;
-
-  call.on("remote-media-player-started", (e) => handleStarted(e));
-  call.on("remote-media-player-stopped", (e) => handleStopped());
-  call.on("remote-media-player-error", (e) => handleStopped());
-  call.on("remote-media-player-updated", (e) => {
-    e.remoteMediaPlayerState.state === "paused"
-      ? handlePaused()
-      : handleResumed();
-  });
-
-  call.on("custom-button-click", (e) => {
-    switch (e.button_id) {
-      case "mediaStart":
-        start();
-        break;
-      case "mediaResume":
-        resume();
-        break;
-      case "mediaPause":
-        pause();
-        break;
-      case "mediaStop":
-        stop();
-        break;
-    }
-  });
-});
-
-export default {};

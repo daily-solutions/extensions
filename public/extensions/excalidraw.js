@@ -6,15 +6,18 @@ let fp, iframeEl, call;
 
 let props = {};
 
+/* Extension configuration */
 // don't use the iframe extension's button
 iframe.configure({ url: iframeUrl(), buttons: {}, showUrl: false });
 
+/* Public interface */
 export default {
   configure: function (p) {
     Object.assign(props, p);
   },
 };
 
+/* Private implementation */
 function iframeUrl() {
   return `https://excalidraw.com/#room=${props.room}`;
 }

@@ -1,9 +1,75 @@
 import daily from "./core.js";
+
 let state = {};
 let updateHandlers = [];
 let call = {};
 let waitingForSync = false;
 let SYNC_MAX_WAITING_TIME = 7000;
+
+/* Public interface */
+export default {
+  onCallStateUpdate: function (key, callback) {
+    if (!updateHandlers[key]) {
+      updateHandlers[key] = [];
+    }
+    updateHandlers[key].push(callback);
+  },
+
+  updateCallState: function (key, newState, broadcast = true) {
+    // used for an extension to request a state update,
+    // which will also get broadcast to everybody else on the call.
+    applyStateUpdate(key, newState);
+    if (broadcast) {
+      broadcastStateUpdate(key, newState);
+    }
+  },
+
+  state,
+};
+
+/* Private implementation */
+
+daily.afterCreateFrame((c) => {
+  call = c;
+  // listen for requests for state from new peers
+  call.on("app-message", (e) => {
+    switch (e.data.message) {
+      case "request-call-state":
+        // only send state if I'm not waiting for it myself
+        if (waitingForSync === false) {
+          call.sendAppMessage(
+            { message: "update-call-state", state },
+            e.fromId
+          );
+        }
+        break;
+
+      case "update-call-state":
+        waitingForSync = false;
+        applyStateUpdates(e.data.state);
+        break;
+    }
+  });
+  // listen for general state updates
+  // ask a peer for the existing state
+  call.on("joined-meeting", async (e) => {
+    waitingForSync = true;
+    // Randomize delay to increase the chance of lowering overall network traffic
+    const requestDelay = 1000 + Math.ceil(1000 * Math.random());
+
+    let overallTimeout = setTimeout(() => {
+      waitingForSync = false;
+    }, SYNC_MAX_WAITING_TIME);
+
+    let interval = setInterval(() => {
+      if (waitingForSync === false) {
+        clearInterval(interval);
+        return;
+      }
+      requestState();
+    }, requestDelay);
+  });
+});
 
 function applyStateUpdates(newState) {
   // internal handler that applies all state updates
@@ -63,65 +129,3 @@ async function requestState() {
     randomId
   );
 }
-
-export default {
-  onCallStateUpdate: function (key, callback) {
-    if (!updateHandlers[key]) {
-      updateHandlers[key] = [];
-    }
-    updateHandlers[key].push(callback);
-  },
-
-  updateCallState: function (key, newState, broadcast = true) {
-    // used for an extension to request a state update,
-    // which will also get broadcast to everybody else on the call.
-    applyStateUpdate(key, newState);
-    if (broadcast) {
-      broadcastStateUpdate(key, newState);
-    }
-  },
-
-  state,
-};
-
-daily.afterCreateFrame((c) => {
-  call = c;
-  // listen for requests for state from new peers
-  call.on("app-message", (e) => {
-    switch (e.data.message) {
-      case "request-call-state":
-        // only send state if I'm not waiting for it myself
-        if (waitingForSync === false) {
-          call.sendAppMessage(
-            { message: "update-call-state", state },
-            e.fromId
-          );
-        }
-        break;
-
-      case "update-call-state":
-        waitingForSync = false;
-        applyStateUpdates(e.data.state);
-        break;
-    }
-  });
-  // listen for general state updates
-  // ask a peer for the existing state
-  call.on("joined-meeting", async (e) => {
-    waitingForSync = true;
-    // Randomize delay to increase the chance of lowering overall network traffic
-    const requestDelay = 1000 + Math.ceil(1000 * Math.random());
-
-    let overallTimeout = setTimeout(() => {
-      waitingForSync = false;
-    }, SYNC_MAX_WAITING_TIME);
-
-    let interval = setInterval(() => {
-      if (waitingForSync === false) {
-        clearInterval(interval);
-        return;
-      }
-      requestState();
-    }, requestDelay);
-  });
-});

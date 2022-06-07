@@ -6,14 +6,18 @@ let fp, iframeEl, call;
 
 let props = {};
 
+/* Extension configuration */
 // don't use the iframe extension's button
 iframe.configure({ url: "about:blank", buttons: {}, showUrl: false });
 
+/* Public interface */
 export default {
   configure: function (p) {
     Object.assign(props, p);
   },
 };
+
+/* Private implementation */
 
 function iframeUrl(boardId) {
   return "https://miro.com/app/live-embed/" + boardId;

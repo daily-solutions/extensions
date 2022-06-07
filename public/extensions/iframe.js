@@ -5,6 +5,7 @@ import callstate from "./callstate.js";
 let fp, iframeEl, locationEl, call;
 let open = false;
 
+/* Defaults */
 let defaultButtons = {
   selectUrl: {
     iconPath: "https://www.svgrepo.com/show/107601/globe.svg",
@@ -13,23 +14,14 @@ let defaultButtons = {
   },
 };
 
-// configure defaults that can be
-// overridden by calling configure()
 let props = {
-  url: "about:blank",
-  buttons: defaultButtons,
-  showUrl: false,
+  url: "about:blank", // used to set the initial URL for the iframe.
+  buttons: defaultButtons, // used to change the button names and/or icons.
+  showUrl: false, // controls whether to display the active iframe URL as a pseudo-address-bar
+  // above the iframe content.
 };
 
-// overloading the "selectUrl" button to work around a bug with updateCustomTrayButtons for now
-function handleSelectButton() {
-  if (callstate.state.iframe?.open === true) {
-    callstate.updateCallState("iframe", { open: false });
-  } else {
-    selectUrl();
-  }
-}
-
+/* Public interface */
 let self;
 export default self = {
   configure: function (p) {
@@ -65,31 +57,7 @@ export default self = {
   },
 };
 
-function selectUrl() {
-  let url = prompt("Enter a URL", props.url);
-  if (url) {
-    self.open(url);
-  }
-}
-
-function handleUrlUpdate(url) {
-  props.url = url;
-  locationEl.innerHTML = url;
-  iframeEl.src = url;
-}
-
-function handleShow() {
-  flexpanel.open();
-  open = true;
-  // call.updateCustomTrayButtons({ close: closeButton, temp: tempButton });
-}
-
-function handleHide() {
-  flexpanel.close();
-  open = false;
-  // call.updateCustomTrayButtons({ selectUrl: selectUrlButton });
-}
-
+/* Daily configuration */
 daily.beforeCreateFrame((parentEl, properties) => {
   // TODO: maybe namespace shared resources like tray buttons?
   if (!properties.customTrayButtons) {
@@ -154,3 +122,39 @@ daily.afterCreateFrame(async (c) => {
     }
   });
 });
+
+/* Private implementation */
+
+// overloading the "selectUrl" button to work around a bug with updateCustomTrayButtons for now
+function handleSelectButton() {
+  if (callstate.state.iframe?.open === true) {
+    callstate.updateCallState("iframe", { open: false });
+  } else {
+    selectUrl();
+  }
+}
+
+function selectUrl() {
+  let url = prompt("Enter a URL", props.url);
+  if (url) {
+    self.open(url);
+  }
+}
+
+function handleUrlUpdate(url) {
+  props.url = url;
+  locationEl.innerHTML = url;
+  iframeEl.src = url;
+}
+
+function handleShow() {
+  flexpanel.open();
+  open = true;
+  // call.updateCustomTrayButtons({ close: closeButton, temp: tempButton });
+}
+
+function handleHide() {
+  flexpanel.close();
+  open = false;
+  // call.updateCustomTrayButtons({ selectUrl: selectUrlButton });
+}

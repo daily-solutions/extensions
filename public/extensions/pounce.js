@@ -4,16 +4,7 @@ let pounced = false;
 let callback, soloCallback;
 let key = "pounce";
 
-function go() {
-  pounced = true;
-  callback();
-}
-
-function stop() {
-  pounced = false;
-  soloCallback();
-}
-
+/* Public interface */
 let self;
 export default self = {
   connect: function (p) {
@@ -39,3 +30,15 @@ export default self = {
     soloCallback = cb;
   },
 };
+
+/* Private implementation */
+
+function go() {
+  pounced = true;
+  callback();
+}
+
+function stop() {
+  pounced = false;
+  soloCallback();
+}

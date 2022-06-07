@@ -6,8 +6,10 @@ var isHandlerDragging = false;
 var flexpanelOpen = false;
 var activeSpeakerWas;
 
+/* Daily configuration */
 daily.afterCreateFrame((c) => (call = c));
 
+/* Public interface */
 let self;
 export default self = {
   create: function ({ leftNode, rightNode, button }) {
@@ -221,6 +223,4 @@ export default self = {
   toggle: function () {
     flexpanelOpen === true ? this.close() : this.open();
   },
-
-  /* end flexpanel */
 };

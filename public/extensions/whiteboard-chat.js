@@ -6,14 +6,18 @@ let fp, iframeEl, call;
 
 let props = {};
 
+/* Extension configuration */
 // don't use the iframe extension's button
 iframe.configure({ url: "about:blank", buttons: {}, showUrl: false });
 
+/* Public interface */
 export default {
   configure: function (p) {
     Object.assign(props, p);
   },
 };
+
+/* Private implementation */
 
 async function iframeUrl(e) {
   let src = "https://www.whiteboard.chat/apiaccess/createjoin/";
