@@ -150,11 +150,9 @@ function handleUrlUpdate(url) {
 function handleShow() {
   flexpanel.open();
   open = true;
-  // call.updateCustomTrayButtons({ close: closeButton, temp: tempButton });
 }
 
 function handleHide() {
   flexpanel.close();
   open = false;
-  // call.updateCustomTrayButtons({ selectUrl: selectUrlButton });
 }

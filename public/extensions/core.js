@@ -32,7 +32,7 @@ export default {
      You'll want to override these in your extension subclass */
 
   beforeCreateFrame: function (handler) {
-    // implmement this in your subclass to do things and/or alter
+    // implement this in your subclass to do things and/or alter
     // what's about to be passed to the real createFrame.
     // make sure to return the args at the end.
     // presume we'll always have a parentEl for now
