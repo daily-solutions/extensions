@@ -1,23 +1,23 @@
 import daily from "./core.js";
 let call;
-let player;
+let playerId;
 
-let mediaStartButton = {
+const mediaStartButton = {
   iconPath: "https://www.svgrepo.com/show/27440/play.svg",
   label: "Play Video",
   tooltip: "Play Video",
 };
-let mediaStopButton = {
+const mediaStopButton = {
   iconPath: "https://www.svgrepo.com/show/27440/play.svg",
   label: "Stop Video",
   tooltip: "Stop Video",
 };
-let mediaResumeButton = {
+const mediaResumeButton = {
   iconPath: "https://www.svgrepo.com/show/27440/play.svg",
   label: "Resume",
   tooltip: "Resume Video",
 };
-let mediaPauseButton = {
+const mediaPauseButton = {
   iconPath: "https://www.svgrepo.com/show/27440/play.svg",
   label: "Pause",
   tooltip: "Pause Video",
@@ -74,24 +74,24 @@ function start() {
 
 function pause() {
   call.updateRemoteMediaPlayer({
-    session_id: player,
+    session_id: playerId,
     settings: { state: "pause" },
   });
 }
 
 function resume() {
   call.updateRemoteMediaPlayer({
-    session_id: player,
+    session_id: playerId,
     settings: { state: "play" },
   });
 }
 
 function stop() {
-  call.stopRemoteMediaPlayer(player);
+  call.stopRemoteMediaPlayer(playerId);
 }
 
 function handleStarted(e) {
-  player = e.session_id;
+  playerId = e.session_id;
   call.updateCustomTrayButtons({
     mediaStop: mediaStopButton,
     mediaPause: mediaPauseButton,

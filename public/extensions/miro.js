@@ -4,7 +4,7 @@ import callstate from "./callstate.js";
 
 let fp, iframeEl, call;
 
-let props = {};
+const props = {};
 
 /* Extension configuration */
 // don't use the iframe extension's button
@@ -41,33 +41,23 @@ function handleMiroButton() {
       open: true,
     });
   } else {
-    if (props.anonymous === true) {
-      miroBoardsPicker.open({
-        clientId: props.clientId,
-        allowCreateAnonymousBoards: true,
-        getToken: () => getTokenFromServer(),
-        action: "select",
-        success: (result) => {
-          console.log("picked board: ", result);
-          callstate.updateCallState("iframe", {
-            open: true,
-            url: iframeUrl(result.id),
-          });
-        },
-      });
-    } else {
-      miroBoardsPicker.open({
-        clientId: props.clientId,
-        action: "select",
-        success: (result) => {
-          console.log("picked board: ", result);
-          callstate.updateCallState("iframe", {
-            open: true,
-            url: iframeUrl(result.id),
-          });
-        },
-      });
+    const boardProps = {
+      clientId: props.clientId,
+      allowCreateAnonymousBoards: true,
+      getToken: () => getTokenFromServer(),
+      action: "select",
+      success: (result) => {
+        console.log("picked board: ", result);
+        callstate.updateCallState("iframe", {
+          open: true,
+          url: iframeUrl(result.id),
+        });
+      },
     }
+    if (props.anonymous === true) {
+      boardProps.allowCreateAnonymousBoards = true;
+    }
+    miroBoardsPicker.open(boardProps);
   }
 }
 

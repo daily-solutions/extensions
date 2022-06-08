@@ -5,7 +5,7 @@ import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
 export default class Socket {
   constructor({ hostname = "", key = "" } = {}) {
     this.hostname = hostname;
-    this.key = key;
+    this.key = key.replace(/^\/+/, '');
 
     this.updateHandlers = [];
     this.state = {};

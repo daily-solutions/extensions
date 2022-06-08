@@ -5,17 +5,20 @@ let state, call;
 let socket;
 let pounced = false;
 let openCallback, closeCallback, onceOpenCallback;
-let openCallbacks = [];
-let closeCallbacks = [];
+const openCallbacks = [];
+const closeCallbacks = [];
+const DOOR_CLOSED = "closed";
+const DOOR_OPEN = "open";
 
 /* Defaults */
 let props = {
   room: "", // used to build the presence socket namespace key.
   domain: "", // used to build the presence socket namespace key.
+  teacher: false, // used to only show the door button to the teacher.
 };
-let key = "door";
+const key = "door";
 
-let buttons = {
+const buttons = {
   closeDoor: {
     iconPath: "https://www.svgrepo.com/show/344140/door-open-fill.svg",
     label: "Close Door",
@@ -37,17 +40,17 @@ let buttons = {
 let self;
 export default self = {
   connect: function (p) {
-    props = p;
-    let key = `${p.domain}/${p.room}/door`;
+    Object.assign(props, p);
+    const key = `${p.domain}/${p.room}/door`;
     socket = new Socket({ key });
     socket.onStateUpdate((s) => {
       state = s;
-      if (state.clients == 1 && !state["doorState"]) {
+      if (state.clients === 1 && !state["doorState"]) {
         // nobody's here yet; open the door
         self.open();
-      } else if (state["doorState"] === "open") {
+      } else if (state["doorState"] === DOOR_OPEN) {
         handleOpen();
-      } else if (state["doorState"] === "closed") {
+      } else if (state["doorState"] === DOOR_CLOSED) {
         handleClosed();
       }
     });
@@ -66,10 +69,10 @@ export default self = {
     closeCallbacks.unshift({ cb, once: true });
   },
   open: function () {
-    socket.updateState({ doorState: "open" });
+    socket.updateState({ doorState: DOOR_OPEN });
   },
   close: function () {
-    socket.updateState({ doorState: "closed" });
+    socket.updateState({ doorState: DOOR_CLOSED });
   },
 };
 
@@ -77,35 +80,40 @@ export default self = {
 
 function handleOpen() {
   // switch button here when bug is fixed
-  for (var i = openCallbacks.length - 1; i >= 0; i--) {
-    openCallbacks[i]["cb"]();
-    if (openCallbacks[i].once === true) {
-      openCallbacks.splice(1, i);
+  for (let i = openCallbacks.length - 1; i >= 0; i--) {
+    const callback = openCallbacks[i];
+    callback["cb"]();
+    if (callback.once === true) {
+      openCallbacks.splice(i, 1);
     }
   }
 }
 
 function handleClosed() {
   // switch button here when bug is fixed
-  for (var i = closeCallbacks.length - 1; i >= 0; i--) {
-    closeCallbacks[i]();
-    if (closeCallbacks[i].once === true) {
-      closeCallbacks.splice(1, i);
+  for (let i = closeCallbacks.length - 1; i >= 0; i--) {
+    const callback = closeCallbacks[i];
+    callback["cb"]();
+    if (callback.once === true) {
+      closeCallbacks.splice(i, 1);
     }
   }
 }
 
 daily.beforeCreateFrame((parentEl, properties) => {
-  if (!properties.customTrayButtons) {
-    properties.customTrayButtons = {};
+  if (props.teacher === true) {
+    if (!properties.customTrayButtons) {
+      properties.customTrayButtons = {};
+    }
+    const button =
+      state.doorState === DOOR_CLOSED
+        ? { openDoor: buttons.openDoor }
+        : { closeDoor: buttons.closeDoor };
+    Object.assign(properties.customTrayButtons, {
+      toggleDoor: buttons.toggleDoor,
+    }); // use button var when bug is fixed
   }
-  let button =
-    state.doorState === "closed"
-      ? { openDoor: buttons.openDoor }
-      : { closeDoor: buttons.closeDoor };
-  Object.assign(properties.customTrayButtons, {
-    toggleDoor: buttons.toggleDoor,
-  }); // use button when bug is fixed
+
   return [parentEl, properties];
 });
 
@@ -120,7 +128,7 @@ daily.afterCreateFrame(async (c) => {
         self.close();
         break;
       case "toggleDoor":
-        state.doorState === "closed" ? self.open() : self.close();
+        state.doorState === DOOR_CLOSED ? self.open() : self.close();
         break;
     }
   });

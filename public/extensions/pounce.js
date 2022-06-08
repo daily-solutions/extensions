@@ -2,14 +2,13 @@ import Socket from "./socketiostate.js";
 let state, props, socket;
 let pounced = false;
 let callback, soloCallback;
-let key = "pounce";
 
 /* Public interface */
 let self;
 export default self = {
   connect: function (p) {
     props = p;
-    let key = `${p.domain}/${p.room}/pounce`;
+    const key = `${p.domain}/${p.room}/pounce`;
     socket = new Socket({ key });
     socket.onStateUpdate((s) => {
       state = s;
@@ -17,7 +16,7 @@ export default self = {
         go();
       }
 
-      if (state.clients == 1 && pounced === true) {
+      if (state.clients === 1 && pounced === true) {
         stop();
       }
     });

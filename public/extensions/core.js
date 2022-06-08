@@ -1,5 +1,5 @@
-let afterCreateFrameHandlers = [];
-let beforeCreateFrameHandlers = [];
+const afterCreateFrameHandlers = [];
+const beforeCreateFrameHandlers = [];
 let call;
 
 /* Public interface */
@@ -13,7 +13,7 @@ export default {
     // your subclass should replace this if you need to do stuff
     // before the call frame is created
     for (let i = 0; i < beforeCreateFrameHandlers.length; i++) {
-      let bcfh = beforeCreateFrameHandlers[i];
+      const bcfh = beforeCreateFrameHandlers[i];
       // TODO: probably need to check argument count or something
       [parentEl, properties] = bcfh(parentEl, properties);
     }

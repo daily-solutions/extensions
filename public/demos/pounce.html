@@ -30,7 +30,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const domain = urlParams.get("domain") || "chad-hq";
       const room = urlParams.get("room") || "extensions";
-      const waiting = document.querySelector("#waiting");
+      const waiting = document.getElementById("waiting");
 
       import daily from "../extensions/core.js";
       import pounce from "../extensions/pounce.js";

@@ -25,7 +25,7 @@
       const domain = urlParams.get("domain") || "chad-hq";
       const room = urlParams.get("room") || "extensions";
       const token = urlParams.get("t");
-      const teacher = urlParams.get("teacher");
+      const teacher = urlParams.get("teacher")?.toLowerCase() === "true";
       const key =
         urlParams.get("key") || "aa746656-b640-40ed-b010-2807561225fa";
 

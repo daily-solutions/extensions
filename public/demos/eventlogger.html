@@ -14,6 +14,8 @@
     <script type="module">
       import daily from "../extensions/core.js";
       import eventlogger from "../extensions/eventlogger.js";
+
+      const urlParams = new URLSearchParams(window.location.search);
       const domain = urlParams.get("domain") || "chad-hq";
       const room = urlParams.get("room") || "extensions";
 

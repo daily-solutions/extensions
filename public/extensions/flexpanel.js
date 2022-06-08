@@ -1,10 +1,10 @@
 import daily from "./core.js";
 
-var fpEl, leftEl, rightEl, grabberEl, rightEl, wrapperEl;
-var call;
-var isHandlerDragging = false;
-var flexpanelOpen = false;
-var activeSpeakerWas;
+let fpEl, leftEl, rightEl, grabberEl, wrapperEl;
+let call;
+let isHandlerDragging = false;
+let flexpanelOpen = false;
+let activeSpeakerWas;
 
 /* Daily configuration */
 daily.afterCreateFrame((c) => (call = c));
@@ -48,7 +48,7 @@ export default self = {
     });
 
     // add some styles that control behavior of the flexpanel
-    var styleEl = document.createElement("style");
+    const styleEl = document.createElement("style");
     styleEl.innerHTML = `body {
         margin: 0px;
         padding: 0px;
@@ -118,25 +118,13 @@ export default self = {
     leftEl.appendChild(leftNode);
     rightEl.appendChild(rightNode);
 
-    // If the left panel contains an iframe,
-    // we need to ignore mouse events in
-    // it when we're dragging to resize
-
-    // store a few states on the window
-    window.activeSpeakerWas = false;
-    window.flexpanelOpen = false;
-    window.isHandlerDragging = false;
-
-    // provide a few methods for extensions to control the flexpanel
-
-    // flexpanel behavior
     document.addEventListener("mousedown", function (e) {
       // If mousedown event is fired from grabberEl, toggle flag to true
       if (e.target === grabberEl) {
-        var rightElIframe = document.querySelector(
+        const rightElIframe = document.querySelector(
           "iframe.rightContainer, .rightContainer iframe"
         );
-        var leftElIframe = document.querySelector(
+        const leftElIframe = document.querySelector(
           "iframe.leftContainer, .leftContainer iframe"
         );
 
@@ -164,13 +152,13 @@ export default self = {
       }
 
       // Get offset
-      var containerOffsetLeft = leftEl.offsetLeft;
+      const containerOffsetLeft = leftEl.offsetLeft;
 
       // Get x-coordinate of pointer relative to container
-      var pointerRelativeXpos = e.clientX - containerOffsetLeft;
+      const pointerRelativeXpos = e.clientX - containerOffsetLeft;
 
       // Arbitrary minimum width set on box A, otherwise its inner content will collapse to width of 0
-      var leftElMinWidth = 60;
+      const leftElMinWidth = 60;
 
       // Resize box A
       // * 8px is the left/right spacing between grabberEl and its inner pseudo-element
@@ -183,10 +171,10 @@ export default self = {
     document.addEventListener("mouseup", function (e) {
       // Turn off dragging flag when user mouse is up
       isHandlerDragging = false;
-      var rightElIframe = document.querySelector(
+      const rightElIframe = document.querySelector(
         "iframe.rightContainer, .rightContainer iframe"
       );
-      var leftElIframe = document.querySelector(
+      const leftElIframe = document.querySelector(
         "iframe.leftContainer, .leftContainer iframe"
       );
 

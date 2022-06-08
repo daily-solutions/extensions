@@ -9,7 +9,7 @@ const io = new Server(server, {
   },
 });
 
-let state = {};
+const state = {};
 
 // "nsp" is the socket namespace. Most single-room
 // extensions set this to ${domain}/${room}/${extensionName}.

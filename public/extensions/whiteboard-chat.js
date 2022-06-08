@@ -22,15 +22,16 @@ export default {
 async function iframeUrl(e) {
   let src = "https://www.whiteboard.chat/apiaccess/createjoin/";
   // use a per-room whiteboard for now
-  let sessionId = e.participants.local.session_id;
-  let userId = e.participants.local.user_id;
-  let roomInfo = await call.room();
+  const participant = e.participants.local;
+  const sessionId = participant.session_id;
+  const userId = participant.user_id;
+  const roomInfo = await call.room();
   src += roomInfo.id; // use the room's GUID as the whiteboard ID
   src += `?key=${props.key}&disableNav=true`; // add some other useful things
   if (props.teacher === "true") {
     src += "&teacher=true&deleteOldUsers=180";
   }
-  src += "&username=" + encodeURIComponent(e.participants.local.user_name);
+  src += "&username=" + encodeURIComponent(participant.user_name);
   src += "&boardName=" + encodeURIComponent(roomInfo.name);
   console.log("whiteboard URL:", src);
   return src;

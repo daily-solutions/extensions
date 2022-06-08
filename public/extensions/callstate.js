@@ -4,7 +4,9 @@ let state = {};
 let updateHandlers = [];
 let call = {};
 let waitingForSync = false;
-let SYNC_MAX_WAITING_TIME = 7000;
+const SYNC_MAX_WAITING_TIME = 7000;
+const UPDATE_MSG = "update-call-state";
+const REQUEST_MSG = "request-call-state";
 
 /* Public interface */
 export default {
@@ -34,17 +36,14 @@ daily.afterCreateFrame((c) => {
   // listen for requests for state from new peers
   call.on("app-message", (e) => {
     switch (e.data.message) {
-      case "request-call-state":
+      case REQUEST_MSG:
         // only send state if I'm not waiting for it myself
         if (waitingForSync === false) {
-          call.sendAppMessage(
-            { message: "update-call-state", state },
-            e.fromId
-          );
+          call.sendAppMessage({ message: UPDATE_MSG, state }, e.fromId);
         }
         break;
 
-      case "update-call-state":
+      case UPDATE_MSG:
         waitingForSync = false;
         applyStateUpdates(e.data.state);
         break;
@@ -54,13 +53,15 @@ daily.afterCreateFrame((c) => {
   // ask a peer for the existing state
   call.on("joined-meeting", async (e) => {
     waitingForSync = true;
-    // Randomize delay to increase the chance of lowering overall network traffic
-    const requestDelay = 1000 + Math.ceil(1000 * Math.random());
 
     let overallTimeout = setTimeout(() => {
       waitingForSync = false;
     }, SYNC_MAX_WAITING_TIME);
 
+    // Use an interval timer to request state from different
+    // peers until we eventually get a response. Randomize the delay
+    // to increase the chance of lowering overall network traffic
+    const requestDelay = 1000 + Math.ceil(1000 * Math.random());
     let interval = setInterval(() => {
       if (waitingForSync === false) {
         clearInterval(interval);
@@ -77,6 +78,7 @@ function applyStateUpdates(newState) {
     applyStateUpdate(k, newState[k]);
   });
 }
+
 function applyStateUpdate(key = "", newState) {
   // also used internally when we receive a state update
   // from the messaging channel.
@@ -87,24 +89,25 @@ function applyStateUpdate(key = "", newState) {
   if (!updateHandlers[key]) {
     updateHandlers[key] = [];
   }
-  for (var i = 0; i < updateHandlers[key].length; i++) {
+  const handlers = updateHandlers[key];
+  for (let i = 0; i < handlers.length; i++) {
     // try calling handlers with just the updated state
     // to make change detection logic easier
-    updateHandlers[key][i](newState);
+    handlers[i](newState);
   }
 }
 
 function broadcastStateUpdate(key, newState) {
-  var ns = {};
+  const ns = {};
   ns[key] = newState;
-  call.sendAppMessage({ message: "update-call-state", state: ns });
+  call.sendAppMessage({ message: UPDATE_MSG, state: ns });
 }
 
 async function requestState() {
-  let friends = await call.participants();
+  const friends = await call.participants();
   // find someone that joined before us and ask for state
   const joinedDate = friends.local.joined_at;
-  let mentors = Object.entries(friends)
+  const mentors = Object.entries(friends)
     .filter(([id, f]) => id !== "local" && f.joined_at < joinedDate)
     .map(([id]) => id);
   if (mentors.length === 0) {

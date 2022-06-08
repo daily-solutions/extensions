@@ -6,7 +6,7 @@ let fp, iframeEl, locationEl, call;
 let open = false;
 
 /* Defaults */
-let defaultButtons = {
+const defaultButtons = {
   selectUrl: {
     iconPath: "https://www.svgrepo.com/show/107601/globe.svg",
     label: "Iframe",
@@ -14,7 +14,7 @@ let defaultButtons = {
   },
 };
 
-let props = {
+const props = {
   url: "about:blank", // used to set the initial URL for the iframe.
   buttons: defaultButtons, // used to change the button names and/or icons.
   showUrl: false, // controls whether to display the active iframe URL as a pseudo-address-bar
