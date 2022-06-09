@@ -10,14 +10,16 @@
     own computer, you'll need to follow the instructions in README.rd to run
     the test server locally.
     
-    You can use this extension with your own Daily domain and room with query params:
-    `door.html?domain=yourdomain&room=yourroom`
+    You can use this extension with your own Daily domain and room with query params.
+    You'll also need to set `teacher=true` to be able to control the door:
+    `door.html?domain=yourdomain&room=yourroom&teacher=true`
     
-    To try it, open this page in a browser tab. You should join the meeting immediately.
-    Once you're in, click the "door" button to close the door. (The button won't change
-    state because of a temporary bug.) Then, try opening this same page in another browser
-    tab. You should see a message telling you the door is closed. When you click the "door"
-    button in the first tab again, your second tab should automatically join the room.
+    To try it, open this page in a browser tab with the `teacher=true` query param.
+    You should join the meeting immediately. Once you're in, click the "door" button
+    to close the door. (The button won't change state because of a temporary bug.)
+    Then, try opening this same page in another browser tab. You should see a message
+    telling you the door is closed. When you click the "door" button in the first tab
+    again, your second tab should automatically join the room.
     -->
   </head>
   <body onload="main()">
@@ -33,7 +35,7 @@
       const domain = urlParams.get("domain") || "chad-hq";
       const room = urlParams.get("room") || "extensions";
       const waiting = document.querySelector("#waiting");
-      const teacher = urlParams.get("teacher")?.toLowerCase() === "true";
+      const teacher = urlParams.get("teacher") === "true";
 
       import daily from "../extensions/core.js";
       import door from "../extensions/door.js";
