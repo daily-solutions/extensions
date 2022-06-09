@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <title>Daily.co Iframe Demo</title>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <style></style>
+    <!--
+    This demo shows how you can use an Whiteboard.chat board in a Daily Prebuilt room.
+    
+    You can use this extension with your own Daily domain and room with query params. You can also
+    use your own Whiteboard.chat account by setting the `key` param to your API key from the
+    whiteboard.chat site. Obviously, in production you'd want to hide that key. You'll also need
+    someone to join using the `teacher` param set to true to be able to start the boards:
+    `wc.html?domain=yourdomain&room=yourroom&key={yourkey}&teacher=true`
+    
+    To try it, open this page in a browser tab, making sure to add `teacher=true` to the URL. Then
+    click the "Boards" button in the toolbar. You can join in other tabs without `teacher=true` to
+    see the boards appear and disappear for the students.
+    -->
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer"></div>
+
+    <script type="module">
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "chad-hq";
+      const room = urlParams.get("room") || "extensions";
+      const token = urlParams.get("t");
+      const teacher = urlParams.get("teacher")?.toLowerCase() === "true";
+      const key =
+        urlParams.get("key") || "aa746656-b640-40ed-b010-2807561225fa";
+
+      import daily from "../extensions/core.js";
+      import wc from "../extensions/whiteboard-chat.js";
+
+      wc.configure({ teacher, room, key });
+
+      window.main = async function () {
+        window.call = daily.createFrame(dailyContainer, {
+          url: `https://${domain}.daily.co/${room}`,
+          dailyConfig: {
+            experimentalChromeVideoMuteLightOff: true,
+          },
+        });
+
+        window.dailyFrame = call.iframe();
+        await call.join();
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Daily.co Iframe Demo</title>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <!--
+    This demo shows how you can embed an Iframe next to a Daily Prebuilt room.
+    
+    You can use this extension with your own Daily domain and room with query params:
+    `mediaplayer.html?domain=yourdomain&room=yourroom`
+    
+    To try it, open this page in a browser tab, then click the "Play Video" button in the toolbar.
+    Enter a URL to a video file or RTMP stream and click OK to start playback. Unfortunately,
+    playback isn't supported in Prebuilt at the moment, but if you open a separate page with
+    a custom UI (such as our React example app) pointed to the same room, you'll see and hear
+    the video playback.
+    -->
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer"></div>
+
+    <script type="module">
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "chad-hq";
+      const room = urlParams.get("room") || "extensions";
+
+      import daily from "../extensions/core.js";
+      import mediaplayer from "../extensions/mediaplayer.js";
+
+      window.main = async function () {
+        window.call = daily.createFrame(dailyContainer, {
+          url: `https://${domain}.daily.co/${room}`,
+          dailyConfig: {
+            experimentalChromeVideoMuteLightOff: true,
+          },
+        });
+
+        await call.join();
+      };
+    </script>
+  </body>
+</html>

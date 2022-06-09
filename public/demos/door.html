@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>Daily.co Door Demo</title>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <!--
+    This demo shows how you can implement a "door" to temporarily prevent
+    other people from joining a room, even if they have a valid meeting token.
+    
+    The door extension requires an external presence server. To try it on your
+    own computer, you'll need to follow the instructions in README.rd to run
+    the test server locally.
+    
+    You can use this extension with your own Daily domain and room with query params:
+    `door.html?domain=yourdomain&room=yourroom`
+    
+    To try it, open this page in a browser tab. You should join the meeting immediately.
+    Once you're in, click the "door" button to close the door. (The button won't change
+    state because of a temporary bug.) Then, try opening this same page in another browser
+    tab. You should see a message telling you the door is closed. When you click the "door"
+    button in the first tab again, your second tab should automatically join the room.
+    -->
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer">
+      <div id="waiting" style="text-align: center">
+        The door to this room is closed right now. We'll connect you as soon as
+        it opens!
+      </div>
+    </div>
+
+    <script type="module">
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "chad-hq";
+      const room = urlParams.get("room") || "extensions";
+      const waiting = document.querySelector("#waiting");
+      const teacher = urlParams.get("teacher")?.toLowerCase() === "true";
+
+      import daily from "../extensions/core.js";
+      import door from "../extensions/door.js";
+      window.main = async function () {
+        door.onceOpen(async () => {
+          waiting.style.display = "none";
+
+          window.call = daily.createFrame(dailyContainer, {
+            url: `https://${domain}.daily.co/${room}`,
+            dailyConfig: {
+              experimentalChromeVideoMuteLightOff: true,
+            },
+          });
+          await call.join();
+        });
+        door.connect({ domain, room, teacher });
+      };
+    </script>
+  </body>
+</html>
