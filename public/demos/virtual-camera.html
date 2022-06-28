@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>Daily.co Virtual Camera Demo</title>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <!--
+	This demo shows how you can use a virtual camera, such as DeepAR or
+	Banuba, with Daily Prebuilt.
+	-->
+  </head>
+  <body onload="main()">
+    <canvas id="deepar-canvas"></canvas>
+
+    <div id="dailyContainer"></div>
+
+    <script type="text/javascript" src="../lib/deepar.js"></script>
+    <script type="text/javascript">
+      // Initialize the DeepAR object
+      var deepAR = DeepAR({
+        licenseKey:
+          "3e4018804744ac52c23ea7605d5a1a51666f66bb96ee5c83935a6a9ab820ba26a6ee636ab725ba38",
+        canvasWidth: 1280,
+        canvasHeight: 720,
+        canvas: document.getElementById("deepar-canvas"),
+        numberOfFaces: 1, // how many faces we want to track min 1, max 4
+        onInitialize: function () {
+          // start video immediately after the initalization, mirror = true
+          deepAR.startVideo(true);
+          // load the aviators effect on the first face into slot 'slot'
+          deepAR.switchEffect(0, "slot", "../lib/teddycigar", function () {
+            // effect loaded
+          });
+          captureVideo();
+          joinCall();
+        },
+      });
+
+      // download the face tracking model
+      deepAR.downloadFaceTrackingModel("../lib/models-68-extreme.bin");
+
+      function captureVideo() {
+        window.videoStream = document
+          .getElementById("deepar-canvas")
+          .captureStream();
+      }
+
+      async function joinCall() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const domain = urlParams.get("domain") || "chad-hq";
+        const room = urlParams.get("room") || "extensions";
+
+        /*window.call = daily.createFrame(dailyContainer, {
+      url: `https://${domain}.daily.co/${room}`,
+      dailyConfig: {
+        experimentalChromeVideoMuteLightOff: true,
+      },
+       });*/
+        window.call = DailyIframe.createCallObject({
+          url: `https://${domain}.daily.co/${room}`,
+          videoSource: window.videoStream.getVideoTracks()[0],
+          dailyConfig: {
+            experimentalChromeVideoMuteLightOff: true,
+          },
+        });
+
+        await call.join();
+
+        //call.setInputDevicesAsync({ videoSource: window.videoStream });
+      }
+    </script>
+  </body>
+</html>

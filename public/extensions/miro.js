@@ -24,7 +24,11 @@ function iframeUrl(boardId) {
 }
 
 function getTokenFromServer() {
-  return fetch("https://daily-miro.glitch.me/jwt");
+  //return fetch("https://daily-miro.glitch.me/jwt");
+  //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTYzOTAxNjQ5MjcsImlzcyI6IjM0NTg3NjQ1MjQ0ODc1Njc0NTAiLCJpYXQiOjE2NTYzNDY5NjR9.yCMX54faspXUe_ymH-q1un7_rYD7SAV66BgHFS4DQ1A";
+  return Promise.resolve(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTYzOTAxNjQ5MjcsImlzcyI6IjM0NTg3NjQ1MjQ0ODc1Njc0NTAiLCJpYXQiOjE2NTYzNDY5NjR9.yCMX54faspXUe_ymH-q1un7_rYD7SAV66BgHFS4DQ1A"
+  );
 }
 
 function handleMiroButton() {
@@ -43,8 +47,12 @@ function handleMiroButton() {
   } else {
     const boardProps = {
       clientId: props.clientId,
-      allowCreateAnonymousBoards: true,
-      getToken: () => getTokenFromServer(),
+      //allowCreateAnonymousBoards: true,
+      getAnonymousUserToken: () => {
+        let result = getTokenFromServer();
+        console.log("in miro function, result is", result);
+        return result;
+      },
       action: "select",
       success: (result) => {
         console.log("picked board: ", result);
@@ -53,8 +61,9 @@ function handleMiroButton() {
           url: iframeUrl(result.id),
         });
       },
-    }
+    };
     if (props.anonymous === true) {
+      console.log("enabling anonymous boards");
       boardProps.allowCreateAnonymousBoards = true;
     }
     miroBoardsPicker.open(boardProps);
