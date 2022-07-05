@@ -30,6 +30,7 @@ io.of(/^\/.*$/).on("connection", (socket) => {
   });
 
   socket.on("update", (msg) => {
+    console.log("update", msg);
     Object.assign(state[nsp], msg);
     socket.nsp.emit("state", state[nsp]);
   });

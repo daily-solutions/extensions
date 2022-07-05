@@ -38,10 +38,8 @@
       const teacher = urlParams.get("teacher") === "true";
 
       import daily from "../extensions/core.js";
-      import door from "../extensions/door.js";
-      import eventlogger from "../extensions/eventlogger.js";
-
-      window.main = async function () {
+      import door from "../extensions/breakout.js";
+      window.main = function main() {
         door.onceOpen(async () => {
           waiting.style.display = "none";
 
