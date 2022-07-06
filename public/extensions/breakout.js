@@ -62,6 +62,7 @@ export default self = {
 
       if (room && room !== localParticipant.room) {
         await call.leave();
+        // await call.destroy();
         await call.join({ url: "https://hush.daily.co/" + room });
       }
     });
