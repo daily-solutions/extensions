@@ -5,10 +5,12 @@ import Socket from "./socketiostate.js";
 
 let call;
 let socket;
-const openCallbacks = [];
-const closeCallbacks = [];
-const DOOR_CLOSED = "closed";
-const DOOR_OPEN = "open";
+
+// Defaults
+let props = {
+  room: "", // used to build the presence socket namespace key.
+  domain: "", // used to build the presence socket namespace key.
+};
 
 // Initial state
 let state = {
@@ -16,40 +18,14 @@ let state = {
   participants: [{ user_name: "", room: "" }],
 };
 
-/* Defaults */
-let props = {
-  room: "", // used to build the presence socket namespace key.
-  domain: "", // used to build the presence socket namespace key.
-  teacher: true, // TODO MAKE FALSE used to only show the door button to the teacher.
-};
-
-const buttons = {
-  endBreakout: {
-    iconPath: "https://www.svgrepo.com/show/344140/door-open-fill.svg",
-    label: "End Breakout",
-    tooltip: "End Breakout",
-  },
-  startBreakout: {
-    iconPath: "https://www.svgrepo.com/show/344139/door-closed-fill.svg",
-    label: "Start Breakout",
-    tooltip: "Start Breakout",
-  },
-  toggleBreakout: {
-    iconPath: "https://www.svgrepo.com/show/344139/door-closed-fill.svg",
-    label: "Toggle Breakout",
-    tooltip: "Toggle Breakout",
-  },
-};
-
 /* Public interface */
 let self;
 export default self = {
   connect: function (p) {
     Object.assign(props, p);
-    const key = `${p.domain}/${p.room}/breakout`; // probably need a random string or session here
+    const key = `${p.domain}/${p.room}/breakout`;
     socket = new Socket({ key });
     socket.onStateUpdate(async (s) => {
-      console.log("state update", s);
       state = { ...state, ...s };
 
       const localParticipant = Object.entries(call.participants())
@@ -61,9 +37,13 @@ export default self = {
       )?.room;
 
       if (room && room !== localParticipant.room) {
-        await call.leave();
-        // await call.destroy();
-        await call.join({ url: "https://hush.daily.co/" + room });
+        try {
+          await call.leave();
+          // await call.destroy();
+          await call.join({ url: `https://${p.domain}.daily.co/${room}` });
+        } catch (err) {
+          console.error("Failed to join new room:", err);
+        }
       }
     });
     socket.connect();
@@ -76,14 +56,11 @@ export default self = {
       .sort((a, b) => a.sort - b.sort)
       .map(({ value }) => value)
       .map(([_, participant], index) => {
-        if (index % 2 === 0) {
-          return { room: "breakout2", user_name: participant.user_name };
-        } else {
-          return { room: "breakout3", user_name: participant.user_name };
-        }
+        // Evenly split into two rooms
+        const room = index % 2 === 0 ? "breakout2" : "breakout3";
+        return { room, user_name: participant.user_name };
       });
 
-    console.log(participants);
     // 2. Send state to all clients
     socket.updateState({
       participants,
@@ -91,7 +68,8 @@ export default self = {
     });
   },
   end: function () {
-    // Not call participants!
+    // 1. Get a list of participants from the server state
+    // and bring them all back to the main room
 
     const participants = state.participants.map((participant) => {
       return { room: "breakout1", user_name: participant.user_name };
@@ -104,40 +82,19 @@ export default self = {
   },
 };
 
-/* Private implementation */
-
-function handleStartBreakout() {
-  // switch button here when bug is fixed
-  for (let i = openCallbacks.length - 1; i >= 0; i--) {
-    const callback = openCallbacks[i];
-    callback["cb"]();
-    if (callback.once === true) {
-      openCallbacks.splice(i, 1);
-    }
-  }
-}
-
-function handleEndBreakout() {
-  // switch button here when bug is fixed
-  for (let i = closeCallbacks.length - 1; i >= 0; i--) {
-    const callback = closeCallbacks[i];
-    callback["cb"]();
-    if (callback.once === true) {
-      closeCallbacks.splice(i, 1);
-    }
-  }
-}
-
 daily.beforeCreateFrame((parentEl, properties) => {
-  console.log("properties", properties);
-
-  if (props.teacher === true) {
-    if (!properties.customTrayButtons) {
-      properties.customTrayButtons = {};
-    }
-
-    properties.customTrayButtons = { toggleBreakout: buttons.toggleBreakout };
+  if (!properties.customTrayButtons) {
+    properties.customTrayButtons = {};
   }
+
+  properties.customTrayButtons = {
+    ...properties.customTrayButtons,
+    toggleBreakout: {
+      iconPath: "https://www.svgrepo.com/show/207394/flash.svg",
+      label: "Toggle Breakout",
+      tooltip: "Toggle Breakout",
+    },
+  };
 
   return [parentEl, properties];
 });
