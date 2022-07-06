@@ -37,6 +37,7 @@ io.of(/^\/.*$/).on("connection", (socket) => {
   });
 });
 
+// Proxy to Daily API to create rooms for breakout rooms
 app.post("/", async (req, res) => {
   try {
     // Add logic to check if the user is authorized to update the state
