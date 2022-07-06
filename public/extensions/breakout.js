@@ -3,7 +3,7 @@
 import daily from "./core.js";
 import Socket from "./socketiostate.js";
 
-let state, call;
+let call;
 let socket;
 const openCallbacks = [];
 const closeCallbacks = [];
@@ -11,21 +11,16 @@ const DOOR_CLOSED = "closed";
 const DOOR_OPEN = "open";
 
 // Initial state
-const initialState = {
+let state = {
   breakoutStarted: false,
-  participants: [
-    { roomId: "breakout", userId: "Alice" },
-    { roomId: "breakout", userId: "Bob" },
-    { roomId: "breakout", userId: "Charlie" },
-    { roomId: "breakout", userId: "Dave" },
-  ],
+  participants: [],
 };
 
 /* Defaults */
 let props = {
   room: "", // used to build the presence socket namespace key.
   domain: "", // used to build the presence socket namespace key.
-  teacher: false, // used to only show the door button to the teacher.
+  teacher: true, // TODO MAKE FALSE used to only show the door button to the teacher.
 };
 
 const buttons = {
@@ -39,7 +34,7 @@ const buttons = {
     label: "Start Breakout",
     tooltip: "Start Breakout",
   },
-  toggleDoor: {
+  toggleBreakout: {
     iconPath: "https://www.svgrepo.com/show/344139/door-closed-fill.svg",
     label: "Toggle Breakout",
     tooltip: "Toggle Breakout",
@@ -55,35 +50,44 @@ export default self = {
     socket = new Socket({ key });
     socket.onStateUpdate((s) => {
       console.log("state update", s);
-      state = s;
-      if (state.clients === 1 && !state["doorState"]) {
-        // nobody's here yet; open the door
-        self.startBreakout();
-      } else if (state["doorState"] === DOOR_OPEN) {
-        handleStartBreakout();
-      } else if (state["doorState"] === DOOR_CLOSED) {
-        handleEndBreakout();
-      }
+      state = { ...s };
+
+      // state.participants[]
     });
     socket.connect();
   },
-  onOpen: function (cb) {
-    openCallbacks.unshift({ cb, once: false });
+  start: function () {
+    // 1. Randomize participants
+
+    const participants = Object.entries(call.participants())
+      .map((value) => ({ value, sort: Math.random() })) // shuffle participants
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value)
+      .map(([_, participant], index) => {
+        if (index % 2 === 0) {
+          return { roomId: "breakout2", sessionId: participant.session_id };
+        } else {
+          return { roomId: "breakout3", sessionId: participant.session_id };
+        }
+      });
+
+    console.log(participants);
+    // 2. Send state to all clients
+    socket.updateState({
+      participants,
+      breakoutStarted: true,
+    });
   },
-  onceOpen: function (cb) {
-    openCallbacks.unshift({ cb, once: true });
-  },
-  onClose: function (cb) {
-    closeCallbacks.unshift({ cb, once: false });
-  },
-  onceClose: function (cb) {
-    closeCallbacks.unshift({ cb, once: true });
-  },
-  open: function () {
-    socket.updateState({ doorState: DOOR_OPEN });
-  },
-  close: function () {
-    socket.updateState({ doorState: DOOR_CLOSED });
+  end: function () {
+    const participants = Object.entries(call.participants()).map(
+      ([_, participant]) => {
+        return { roomId: "breakout1", sessionId: participant.session_id };
+      }
+    );
+    socket.updateState({
+      participants,
+      breakoutStarted: false,
+    });
   },
 };
 
@@ -112,17 +116,14 @@ function handleEndBreakout() {
 }
 
 daily.beforeCreateFrame((parentEl, properties) => {
+  console.log("properties", properties);
+
   if (props.teacher === true) {
     if (!properties.customTrayButtons) {
       properties.customTrayButtons = {};
     }
-    const button =
-      state.doorState === DOOR_CLOSED
-        ? { startBreakout: buttons.startBreakout }
-        : { endBreakout: buttons.endBreakout };
-    Object.assign(properties.customTrayButtons, {
-      button,
-    }); // use button var when bug is fixed
+
+    properties.customTrayButtons = { toggleBreakout: buttons.toggleBreakout };
   }
 
   return [parentEl, properties];
@@ -131,18 +132,10 @@ daily.beforeCreateFrame((parentEl, properties) => {
 daily.afterCreateFrame(async (c) => {
   call = c;
   call.on("custom-button-click", (e) => {
-    switch (e.button_id) {
-      case "startBreakout":
-        self.startBreakout();
-        break;
-      case "endBreakout":
-        self.endBreakout();
-        break;
-      case "toggleDoor":
-        state.doorState === DOOR_CLOSED
-          ? self.startBreakout()
-          : self.endBreakout();
-        break;
+    console.log("custom-button-click", e);
+    if (e.button_id !== "toggleBreakout") {
+      return;
     }
+    state.breakoutStarted ? self.end() : self.start();
   });
 });
