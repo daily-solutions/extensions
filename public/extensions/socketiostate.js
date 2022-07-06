@@ -5,13 +5,13 @@ import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
 export default class Socket {
   constructor({ hostname = "", key = "" } = {}) {
     this.hostname = hostname;
-    this.key = key.replace(/^\/+/, "");
+    this.key = key.replace(/^\/+/, '');
 
     this.updateHandlers = [];
     this.state = {};
   }
 
-  #applyStateUpdate(ns) {
+  _applyStateUpdate(ns) {
     // also used internally when we receive a state update
     // from the messaging channel.
     Object.assign(this.state, ns);
@@ -22,7 +22,7 @@ export default class Socket {
     }
   }
 
-  #broadcastStateUpdate(newState) {
+  _broadcastStateUpdate(newState) {
     this.socket.emit("update", newState);
   }
 
@@ -30,7 +30,7 @@ export default class Socket {
     this.socket = io(this.hostname + "/" + this.key);
     // listen for requests for state from new peers
     this.socket.on("state", (msg) => {
-      this.#applyStateUpdate(msg);
+      this._applyStateUpdate(msg);
     });
   }
 
@@ -39,9 +39,9 @@ export default class Socket {
   }
 
   updateState(newState, broadcast = true) {
-    this.#applyStateUpdate(newState);
+    this._applyStateUpdate(newState);
     if (broadcast) {
-      this.#broadcastStateUpdate(newState);
+      this._broadcastStateUpdate(newState);
     }
   }
 
