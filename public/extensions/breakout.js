@@ -13,7 +13,7 @@ const DOOR_OPEN = "open";
 // Initial state
 let state = {
   breakoutStarted: false,
-  participants: [{ session_id: "", room: "" }],
+  participants: [{ user_name: "", room: "" }],
 };
 
 /* Defaults */
@@ -57,10 +57,11 @@ export default self = {
         .map(([_, participant]) => participant)[0];
 
       const room = state.participants.find(
-        (p) => p.session_id === localParticipant.session_id
+        (p) => p.user_name === localParticipant.user_name
       )?.room;
 
       if (room && room !== localParticipant.room) {
+        await call.leave();
         await call.join({ url: "https://hush.daily.co/" + room });
       }
     });
@@ -75,9 +76,9 @@ export default self = {
       .map(({ value }) => value)
       .map(([_, participant], index) => {
         if (index % 2 === 0) {
-          return { room: "breakout2", session_id: participant.session_id };
+          return { room: "breakout2", user_name: participant.user_name };
         } else {
-          return { room: "breakout3", session_id: participant.session_id };
+          return { room: "breakout3", user_name: participant.user_name };
         }
       });
 
@@ -89,11 +90,12 @@ export default self = {
     });
   },
   end: function () {
-    const participants = Object.entries(call.participants()).map(
-      ([_, participant]) => {
-        return { room: "breakout1", session_id: participant.session_id };
-      }
-    );
+    // Not call participants!
+
+    const participants = state.participants.map((participant) => {
+      return { room: "breakout1", user_name: participant.user_name };
+    });
+
     socket.updateState({
       participants,
       breakoutStarted: false,
