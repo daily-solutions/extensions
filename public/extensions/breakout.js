@@ -13,7 +13,7 @@ const DOOR_OPEN = "open";
 // Initial state
 let state = {
   breakoutStarted: false,
-  participants: [],
+  participants: [{ session_id: "", room: "" }],
 };
 
 /* Defaults */
@@ -48,11 +48,21 @@ export default self = {
     Object.assign(props, p);
     const key = `${p.domain}/${p.room}/breakout`; // probably need a random string or session here
     socket = new Socket({ key });
-    socket.onStateUpdate((s) => {
+    socket.onStateUpdate(async (s) => {
       console.log("state update", s);
-      state = { ...s };
+      state = { ...state, ...s };
 
-      // state.participants[]
+      const localParticipant = Object.entries(call.participants())
+        .filter(([id, _]) => id === "local")
+        .map(([_, participant]) => participant)[0];
+
+      const room = state.participants.find(
+        (p) => p.session_id === localParticipant.session_id
+      )?.room;
+
+      if (room && room !== localParticipant.room) {
+        await call.join({ url: "https://hush.daily.co/" + room });
+      }
     });
     socket.connect();
   },
@@ -65,9 +75,9 @@ export default self = {
       .map(({ value }) => value)
       .map(([_, participant], index) => {
         if (index % 2 === 0) {
-          return { roomId: "breakout2", sessionId: participant.session_id };
+          return { room: "breakout2", session_id: participant.session_id };
         } else {
-          return { roomId: "breakout3", sessionId: participant.session_id };
+          return { room: "breakout3", session_id: participant.session_id };
         }
       });
 
@@ -81,7 +91,7 @@ export default self = {
   end: function () {
     const participants = Object.entries(call.participants()).map(
       ([_, participant]) => {
-        return { roomId: "breakout1", sessionId: participant.session_id };
+        return { room: "breakout1", session_id: participant.session_id };
       }
     );
     socket.updateState({
@@ -132,7 +142,6 @@ daily.beforeCreateFrame((parentEl, properties) => {
 daily.afterCreateFrame(async (c) => {
   call = c;
   call.on("custom-button-click", (e) => {
-    console.log("custom-button-click", e);
     if (e.button_id !== "toggleBreakout") {
       return;
     }
