@@ -96,6 +96,7 @@ app.post("/create-rooms", async (req, res) => {
 });
 
 app.use("/", serveIndex(__dirname + "/public"));
+app.use(express.static(__dirname + "/public"));
 
 server.listen(process.env.PORT, () => {
   console.log("listening on", process.env.PORT);
