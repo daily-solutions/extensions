@@ -1,6 +1,7 @@
 // @ts-check
 const express = require("express");
 const app = express();
+const serveIndex = require("serve-index");
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
@@ -94,7 +95,7 @@ app.post("/create-rooms", async (req, res) => {
   }
 });
 
-app.use(express.static("public"));
+app.use("/", serveIndex(__dirname + "/public"));
 
 server.listen(process.env.PORT, () => {
   console.log("listening on", process.env.PORT);
