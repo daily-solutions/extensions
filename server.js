@@ -69,6 +69,7 @@ app.post("/create-rooms", async (req, res) => {
         name,
         properties: {
           exp,
+          enable_prejoin_ui: false,
         },
       });
       return fetch("https://api.daily.co/v1/rooms", {

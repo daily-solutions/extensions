@@ -12,9 +12,35 @@ let state = {
   participants: [{ user_name: "", room: "" }],
 };
 
-/* Public interface */
-let self;
-export default self = {
+daily.beforeCreateFrame((parentEl, properties) => {
+  if (!properties.customTrayButtons) {
+    properties.customTrayButtons = {};
+  }
+
+  properties.customTrayButtons = {
+    ...properties.customTrayButtons,
+    toggleBreakout: {
+      iconPath: "https://www.svgrepo.com/show/207394/flash.svg",
+      label: "Breakout",
+      tooltip: "Breakout",
+    },
+  };
+
+  return [parentEl, properties];
+});
+
+daily.afterCreateFrame(async (c) => {
+  call = c;
+  call.on("custom-button-click", (e) => {
+    if (e.button_id !== "toggleBreakout") {
+      return;
+    }
+
+    state.breakoutStarted ? self.end() : self.start();
+  });
+});
+
+const self = {
   connect: function ({ room = "", domain = "" }) {
     // Create breakout rooms (see server.js for implementation)
     fetch("/create-rooms", {
@@ -89,30 +115,4 @@ export default self = {
   },
 };
 
-daily.beforeCreateFrame((parentEl, properties) => {
-  if (!properties.customTrayButtons) {
-    properties.customTrayButtons = {};
-  }
-
-  properties.customTrayButtons = {
-    ...properties.customTrayButtons,
-    toggleBreakout: {
-      iconPath: "https://www.svgrepo.com/show/207394/flash.svg",
-      label: "Breakout",
-      tooltip: "Breakout",
-    },
-  };
-
-  return [parentEl, properties];
-});
-
-daily.afterCreateFrame(async (c) => {
-  call = c;
-  call.on("custom-button-click", (e) => {
-    if (e.button_id !== "toggleBreakout") {
-      return;
-    }
-
-    state.breakoutStarted ? self.end() : self.start();
-  });
-});
+export default self;
