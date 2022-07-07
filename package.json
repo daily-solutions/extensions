@@ -4,7 +4,8 @@
   "description": "A variety of tools for exending the functionality of the Daily platform",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "express": "^4.18.1",
@@ -16,5 +17,8 @@
   "repository": {
     "url": "https://github.com/daily-demos/extensions"
   },
-  "license": "BSD"
+  "license": "BSD",
+  "devDependencies": {
+    "prettier": "2.7.1"
+  }
 }
