@@ -51,8 +51,6 @@ app.post("/create-rooms", async (req, res) => {
   const Authorization = `Bearer ${dailyAPIKey}`;
 
   try {
-    const exp = Math.floor(Date.now() / 1000) + 60 * 30; // 30 minute expiry
-
     const headersList = {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -69,7 +67,6 @@ app.post("/create-rooms", async (req, res) => {
       const bodyContent = JSON.stringify({
         name,
         properties: {
-          exp,
           enable_prejoin_ui: false,
         },
       });
