@@ -57,8 +57,6 @@ app.post("/create-rooms", async (req, res) => {
       Authorization,
     };
 
-    const roomId = () => Math.floor(1000 + Math.random() * 9000); // generate random 4 digit number
-
     const roomRequets = [
       `ext-breakout-1`,
       `ext-breakout-2`,
