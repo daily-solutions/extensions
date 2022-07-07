@@ -11,9 +11,8 @@
 
     <script type="module">
       const urlParams = new URLSearchParams(window.location.search);
-      const domain = urlParams.get("domain") || "chad-hq";
-      const room = urlParams.get("room") || "extensions";
-      const teacher = urlParams.get("teacher") === "true";
+      const domain = urlParams.get("domain") || "hush";
+      const room = urlParams.get("room") || "breakout";
 
       import daily from "../extensions/core.js";
       import breakout from "../extensions/breakout.js";

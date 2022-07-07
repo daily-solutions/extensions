@@ -91,8 +91,8 @@ daily.beforeCreateFrame((parentEl, properties) => {
     ...properties.customTrayButtons,
     toggleBreakout: {
       iconPath: "https://www.svgrepo.com/show/207394/flash.svg",
-      label: "Toggle Breakout",
-      tooltip: "Toggle Breakout",
+      label: "Breakout",
+      tooltip: "Breakout",
     },
   };
 
