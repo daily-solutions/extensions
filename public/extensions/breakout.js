@@ -6,12 +6,6 @@ import Socket from "./socketiostate.js";
 let call;
 let socket;
 
-// Defaults
-let props = {
-  room: "", // used to build the presence socket namespace key.
-  domain: "", // used to build the presence socket namespace key.
-};
-
 // Initial state
 let state = {
   breakoutStarted: false,
@@ -21,9 +15,23 @@ let state = {
 /* Public interface */
 let self;
 export default self = {
-  connect: function (p) {
-    Object.assign(props, p);
-    const key = `${p.domain}/${p.room}/breakout`;
+  connect: function ({ room = "", domain = "" }) {
+    // Create breakout rooms (see server.js for implementation)
+    fetch("/create-rooms", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return response.text();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+
+    const key = `${domain}/${room}/breakout`;
     socket = new Socket({ key });
     socket.onStateUpdate(async (s) => {
       state = { ...state, ...s };
@@ -39,8 +47,7 @@ export default self = {
       if (room && room !== localParticipant.room) {
         try {
           await call.leave();
-          // await call.destroy();
-          await call.join({ url: `https://${p.domain}.daily.co/${room}` });
+          await call.join({ url: `https://${domain}.daily.co/${room}` });
         } catch (err) {
           console.error("Failed to join new room:", err);
         }
@@ -57,7 +64,7 @@ export default self = {
       .map(({ value }) => value)
       .map(([_, participant], index) => {
         // Evenly split into two rooms
-        const room = index % 2 === 0 ? "breakout2" : "breakout3";
+        const room = index % 2 === 0 ? "ext-breakout-2" : "ext-breakout-3";
         return { room, user_name: participant.user_name };
       });
 
@@ -72,7 +79,7 @@ export default self = {
     // and bring them all back to the main room
 
     const participants = state.participants.map((participant) => {
-      return { room: "breakout1", user_name: participant.user_name };
+      return { room: "ext-breakout-1", user_name: participant.user_name };
     });
 
     socket.updateState({
@@ -105,6 +112,7 @@ daily.afterCreateFrame(async (c) => {
     if (e.button_id !== "toggleBreakout") {
       return;
     }
+
     state.breakoutStarted ? self.end() : self.start();
   });
 });

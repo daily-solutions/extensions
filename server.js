@@ -38,65 +38,58 @@ io.of(/^\/.*$/).on("connection", (socket) => {
 });
 
 // Proxy to Daily API to create rooms for breakout rooms
-app.post("/", async (req, res) => {
-  try {
-    // Add logic to check if the user is authorized to update the state
-    const isAllowed = true;
-    if (!isAllowed) {
-      return res.json({
-        statusCode: 403,
-        headers: { "content-type": "application/json" },
-        body: "forbidden",
-      });
-    }
-  } catch (e) {
-    console.error(e);
-    return res.json({
-      statusCode: 500,
-      headers: { "content-type": "application/json" },
-      body: "failed to validate request IP",
+app.post("/create-rooms", async (req, res) => {
+  // Add logic to check if the user is authorized to create a room
+  const isAllowed = true;
+  if (!isAllowed) {
+    return res.status(403).json({
+      error: "forbidden",
     });
   }
-
   const dailyAPIKey = process.env.DAILY_API_KEY || "";
-  const Authorization = req.headers.Authorization || `Bearer ${dailyAPIKey}`;
-  // Prepare headers, containing our Daily API key
-  const headers = {
-    Authorization,
-    "Content-Type": "application/json",
-  };
-
-  const dailyAPIURL = "https://api.daily.co/v1/";
+  const Authorization = `Bearer ${dailyAPIKey}`;
 
   try {
-    const eventBody = JSON.parse(req.body ?? "{}");
-    const exp = Math.floor(Date.now() / 1000) + 60 * 10; // default to ten minutes
+    const exp = Math.floor(Date.now() / 1000) + 60 * 30; // 30 minute expiry
 
-    const finalReqBody = {
-      ...eventBody,
-      exp,
+    const headersList = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization,
     };
 
-    const response = await fetch(dailyAPIURL, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(finalReqBody),
+    const roomId = () => Math.floor(1000 + Math.random() * 9000); // generate random 4 digit number
+
+    const roomRequets = [
+      `ext-breakout-1`,
+      `ext-breakout-2`,
+      `ext-breakout-3`,
+    ].map((name) => {
+      const bodyContent = JSON.stringify({
+        name,
+        properties: {
+          exp,
+        },
+      });
+      return fetch("https://api.daily.co/v1/rooms", {
+        method: "POST",
+        body: bodyContent,
+        headers: headersList,
+      });
     });
 
-    const data = await response.text();
+    const responses = await Promise.all(roomRequets);
 
-    return {
-      statusCode: response.status,
-      headers: { "content-type": "application/json" },
-      body: data,
-    };
+    const responseBodies = responses.map((response) => response.json());
+
+    const data = await Promise.all(responseBodies);
+
+    const roomUrls = data.map(({ url }) => url);
+
+    return res.status(200).json({ roomUrls });
   } catch (error) {
     console.error(error);
-    return {
-      statusCode: 500,
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(error),
-    };
+    return res.status(400).json(error);
   }
 });
 
