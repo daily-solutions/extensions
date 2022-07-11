@@ -15,7 +15,7 @@
       const room = urlParams.get("room") || "breakout1";
 
       import daily from "../extensions/core.js";
-      import breakout from "../extensions/breakout.js";
+      import * as breakout from "../extensions/breakout.js";
       window.main = async function main() {
         window.call = daily.createFrame(dailyContainer, {
           url: `https://${domain}.daily.co/${room}`,

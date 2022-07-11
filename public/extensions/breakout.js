@@ -36,83 +36,81 @@ daily.afterCreateFrame(async (c) => {
       return;
     }
 
-    state.breakoutStarted ? self.end() : self.start();
+    state.breakoutStarted ? end() : start();
   });
 });
 
-const self = {
-  connect: function ({ room = "", domain = "" }) {
-    // Create breakout rooms (see server.js for implementation)
-    fetch("/create-rooms", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
+export function connect({ room = "", domain = "" }) {
+  // Create breakout rooms (see server.js for implementation)
+  fetch("/create-rooms", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      return response.text();
     })
-      .then((response) => {
-        return response.text();
-      })
-      .then((data) => {
-        console.log(data);
-      });
+    .then((data) => {
+      console.log(data);
+    });
 
-    const key = `${domain}/${room}/breakout`;
-    socket = new Socket({ key });
-    socket.onStateUpdate(async (s) => {
-      state = { ...state, ...s };
+  const key = `${domain}/${room}/breakout`;
+  socket = new Socket({ key });
+  socket.onStateUpdate(async (s) => {
+    state = { ...state, ...s };
 
-      const localParticipant = Object.entries(call.participants())
-        .filter(([id, _]) => id === "local")
-        .map(([_, participant]) => participant)[0];
+    const localParticipant = Object.entries(call.participants())
+      .filter(([id, _]) => id === "local")
+      .map(([_, participant]) => participant)[0];
 
-      const room = state.participants.find(
-        (p) => p.user_name === localParticipant.user_name
-      )?.room;
+    const room = state.participants.find(
+      (p) => p.user_name === localParticipant.user_name
+    )?.room;
 
-      if (room && room !== localParticipant.room) {
-        try {
-          await call.leave();
-          await call.join({ url: `https://${domain}.daily.co/${room}` });
-        } catch (err) {
-          console.error("Failed to join new room:", err);
-        }
+    if (room && room !== localParticipant.room) {
+      try {
+        await call.leave();
+        await call.join({ url: `https://${domain}.daily.co/${room}` });
+      } catch (err) {
+        console.error("Failed to join new room:", err);
       }
-    });
-    socket.connect();
-  },
-  start: function () {
-    // 1. Randomize participants
+    }
+  });
+  socket.connect();
+}
 
-    const participants = Object.entries(call.participants())
-      .map((value) => ({ value, sort: Math.random() })) // shuffle participants
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value)
-      .map(([_, participant], index) => {
-        // Evenly split into two rooms
-        const room = index % 2 === 0 ? "ext-breakout-2" : "ext-breakout-3";
-        return { room, user_name: participant.user_name };
-      });
+export function start() {
+  // 1. Randomize participants
 
-    // 2. Send state to all clients
-    socket.updateState({
-      participants,
-      breakoutStarted: true,
-    });
-  },
-  end: function () {
-    // 1. Get a list of participants from the server state
-    // and bring them all back to the main room
-
-    const participants = state.participants.map((participant) => {
-      return { room: "ext-breakout-1", user_name: participant.user_name };
+  const participants = Object.entries(call.participants())
+    .map((value) => ({ value, sort: Math.random() })) // shuffle participants
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+    .map(([_, participant], index) => {
+      // Evenly split into two rooms
+      const room = index % 2 === 0 ? "ext-breakout-2" : "ext-breakout-3";
+      return { room, user_name: participant.user_name };
     });
 
-    socket.updateState({
-      participants,
-      breakoutStarted: false,
-    });
-  },
-};
+  // 2. Send state to all clients
+  socket.updateState({
+    participants,
+    breakoutStarted: true,
+  });
+}
 
-export default self;
+export function end() {
+  // 1. Get a list of participants from the server state
+  // and bring them all back to the main room
+
+  const participants = state.participants.map((participant) => {
+    return { room: "ext-breakout-1", user_name: participant.user_name };
+  });
+
+  socket.updateState({
+    participants,
+    breakoutStarted: false,
+  });
+}
