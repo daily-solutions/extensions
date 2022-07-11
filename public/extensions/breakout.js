@@ -70,8 +70,19 @@ export function connect({ room = "", domain = "" }) {
   socket.connect();
 }
 
+function randomizeParticipants(participants = {}, roomUrls = []) {
+  return Object.entries(participants)
+    .map((value) => ({ value, sort: Math.random() })) // shuffle participants
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+    .map(([_, participant], index) => {
+      // Evenly split into two rooms
+      const roomUrl = index % 2 === 0 ? roomUrls[0] : roomUrls[1];
+      return { roomUrl, user_name: participant.user_name };
+    });
+}
+
 export async function start() {
-  // 1. Create breakout rooms (see server.js for implementation)
   const response = await fetch("/create-rooms", {
     method: "POST",
     headers: {
@@ -82,21 +93,11 @@ export async function start() {
 
   const { roomUrls } = await response.json();
 
-  console.log("roomUrls: ", roomUrls);
+  // Randomize participants
 
-  // 2. Randomize participants
+  const participants = randomizeParticipants(call.participants(), roomUrls);
 
-  const participants = Object.entries(call.participants())
-    .map((value) => ({ value, sort: Math.random() })) // shuffle participants
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value)
-    .map(([_, participant], index) => {
-      // Evenly split into two rooms
-      const roomUrl = index % 2 === 0 ? roomUrls[0] : roomUrls[1];
-      return { roomUrl, user_name: participant.user_name };
-    });
-
-  // 3. Send state to all clients
+  // Send state to all clients
   socket.updateState({
     participants,
     breakoutStarted: true,
