@@ -57,13 +57,15 @@ app.post("/create-rooms", async (req, res) => {
       Authorization,
     };
 
-    const roomRequets = [
-      `ext-breakout-1`,
-      `ext-breakout-2`,
-      `ext-breakout-3`,
-    ].map((name) => {
+    // If you'd like to dynamically change the number of rooms
+    // created, change how numberOfRooms is set.
+    const numberOfRooms = 3;
+    const roomRequets = [...Array(numberOfRooms)].map(() => {
       const bodyContent = JSON.stringify({
         properties: {
+          // Removes the prejoin UI for breakout rooms,
+          // otherwise the prejoin UI will be shown
+          // inbetween sessions
           enable_prejoin_ui: false,
         },
       });
