@@ -94,7 +94,6 @@ export async function start() {
   const { roomUrls } = await response.json();
 
   // Randomize participants
-
   const participants = randomizeParticipants(call.participants(), roomUrls);
 
   // Send state to all clients
