@@ -13,8 +13,6 @@ let state = {
   participants: [{ user_name: "", roomUrl: "" }],
 };
 
-window._state = state;
-
 daily.beforeCreateFrame((parentEl, properties) => {
   if (!properties.customTrayButtons) {
     properties.customTrayButtons = {};
