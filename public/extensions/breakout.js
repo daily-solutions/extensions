@@ -8,9 +8,12 @@ let socket;
 
 // Initial state
 let state = {
+  initialRoomUrl: "",
   breakoutStarted: false,
-  participants: [{ user_name: "", room: "" }],
+  participants: [{ user_name: "", roomUrl: "" }],
 };
+
+window._state = state;
 
 daily.beforeCreateFrame((parentEl, properties) => {
   if (!properties.customTrayButtons) {
@@ -41,22 +44,8 @@ daily.afterCreateFrame(async (c) => {
 });
 
 export function connect({ room = "", domain = "" }) {
-  // Create breakout rooms (see server.js for implementation)
-  fetch("/create-rooms", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-      return response.text();
-    })
-    .then((data) => {
-      console.log(data);
-    });
-
   const key = `${domain}/${room}/breakout`;
+  state.initialRoomUrl = `https://${domain}.daily.co/${room}`;
   socket = new Socket({ key });
   socket.onStateUpdate(async (s) => {
     state = { ...state, ...s };
@@ -65,14 +54,14 @@ export function connect({ room = "", domain = "" }) {
       .filter(([id, _]) => id === "local")
       .map(([_, participant]) => participant)[0];
 
-    const room = state.participants.find(
-      (p) => p.user_name === localParticipant.user_name
-    )?.room;
+    const roomUrl = state.participants.find(
+      (p) => p.user_name === localParticipant?.user_name
+    )?.roomUrl;
 
-    if (room && room !== localParticipant.room) {
+    if (roomUrl) {
       try {
         await call.leave();
-        await call.join({ url: `https://${domain}.daily.co/${room}` });
+        await call.join({ url: roomUrl });
       } catch (err) {
         console.error("Failed to join new room:", err);
       }
@@ -81,7 +70,20 @@ export function connect({ room = "", domain = "" }) {
   socket.connect();
 }
 
-export function start() {
+export async function start() {
+  // Create breakout rooms (see server.js for implementation)
+  const response = await fetch("/create-rooms", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+
+  const { roomUrls } = await response.json();
+
+  console.log("roomUrls: ", roomUrls);
+
   // 1. Randomize participants
 
   const participants = Object.entries(call.participants())
@@ -90,8 +92,8 @@ export function start() {
     .map(({ value }) => value)
     .map(([_, participant], index) => {
       // Evenly split into two rooms
-      const room = index % 2 === 0 ? "ext-breakout-2" : "ext-breakout-3";
-      return { room, user_name: participant.user_name };
+      const roomUrl = index % 2 === 0 ? roomUrls[1] : roomUrls[2];
+      return { roomUrl, user_name: participant.user_name };
     });
 
   // 2. Send state to all clients
@@ -106,7 +108,7 @@ export function end() {
   // and bring them all back to the main room
 
   const participants = state.participants.map((participant) => {
-    return { room: "ext-breakout-1", user_name: participant.user_name };
+    return { roomUrl: state.initialRoomUrl, user_name: participant.user_name };
   });
 
   socket.updateState({

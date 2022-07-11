@@ -63,7 +63,6 @@ app.post("/create-rooms", async (req, res) => {
       `ext-breakout-3`,
     ].map((name) => {
       const bodyContent = JSON.stringify({
-        name,
         properties: {
           enable_prejoin_ui: false,
         },
@@ -80,6 +79,8 @@ app.post("/create-rooms", async (req, res) => {
     const responseBodies = responses.map((response) => response.json());
 
     const data = await Promise.all(responseBodies);
+
+    console.log("data:", data);
 
     const roomUrls = data.map(({ url }) => url);
 
