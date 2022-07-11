@@ -50,9 +50,7 @@ export function connect({ room = "", domain = "" }) {
   socket.onStateUpdate(async (s) => {
     state = { ...state, ...s };
 
-    const localParticipant = Object.entries(call.participants())
-      .filter(([id, _]) => id === "local")
-      .map(([_, participant]) => participant)[0];
+    const localParticipant = call.participants().local;
 
     const roomUrl = state.participants.find(
       (p) => p.user_name === localParticipant?.user_name
