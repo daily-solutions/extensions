@@ -43,28 +43,30 @@ daily.afterCreateFrame(async (c) => {
   });
 });
 
+async function handleOnStateUpdate(s = {}) {
+  state = { ...state, ...s };
+
+  const localParticipant = call.participants().local;
+
+  const roomUrl = state.participants.find(
+    (p) => p.user_name === localParticipant?.user_name
+  )?.roomUrl;
+
+  if (roomUrl) {
+    try {
+      await call.leave();
+      await call.join({ url: roomUrl });
+    } catch (err) {
+      console.error("Failed to join new room:", err);
+    }
+  }
+}
+
 export function connect({ room = "", domain = "" }) {
   const key = `${domain}/${room}/breakout`;
   state.initialRoomUrl = `https://${domain}.daily.co/${room}`;
   socket = new Socket({ key });
-  socket.onStateUpdate(async (s) => {
-    state = { ...state, ...s };
-
-    const localParticipant = call.participants().local;
-
-    const roomUrl = state.participants.find(
-      (p) => p.user_name === localParticipant?.user_name
-    )?.roomUrl;
-
-    if (roomUrl) {
-      try {
-        await call.leave();
-        await call.join({ url: roomUrl });
-      } catch (err) {
-        console.error("Failed to join new room:", err);
-      }
-    }
-  });
+  socket.onStateUpdate(handleOnStateUpdate);
   socket.connect();
 }
 
