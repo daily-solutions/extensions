@@ -61,7 +61,7 @@ app.post("/create-rooms", async (req, res) => {
     // If you'd like to dynamically change the number of rooms
     // created, change how numberOfRooms is set.
     const numberOfRooms = 2;
-    const roomRequets = [...Array(numberOfRooms)].map(() => {
+    const roomRequests = [...Array(numberOfRooms)].map(() => {
       const bodyContent = JSON.stringify({
         properties: {
           // Removes the prejoin UI for breakout rooms,
@@ -78,7 +78,7 @@ app.post("/create-rooms", async (req, res) => {
       });
     });
 
-    const responses = await Promise.all(roomRequets);
+    const responses = await Promise.all(roomRequests);
 
     const responseBodies = responses.map((response) => response.json());
 
