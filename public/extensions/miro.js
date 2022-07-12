@@ -23,8 +23,10 @@ function iframeUrl(boardId) {
   return "https://miro.com/app/live-embed/" + boardId;
 }
 
-function getTokenFromServer() {
-  return fetch("https://daily-miro.glitch.me/jwt");
+async function getTokenFromServer() {
+  const response = await fetch("https://daily-miro.glitch.me/jwt");
+  const token = await response.text();
+  return token;
 }
 
 function handleMiroButton() {
@@ -43,17 +45,16 @@ function handleMiroButton() {
   } else {
     const boardProps = {
       clientId: props.clientId,
-      allowCreateAnonymousBoards: true,
-      getToken: () => getTokenFromServer(),
-      action: "select",
+      getAnonymousUserToken: () => getTokenFromServer(),
+      action: "access-link",
       success: (result) => {
         console.log("picked board: ", result);
         callstate.updateCallState("iframe", {
           open: true,
-          url: iframeUrl(result.id),
+          url: iframeUrl(result.accessLink),
         });
       },
-    }
+    };
     if (props.anonymous === true) {
       boardProps.allowCreateAnonymousBoards = true;
     }
