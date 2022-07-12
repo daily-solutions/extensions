@@ -35,7 +35,7 @@ Some extensions need to share state information outside the context of a Daily c
 
 - **["Pouncing"](https://daily-extensions.onrender.com/demos/pounce.html)**: For use cases where two participants might join a room at very different times, and you don't want to pay for the first user being connected to the meeting alone. The first user that visits this page will see a "Waiting for others" message. When a second person opens the page, they will both join the Daily room. When one of them leaves (so the participant count goes back down to 1), the remaining person will exit the call and go back to the waiting screen.
 - **[Door](https://daily-extensions.onrender.com/demos/door.html)**: Adds a button to the toolbar that opens or closes the "door" to the room. When the door is closed, anyone who tries to join the room will see a message that the door is closed. If someone currently in the meeting clicks the button to open the door, anyone who is waiting will immediately `join()` the call.
-- **[Breakout Rooms](about:blank)**: Coming soon!
+- **[Breakout Rooms](https://daily-extensions.onrender.com/demos/door.html)**: Sets up the foundation needed to create custom breakout room experiences. Includes examples on how to dynamically create rooms with the API, send users to a room, and bring them back to the main room.
 
 To try these extensions on your own computer, you'll need a simple Express server app that provides some websocket functionality. The easiest way to get started is to clone the repo:
 

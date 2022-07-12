@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Daily.co Breakout Demo</title>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+
+    <!--
+    This demo shows how you can implement a "breakout room" in a Daily Prebuilt room.
+    -->
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer"></div>
+
+    <script type="module">
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "hush";
+      const room = urlParams.get("room") || "breakout1";
+
+      import * as breakout from "../extensions/breakout.js";
+
+      window.main = async function main() {
+        const parentEl = document.getElementById("dailyContainer");
+        const call = DailyIframe.createFrame(parentEl, {
+          url: `https://${domain}.daily.co/${room}`,
+          dailyConfig: {
+            experimentalChromeVideoMuteLightOff: true,
+          },
+          customTrayButtons: {
+            toggleBreakout: {
+              iconPath: "https://www.svgrepo.com/show/207394/flash.svg",
+              label: "Breakout",
+              tooltip: "Breakout",
+            },
+          },
+        });
+
+        await call.join();
+        breakout.connect({ call, domain, room });
+      };
+    </script>
+  </body>
+</html>

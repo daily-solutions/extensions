@@ -1,17 +1,16 @@
-import daily from "./core.js";
 import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
 
 /* Public interface */
 export default class Socket {
   constructor({ hostname = "", key = "" } = {}) {
     this.hostname = hostname;
-    this.key = key.replace(/^\/+/, '');
+    this.key = key.replace(/^\/+/, "");
 
     this.updateHandlers = [];
     this.state = {};
   }
 
-  _applyStateUpdate(ns) {
+  #applyStateUpdate(ns) {
     // also used internally when we receive a state update
     // from the messaging channel.
     Object.assign(this.state, ns);
@@ -22,15 +21,15 @@ export default class Socket {
     }
   }
 
-  _broadcastStateUpdate(newState) {
+  #broadcastStateUpdate(newState) {
     this.socket.emit("update", newState);
   }
 
-  connect({ hostname = this.hostname, key = this.key } = {}) {
+  connect() {
     this.socket = io(this.hostname + "/" + this.key);
     // listen for requests for state from new peers
     this.socket.on("state", (msg) => {
-      this._applyStateUpdate(msg);
+      this.#applyStateUpdate(msg);
     });
   }
 
@@ -39,9 +38,9 @@ export default class Socket {
   }
 
   updateState(newState, broadcast = true) {
-    this._applyStateUpdate(newState);
+    this.#applyStateUpdate(newState);
     if (broadcast) {
-      this._broadcastStateUpdate(newState);
+      this.#broadcastStateUpdate(newState);
     }
   }
 
