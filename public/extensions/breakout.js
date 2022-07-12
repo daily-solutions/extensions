@@ -1,6 +1,5 @@
 // @ts-check
 
-import daily from "./core.js";
 import Socket from "./socketiostate.js";
 
 let socket;
@@ -32,13 +31,6 @@ async function handleOnStateUpdate(s = {}, call) {
 }
 
 export function connect({ room = "", domain = "", call }) {
-  call.on("custom-button-click", (e) => {
-    if (e.button_id !== "toggleBreakout") {
-      return;
-    }
-    state.breakoutStarted ? end() : start(call);
-  });
-
   const key = `${domain}/${room}/breakout`;
   state.initialRoomUrl = `https://${domain}.daily.co/${room}`;
   socket = new Socket({ key });
@@ -46,6 +38,12 @@ export function connect({ room = "", domain = "", call }) {
     handleOnStateUpdate(state, call);
   });
   socket.connect();
+  call.on("custom-button-click", (e) => {
+    if (e.button_id !== "toggleBreakout") {
+      return;
+    }
+    state.breakoutStarted ? end() : start(call);
+  });
 }
 
 function randomizeParticipants(participants = {}, roomUrls = []) {
@@ -60,7 +58,7 @@ function randomizeParticipants(participants = {}, roomUrls = []) {
     });
 }
 
-export async function start(call) {
+async function start(call) {
   const response = await fetch("/create-rooms", {
     method: "POST",
     headers: {
@@ -81,7 +79,7 @@ export async function start(call) {
   });
 }
 
-export function end() {
+function end() {
   // 1. Get a list of participants from the server state
   // and bring them all back to the main room
 

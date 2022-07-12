@@ -18,7 +18,7 @@
       import * as breakout from "../extensions/breakout.js";
 
       window.main = async function main() {
-        window.call = DailyIframe.createFrame(parentEl, {
+        const call = DailyIframe.createFrame(parentEl, {
           url: `https://${domain}.daily.co/${room}`,
           dailyConfig: {
             experimentalChromeVideoMuteLightOff: true,
