@@ -67,6 +67,7 @@ app.post("/create-rooms", async (req, res) => {
           // otherwise the prejoin UI will be shown
           // inbetween sessions
           enable_prejoin_ui: false,
+          exp: Math.floor(Date.now() / 1000) + 60 * 60, // expires in 1 hour
         },
       });
       return fetch("https://api.daily.co/v1/rooms", {

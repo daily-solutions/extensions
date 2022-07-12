@@ -18,15 +18,18 @@
       import * as breakout from "../extensions/breakout.js";
 
       window.main = async function main() {
+        const parentEl = document.getElementById("dailyContainer");
         const call = DailyIframe.createFrame(parentEl, {
           url: `https://${domain}.daily.co/${room}`,
           dailyConfig: {
             experimentalChromeVideoMuteLightOff: true,
           },
-          toggleBreakout: {
-            iconPath: "https://www.svgrepo.com/show/207394/flash.svg",
-            label: "Breakout",
-            tooltip: "Breakout",
+          customTrayButtons: {
+            toggleBreakout: {
+              iconPath: "https://www.svgrepo.com/show/207394/flash.svg",
+              label: "Breakout",
+              tooltip: "Breakout",
+            },
           },
         });
 
