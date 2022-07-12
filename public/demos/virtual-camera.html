@@ -26,9 +26,14 @@
           // start video immediately after the initalization, mirror = true
           deepAR.startVideo(true);
           // load the aviators effect on the first face into slot 'slot'
-          deepAR.switchEffect(0, "slot", "../lib/teddycigar", function () {
-            // effect loaded
-          });
+          deepAR.switchEffect(
+            0,
+            "slot",
+            "../lib/Snail/Snail.deepar",
+            function () {
+              // effect loaded
+            }
+          );
           captureVideo();
           joinCall();
         },
@@ -63,8 +68,6 @@
         });
 
         await call.join();
-
-        //call.setInputDevicesAsync({ videoSource: window.videoStream });
       }
     </script>
   </body>
