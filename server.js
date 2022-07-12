@@ -10,6 +10,7 @@ const io = new Server(server, {
     origin: "*",
   },
 });
+const fetch = require("node-fetch");
 
 const state = {};
 
@@ -59,7 +60,7 @@ app.post("/create-rooms", async (req, res) => {
 
     // If you'd like to dynamically change the number of rooms
     // created, change how numberOfRooms is set.
-    const numberOfRooms = 3;
+    const numberOfRooms = 2;
     const roomRequets = [...Array(numberOfRooms)].map(() => {
       const bodyContent = JSON.stringify({
         properties: {
