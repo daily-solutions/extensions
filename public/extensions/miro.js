@@ -19,10 +19,6 @@ export default {
 
 /* Private implementation */
 
-function iframeUrl(boardId) {
-  return "https://miro.com/app/live-embed/" + boardId;
-}
-
 async function getTokenFromServer() {
   const response = await fetch("https://daily-miro.glitch.me/jwt");
   const token = await response.text();
@@ -51,7 +47,7 @@ function handleMiroButton() {
         console.log("picked board: ", result);
         callstate.updateCallState("iframe", {
           open: true,
-          url: iframeUrl(result.accessLink),
+          url: result.accessLink,
         });
       },
     };
