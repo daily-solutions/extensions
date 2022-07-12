@@ -157,5 +157,3 @@ These hooks will execute just before and after the top-level app calls `join()`.
 ## Contributing
 
 We'd be happy to have you contribute to Daily Extensions! To get started, check out our [Contributing Guide](CONTRIBUTING.md).
-
-> > > > > > > 599b0e5 (Initial Commit)
