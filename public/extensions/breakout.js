@@ -3,7 +3,6 @@
 import daily from "./core.js";
 import Socket from "./socketiostate.js";
 
-let call;
 let socket;
 
 // Initial state
@@ -13,35 +12,7 @@ let state = {
   participants: [{ user_name: "", roomUrl: "" }],
 };
 
-daily.beforeCreateFrame((parentEl, properties) => {
-  if (!properties.customTrayButtons) {
-    properties.customTrayButtons = {};
-  }
-
-  properties.customTrayButtons = {
-    ...properties.customTrayButtons,
-    toggleBreakout: {
-      iconPath: "https://www.svgrepo.com/show/207394/flash.svg",
-      label: "Breakout",
-      tooltip: "Breakout",
-    },
-  };
-
-  return [parentEl, properties];
-});
-
-daily.afterCreateFrame(async (c) => {
-  call = c;
-  call.on("custom-button-click", (e) => {
-    if (e.button_id !== "toggleBreakout") {
-      return;
-    }
-
-    state.breakoutStarted ? end() : start();
-  });
-});
-
-async function handleOnStateUpdate(s = {}) {
+async function handleOnStateUpdate(s = {}, call) {
   state = { ...state, ...s };
 
   const localParticipant = call.participants().local;
@@ -60,11 +31,20 @@ async function handleOnStateUpdate(s = {}) {
   }
 }
 
-export function connect({ room = "", domain = "" }) {
+export function connect({ room = "", domain = "", call }) {
+  call.on("custom-button-click", (e) => {
+    if (e.button_id !== "toggleBreakout") {
+      return;
+    }
+    state.breakoutStarted ? end() : start(call);
+  });
+
   const key = `${domain}/${room}/breakout`;
   state.initialRoomUrl = `https://${domain}.daily.co/${room}`;
   socket = new Socket({ key });
-  socket.onStateUpdate(handleOnStateUpdate);
+  socket.onStateUpdate((state) => {
+    handleOnStateUpdate(state, call);
+  });
   socket.connect();
 }
 
@@ -80,7 +60,7 @@ function randomizeParticipants(participants = {}, roomUrls = []) {
     });
 }
 
-export async function start() {
+export async function start(call) {
   const response = await fetch("/create-rooms", {
     method: "POST",
     headers: {
