@@ -36,7 +36,7 @@ async function handleOnStateUpdate(s = {}, call) {
 function connect({ room = "", domain = "", call }) {
   const key = `${domain}/${room}/breakout`;
   state.initialRoomUrl = `https://${domain}.daily.co/${room}`;
-  socket = new Socket({ key });
+  socket = new Socket({ key, hostname: "localhost:3000" });
   socket.onStateUpdate((state) => {
     handleOnStateUpdate(state, call);
   });
@@ -62,7 +62,7 @@ function randomizeParticipants(participants = {}, roomUrls = []) {
 }
 
 async function start(call) {
-  const response = await fetch("/create-rooms", {
+  const response = await fetch("http://localhost:3000/create-rooms", {
     method: "POST",
     headers: {
       Accept: "application/json",
