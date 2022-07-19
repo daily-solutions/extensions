@@ -15,6 +15,9 @@
       const urlParams = new URLSearchParams(window.location.search);
       const domain = urlParams.get("domain") || "hush";
       const room = urlParams.get("room") || "breakout1";
+      const hostname = urlParams.get("hostname") || "localhost";
+      const hostnameWithPort =
+        hostname + (window.location.port ? ":" + window.location.port : "");
 
       import breakout from "../extensions/breakout.js";
 
@@ -30,6 +33,7 @@
                 config: {
                   domain,
                   room,
+                  hostname: hostnameWithPort,
                 },
               },
             ],

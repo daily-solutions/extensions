@@ -13,6 +13,7 @@ let state = {
 
 let domain = "";
 let room = "";
+let hostname = "";
 
 async function handleOnStateUpdate(s = {}, call) {
   state = { ...state, ...s };
@@ -36,7 +37,7 @@ async function handleOnStateUpdate(s = {}, call) {
 function connect({ room = "", domain = "", call }) {
   const key = `${domain}/${room}/breakout`;
   state.initialRoomUrl = `https://${domain}.daily.co/${room}`;
-  socket = new Socket({ key, hostname: "localhost:3000" });
+  socket = new Socket({ key, hostname: hostname });
   socket.onStateUpdate((state) => {
     handleOnStateUpdate(state, call);
   });
@@ -62,7 +63,7 @@ function randomizeParticipants(participants = {}, roomUrls = []) {
 }
 
 async function start(call) {
-  const response = await fetch("http://localhost:3000/create-rooms", {
+  const response = await fetch(`//${hostname || ""}/create-rooms`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -99,6 +100,7 @@ function end() {
 function configure(config) {
   domain = config.domain;
   room = config.room;
+  hostname = config.hostname;
 }
 
 function beforeCreateFrame(parentEl, properties) {
