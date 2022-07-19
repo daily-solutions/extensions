@@ -96,15 +96,6 @@ function end() {
   });
 }
 
-// type DailyExtension = {
-//   configure?: (options: any) => void;
-//   beforeCreateFrame?: (
-//     parentEl: HTMLElement,
-//     properties: any
-//   ) => [HTMLElement, any];
-//   afterCreateFrame?: (dailyCall: DailyCall) => void;
-// };
-
 function configure(config) {
   domain = config.domain;
   room = config.room;
