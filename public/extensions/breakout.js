@@ -11,6 +11,9 @@ let state = {
   participants: [{ user_name: "", roomUrl: "" }],
 };
 
+let domain = "";
+let room = "";
+
 async function handleOnStateUpdate(s = {}, call) {
   state = { ...state, ...s };
 
@@ -30,7 +33,7 @@ async function handleOnStateUpdate(s = {}, call) {
   }
 }
 
-export function connect({ room = "", domain = "", call }) {
+function connect({ room = "", domain = "", call }) {
   const key = `${domain}/${room}/breakout`;
   state.initialRoomUrl = `https://${domain}.daily.co/${room}`;
   socket = new Socket({ key });
@@ -92,3 +95,40 @@ function end() {
     breakoutStarted: false,
   });
 }
+
+// type DailyExtension = {
+//   configure?: (options: any) => void;
+//   beforeCreateFrame?: (
+//     parentEl: HTMLElement,
+//     properties: any
+//   ) => [HTMLElement, any];
+//   afterCreateFrame?: (dailyCall: DailyCall) => void;
+// };
+
+function configure(config) {
+  domain = config.domain;
+  room = config.room;
+}
+
+function beforeCreateFrame(parentEl, properties) {
+  if (!properties.customTrayButtons) {
+    properties.customTrayButtons = {};
+  }
+  properties.customTrayButtons.toggleBreakout = {
+    iconPath: "https://www.svgrepo.com/show/207394/flash.svg",
+    label: "Breakout",
+    tooltip: "Breakout",
+  };
+
+  return [parentEl, properties];
+}
+
+function afterCreateFrame(call) {
+  connect({ call, domain, room });
+}
+
+export default {
+  afterCreateFrame,
+  beforeCreateFrame,
+  configure,
+};

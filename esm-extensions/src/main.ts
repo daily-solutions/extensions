@@ -1,13 +1,8 @@
 import daily from "./core";
 // import pounce from "../../public/extensions/pounce.js";
-// import callstate from "../../public/extensions/callstate.js";
-// import breakout from "../../public/extensions/breakout.js";
-import whiteboard from "../../public/extensions/whiteboard-chat.js";
+import breakout from "../../public/extensions/breakout.js";
+// import whiteboard from "../../public/extensions/whiteboard-chat.js";
 import eventlogger from "../../public/extensions/eventlogger.js";
-
-console.log("whiteboard: ", whiteboard);
-
-// const breakoutRooms = {};
 
 const domain = "hush";
 const room = "meet";
@@ -18,23 +13,31 @@ const call = daily.createFrame(dailyContainer, {
   dailyConfig: {
     experimentalChromeVideoMuteLightOff: true,
     extensions: [
-      { extension: whiteboard, config: { type: "miro", accountId: "abc1234" } },
-      eventlogger,
       // {
-      //   extension: breakoutRooms,
-      //   config: { type: "miro", accountId: "abc1234" },
+      //   extension: whiteboard,
+      //   config: {
+      //     teacher: true,
+      //     room,
+      //     key: "aa746656-b640-40ed-b010-2807561225fa",
+      //   },
       // },
+      eventlogger,
+      {
+        extension: breakout,
+        config: {
+          domain,
+          room,
+        },
+      },
     ],
   },
   iframeStyle: {
     position: "fixed",
-    top: 0,
-    left: 0,
+    top: "0",
+    left: "0",
     width: "100%",
     height: "100%",
   },
 });
-
-window.call = call;
 
 await call.join();

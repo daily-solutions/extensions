@@ -18,7 +18,7 @@ export function configure(p) {
 
 /* Private implementation */
 
-async function iframeUrl(e) {
+async function iframeUrl(e, call) {
   let src = "https://www.whiteboard.chat/apiaccess/createjoin/";
   // use a per-room whiteboard for now
   const participant = e.participants.local;
@@ -37,9 +37,14 @@ async function iframeUrl(e) {
 }
 
 function handleWcButton() {
-  callstate.updateCallState("iframe", {
-    open: !callstate.state.iframe?.open,
-  });
+  callstate.updateCallState(
+    "iframe",
+    {
+      open: !callstate.state.iframe?.open,
+    },
+    true,
+    call
+  );
 }
 
 export function beforeCreateFrame(parentEl, properties) {
@@ -60,12 +65,11 @@ export function beforeCreateFrame(parentEl, properties) {
 
 export async function afterCreateFrame(c) {
   call = c;
-
   call.on("joined-meeting", async (e) => {
     // let the teacher set the whiteboard URL
     // for everybody
-    let url = await iframeUrl(e);
-    callstate.updateCallState("iframe", { url });
+    let url = await iframeUrl(e, call);
+    callstate.updateCallState("iframe", { url }, true, call);
   });
 
   call.on("custom-button-click", (e) => {
