@@ -20,6 +20,7 @@
         hostname + (window.location.port ? ":" + window.location.port : "");
 
       import breakout from "../extensions/breakout.js";
+      import eventlogger from "../../extensions/eventlogger.js";
 
       window.main = async function main() {
         const parentEl = document.getElementById("dailyContainer");
@@ -28,6 +29,7 @@
           dailyConfig: {
             experimentalChromeVideoMuteLightOff: true,
             extensions: [
+              eventlogger,
               {
                 extension: breakout,
                 config: {
