@@ -10,7 +10,7 @@
     <div id="dailyContainer"></div>
 
     <script type="module">
-      import daily from "../extensions/esm-core.js";
+      import DailyIframe from "../extensions/esm-core.js";
 
       const urlParams = new URLSearchParams(window.location.search);
       const domain = urlParams.get("domain") || "hush";
@@ -20,7 +20,7 @@
 
       window.main = async function main() {
         const parentEl = document.getElementById("dailyContainer");
-        const call = daily.createFrame(dailyContainer, {
+        const call = DailyIframe.createFrame(parentEl, {
           url: `https://${domain}.daily.co/${room}`,
           dailyConfig: {
             experimentalChromeVideoMuteLightOff: true,
