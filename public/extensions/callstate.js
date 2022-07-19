@@ -1,4 +1,4 @@
-import daily from "./core.js";
+// import daily from "./core.js";
 
 let state = {};
 let updateHandlers = [];
@@ -31,7 +31,7 @@ export default {
 
 /* Private implementation */
 
-daily.afterCreateFrame((c) => {
+export function afterCreateFrame((c) => {
   call = c;
   // listen for requests for state from new peers
   call.on("app-message", (e) => {

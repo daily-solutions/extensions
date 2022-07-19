@@ -1,4 +1,3 @@
-import daily from "./core.js";
 import iframe from "./iframe.js";
 import callstate from "./callstate.js";
 
@@ -11,11 +10,11 @@ let props = {};
 iframe.configure({ url: "about:blank", buttons: {}, showUrl: false });
 
 /* Public interface */
-export default {
-  configure: function (p) {
-    Object.assign(props, p);
-  },
-};
+
+export function configure(p) {
+  console.log("[whiteboard] configure", p);
+  Object.assign(props, p);
+}
 
 /* Private implementation */
 
@@ -43,7 +42,7 @@ function handleWcButton() {
   });
 }
 
-daily.beforeCreateFrame((parentEl, properties) => {
+export function beforeCreateFrame(parentEl, properties) {
   // TODO: maybe namespace shared resources like tray buttons?
   if (props.teacher) {
     if (!properties.customTrayButtons) {
@@ -57,9 +56,9 @@ daily.beforeCreateFrame((parentEl, properties) => {
   }
 
   return [parentEl, properties];
-});
+}
 
-daily.afterCreateFrame(async (c) => {
+export async function afterCreateFrame(c) {
   call = c;
 
   call.on("joined-meeting", async (e) => {
@@ -76,4 +75,10 @@ daily.afterCreateFrame(async (c) => {
         break;
     }
   });
-});
+}
+
+export default {
+  beforeCreateFrame,
+  afterCreateFrame,
+  configure,
+};
