@@ -1,5 +1,7 @@
 import daily from "./core";
+//@ts-ignore
 import breakout from "../../public/extensions/breakout.js";
+//@ts-ignore
 import eventlogger from "../../public/extensions/eventlogger.js";
 
 const domain = "hush";
@@ -30,4 +32,4 @@ const call = daily.createFrame(dailyContainer, {
   },
 });
 
-await call.join();
+call.join().catch((err) => console.error(err));
