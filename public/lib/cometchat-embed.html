@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <script
+      defer
+      src="https://widget-js.cometchat.io/v3/cometchatwidget.js"
+    ></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #cometchat {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="cometchat"></div>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const userid = urlParams.get("userid");
+      const username = urlParams.get("username");
+      const groupid = urlParams.get("groupid");
+      const groupname = urlParams.get("groupname");
+
+      function launch(groupid) {
+        CometChatWidget.launch({
+          widgetID: "8a3e610c-0942-4c3d-93c5-9c46c8b7604f",
+          target: "#cometchat",
+          roundedCorners: "false",
+          defaultID: groupid, //default UID (user) or GUID (group) to show,
+          defaultType: "group", //user or group
+        });
+      }
+      window.addEventListener("DOMContentLoaded", (event) => {
+        CometChatWidget.init({
+          appID: "2149927d6f7a45fd",
+          appRegion: "us",
+          authKey: "3294c6556f27d5b10797fbd6a81d4c4ad55e68dc",
+        }).then(
+          (response) => {
+            console.log("Initialization completed successfully");
+            //You can now call login function.
+            const user = new CometChatWidget.CometChat.User(userid);
+            user.setName(username);
+            CometChatWidget.createOrUpdateUser(user).then((user) => {
+              CometChatWidget.login({
+                uid: userid,
+              }).then(
+                (response) => {
+                  const group = new CometChatWidget.CometChat.Group(
+                    groupid,
+                    groupname,
+                    CometChatWidget.CometChat.GROUP_TYPE.PUBLIC
+                  );
+                  CometChatWidget.createOrUpdateGroup(group).then(
+                    (group) => {
+                      launch(groupid);
+                    },
+                    (error) => {
+                      // ok, try joining the group
+                      CometChatWidget.CometChat.joinGroup(
+                        groupid,
+                        CometChatWidget.CometChat.GROUP_TYPE.PUBLIC
+                      ).then(
+                        (group) => {
+                          console.log("Group joined successfully:", group);
+                          launch(groupid);
+                        },
+                        (error) => {
+                          console.log(
+                            "Group joining failed with exception:",
+                            error
+                          );
+                        }
+                      );
+                    }
+                  );
+                },
+                (error) => {
+                  console.log("User login failed with error:", error);
+                  //Check the reason for error and take appropriate action.
+                }
+              );
+            });
+          },
+          (error) => {
+            console.log("Initialization failed with error:", error);
+            //Check the reason for error and take appropriate action.
+          }
+        );
+      });
+    </script>
+  </body>
+</html>
