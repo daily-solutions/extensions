@@ -4,6 +4,8 @@
     <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
     <!--
 	This demo shows how you can embed a CometChat iframe in Daily Prebuilt.
+	For the best experience, make sure to disable Daily's built-in chat
+	from the room settings in your Dashboard.
 	-->
   </head>
   <body onload="main()">
@@ -13,14 +15,17 @@
       const urlParams = new URLSearchParams(window.location.search);
       const domain = urlParams.get("domain") || "chad-hq";
       const room = urlParams.get("room") || "extensions";
+      // TODO: This should be enforced-unique somehow, maybe?
+      const name = urlParams.get("name");
 
       import daily from "../extensions/core.js";
-      import iframe from "../extensions/iframe.js";
-      iframe.configure({ showUrl: false });
+      import cometchat from "../extensions/cometchat.js";
+      cometchat.configure({ name, domain, room });
 
       window.main = async function () {
         window.call = daily.createFrame(dailyContainer, {
           url: `https://${domain}.daily.co/${room}`,
+          showLeaveButton: true,
           dailyConfig: {
             experimentalChromeVideoMuteLightOff: true,
           },

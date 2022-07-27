@@ -1,8 +1,9 @@
 import daily from "./core.js";
 import flexpanel from "./flexpanel.js";
 import callstate from "./callstate.js";
+import localstate from "./localstate.js";
 
-let fp, iframeEl, locationEl, call;
+let fp, iframeEl, locationEl, call, state;
 let open = false;
 
 /* Defaults */
@@ -19,6 +20,9 @@ const props = {
   buttons: defaultButtons, // used to change the button names and/or icons.
   showUrl: false, // controls whether to display the active iframe URL as a pseudo-address-bar
   // above the iframe content.
+  broadcast: true, // whether to broadcast iframe updates (url and show state) to other participants.
+  leftSize: 80, // passes through to the flexpanel
+  sidebar: false, // set to 'true' to put your flexpanel on the right side
 };
 
 /* Public interface */
@@ -26,34 +30,35 @@ let self;
 export default self = {
   configure: function (p) {
     Object.assign(props, p);
+    state = props.broadcast === true ? callstate : localstate;
   },
   open: function (url) {
     // sets a new URL for the iframe and opens
     props.url = url;
     open = true;
-    callstate.updateCallState("iframe", { url, open });
+    state.updateCallState("iframe", { url, open });
   },
   close: function () {
     // closes the iframe and clears URL
     props.url = "about:blank";
     open = false;
-    callstate.updateCallState("iframe", { url: props.url, open });
+    state.updateCallState("iframe", { url: props.url, open });
   },
   show: function () {
     // just shows the iframe (flexpanel)
     open = true;
-    callstate.updateCallState("iframe", { open });
+    state.updateCallState("iframe", { open });
   },
   hide: function () {
     // just hides without removing URL
     open = false;
-    callstate.updateCallState("iframe", { open });
+    state.updateCallState("iframe", { open });
   },
   setUrl: function (url) {
     // updates URL without changing
     // show/hide state
     props.url = url;
-    callstate.updateCallState("iframe", { url: props.url });
+    state.updateCallState("iframe", { url: props.url });
   },
 };
 
@@ -90,9 +95,12 @@ daily.beforeCreateFrame((parentEl, properties) => {
   }
   containerEl.appendChild(iframeEl);
   iframeEl.src = props.url;
+  parentEl.parentNode.appendChild(containerEl);
   fp = flexpanel.create({
-    leftNode: containerEl,
-    rightNode: parentEl,
+    contentNode: containerEl,
+    dailyNode: parentEl,
+    contentSize: props.contentSize,
+    sidebar: props.sidebar,
   });
   // hang on to the iframe created by the flexpanel
 
@@ -102,7 +110,7 @@ daily.beforeCreateFrame((parentEl, properties) => {
 daily.afterCreateFrame(async (c) => {
   call = c;
 
-  callstate.onCallStateUpdate("iframe", (state) => {
+  state.onCallStateUpdate("iframe", (state) => {
     if ("url" in state) {
       handleUrlUpdate(state.url);
     }
@@ -127,8 +135,8 @@ daily.afterCreateFrame(async (c) => {
 
 // overloading the "selectUrl" button to work around a bug with updateCustomTrayButtons for now
 function handleSelectButton() {
-  if (callstate.state.iframe?.open === true) {
-    callstate.updateCallState("iframe", { open: false });
+  if (state.state.iframe?.open === true) {
+    state.updateCallState("iframe", { open: false });
   } else {
     selectUrl();
   }

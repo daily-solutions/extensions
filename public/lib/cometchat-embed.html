@@ -13,6 +13,9 @@
         margin: 0;
         padding: 0;
       }
+      .app__messenger {
+        border: 0 !important;
+      }
     </style>
   </head>
 
@@ -21,10 +24,10 @@
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       const userid = urlParams.get("userid");
-      const username = urlParams.get("username");
+      const username = decodeURIComponent(urlParams.get("username"));
       const groupid = urlParams.get("groupid");
       const groupname = urlParams.get("groupname");
-
+      console.log("userid: ", userid);
       function launch(groupid) {
         CometChatWidget.launch({
           widgetID: "8a3e610c-0942-4c3d-93c5-9c46c8b7604f",
@@ -55,27 +58,38 @@
                     groupname,
                     CometChatWidget.CometChat.GROUP_TYPE.PUBLIC
                   );
+                  // Try to create or update the group. If you're the first
+                  // person here, this will work; otherwise, you'll get one
+                  // of a few possible errors
                   CometChatWidget.createOrUpdateGroup(group).then(
                     (group) => {
                       launch(groupid);
                     },
                     (error) => {
+                      console.log("create or update error: ", error);
+                      if (error.code === "ERR_GROUP_NO_MODERATOR_SCOPE") {
+                        // then the group already exists, but we didn't create
+                        // it. So we just need to find it and open that group
+                        launch(groupid);
+                      } else if (error.code === "ERR_GROUP_NOT_JOINED") {
+                        // We just need to join the group, then launch it.
+                        CometChatWidget.CometChat.joinGroup(
+                          groupid,
+                          CometChatWidget.CometChat.GROUP_TYPE.PUBLIC
+                        ).then(
+                          (group) => {
+                            console.log("Group joined successfully:", group);
+                            launch(groupid);
+                          },
+                          (error) => {
+                            console.log(
+                              "Group joining failed with exception:",
+                              error
+                            );
+                          }
+                        );
+                      }
                       // ok, try joining the group
-                      CometChatWidget.CometChat.joinGroup(
-                        groupid,
-                        CometChatWidget.CometChat.GROUP_TYPE.PUBLIC
-                      ).then(
-                        (group) => {
-                          console.log("Group joined successfully:", group);
-                          launch(groupid);
-                        },
-                        (error) => {
-                          console.log(
-                            "Group joining failed with exception:",
-                            error
-                          );
-                        }
-                      );
                     }
                   );
                 },
