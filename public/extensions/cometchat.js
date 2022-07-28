@@ -2,6 +2,7 @@ import daily from "./core.js";
 import iframe from "./iframe.js";
 
 let fp, iframeEl, call;
+let open = false;
 
 const props = {};
 
@@ -40,12 +41,14 @@ function iframeUrl(username) {
 }
 
 function handleCometChatButton() {
-  if (props.open === true) {
+  if (open === true) {
     // then the frame is open; just close it
     iframe.hide();
+    open = false;
   } else {
     // then the frame was closed; reopen it
     iframe.show();
+    open = true;
   }
 }
 

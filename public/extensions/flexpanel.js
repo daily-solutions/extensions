@@ -5,7 +5,7 @@ let call;
 let isHandlerDragging = false;
 let flexpanelOpen = false;
 let activeSpeakerWas;
-
+let sidebarMode;
 /* Daily configuration */
 daily.afterCreateFrame((c) => (call = c));
 
@@ -29,6 +29,7 @@ export default self = {
 
     leftEl = document.createElement("div");
     rightEl = document.createElement("div");
+    sidebarMode = sidebar;
     let dailySize = 100 - contentSize;
 
     daily.beforeCreateFrame((parentEl, properties) => {
@@ -213,7 +214,7 @@ export default self = {
     leftEl.classList.add("flexpanelOpen");
     grabberEl.classList.add("flexpanelOpen");
     activeSpeakerWas = call.activeSpeakerMode();
-    if (sidebar === false) {
+    if (sidebarMode === false) {
       call.setActiveSpeakerMode(false);
     }
     flexpanelOpen = true;
@@ -222,7 +223,7 @@ export default self = {
     rightEl.classList.remove("flexpanelOpen");
     leftEl.classList.remove("flexpanelOpen");
     grabberEl.classList.remove("flexpanelOpen");
-    if (sidebar === false) {
+    if (sidebarMode === false) {
       call.setActiveSpeakerMode(activeSpeakerWas);
     }
     flexpanelOpen = false;
