@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Daily.co Iframe Demo</title>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <!--
+    This demo shows how you can embed a CometChat iframe in Daily Prebuilt.
+    For the best experience, make sure to disable Daily's built-in chat
+    from the room settings in your Dashboard.
+    
+    The extension creates new CometChat users for each person that joins the
+    Daily room based on their Daily name. For real-world use cases, you'll
+    probably want to change that to use your own user model.
+    
+    The extension also creates a CometChat 'group' named after the Daily room.
+    This is how the chat persists between sessions in the same room.
+	-->
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer"></div>
+
+    <script type="module">
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "chad-hq";
+      const room = urlParams.get("room") || "extensions";
+      // TODO: This should be enforced-unique somehow, maybe?
+      const name = urlParams.get("name");
+
+      import daily from "../extensions/core.js";
+      import cometchat from "../extensions/cometchat.js";
+      cometchat.configure({ name, domain, room });
+
+      window.main = async function () {
+        window.call = daily.createFrame(dailyContainer, {
+          url: `https://${domain}.daily.co/${room}`,
+          showLeaveButton: true,
+          dailyConfig: {
+            experimentalChromeVideoMuteLightOff: true,
+          },
+        });
+
+        await call.join();
+      };
+    </script>
+  </body>
+</html>

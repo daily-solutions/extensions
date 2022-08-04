@@ -5,14 +5,20 @@ let call;
 let isHandlerDragging = false;
 let flexpanelOpen = false;
 let activeSpeakerWas;
-
+let sidebarMode;
 /* Daily configuration */
 daily.afterCreateFrame((c) => (call = c));
 
 /* Public interface */
 let self;
 export default self = {
-  create: function ({ leftNode, rightNode, button }) {
+  create: function ({
+    contentNode,
+    dailyNode,
+    button,
+    contentSize = 80,
+    sidebar = false,
+  }) {
     // currently designed for an iframe on the left
     // and a node (the Daily iframe) on the right.
     // creates a side-by-side layout that can be opened and closed
@@ -23,6 +29,9 @@ export default self = {
 
     leftEl = document.createElement("div");
     rightEl = document.createElement("div");
+    sidebarMode = sidebar;
+    let dailySize = 100 - contentSize;
+
     daily.beforeCreateFrame((parentEl, properties) => {
       // TODO: maybe namespace shared resources like tray buttons?
       if (button) {
@@ -62,19 +71,19 @@ export default self = {
         width: 100%;
         height: 100%;
       }
-      .leftContainer {
+      .contentContainer {
         flex: 0;
         display: none;
       }
-      .leftContainer.flexpanelOpen {
+      .contentContainer.flexpanelOpen {
         display: flex;
-        flex: 80 80 auto;
+        flex: ${contentSize} ${contentSize} auto;
       }
-      .rightContainer {
+      .dailyContainer {
         flex: 100;
       }
-      .rightContainer.flexpanelOpen {
-        flex: 20 20 auto;
+      .dailyContainer.flexpanelOpen {
+        flex: ${dailySize} ${dailySize} auto;
       }
 
       #grabber {
@@ -106,26 +115,33 @@ export default self = {
     fpEl.appendChild(leftEl);
     grabberEl = document.createElement("div");
     grabberEl.setAttribute("id", "grabber");
-    leftEl.classList.add("leftContainer");
-    rightEl.classList.add("rightContainer");
 
-    // Gymastics to put all the nodes in the right hierarchy
-    rightNode.parentNode.insertBefore(fpEl, rightNode);
+    // Gymnastics to put all the nodes in the right hierarchy
+    dailyNode.parentNode.insertBefore(fpEl, dailyNode);
     fpEl.appendChild(leftEl);
     fpEl.appendChild(grabberEl);
     fpEl.appendChild(rightEl);
 
-    leftEl.appendChild(leftNode);
-    rightEl.appendChild(rightNode);
+    if (sidebar === true) {
+      leftEl.classList.add("dailyContainer");
+      rightEl.classList.add("contentContainer");
+      leftEl.appendChild(dailyNode);
+      rightEl.appendChild(contentNode);
+    } else {
+      leftEl.classList.add("contentContainer");
+      rightEl.classList.add("dailyContainer");
+      leftEl.appendChild(contentNode);
+      rightEl.appendChild(dailyNode);
+    }
 
     document.addEventListener("mousedown", function (e) {
       // If mousedown event is fired from grabberEl, toggle flag to true
       if (e.target === grabberEl) {
         const rightElIframe = document.querySelector(
-          "iframe.rightContainer, .rightContainer iframe"
+          "iframe.dailyContainer, .dailyContainer iframe"
         );
         const leftElIframe = document.querySelector(
-          "iframe.leftContainer, .leftContainer iframe"
+          "iframe.contentContainer, .contentContainer iframe"
         );
 
         isHandlerDragging = true;
@@ -172,10 +188,10 @@ export default self = {
       // Turn off dragging flag when user mouse is up
       isHandlerDragging = false;
       const rightElIframe = document.querySelector(
-        "iframe.rightContainer, .rightContainer iframe"
+        "iframe.dailyContainer, .dailyContainer iframe"
       );
       const leftElIframe = document.querySelector(
-        "iframe.leftContainer, .leftContainer iframe"
+        "iframe.contentContainer, .contentContainer iframe"
       );
 
       if (leftElIframe) {
@@ -198,14 +214,18 @@ export default self = {
     leftEl.classList.add("flexpanelOpen");
     grabberEl.classList.add("flexpanelOpen");
     activeSpeakerWas = call.activeSpeakerMode();
-    call.setActiveSpeakerMode(false);
+    if (sidebarMode === false) {
+      call.setActiveSpeakerMode(false);
+    }
     flexpanelOpen = true;
   },
   close: function () {
     rightEl.classList.remove("flexpanelOpen");
     leftEl.classList.remove("flexpanelOpen");
     grabberEl.classList.remove("flexpanelOpen");
-    call.setActiveSpeakerMode(activeSpeakerWas);
+    if (sidebarMode === false) {
+      call.setActiveSpeakerMode(activeSpeakerWas);
+    }
     flexpanelOpen = false;
   },
   toggle: function () {
