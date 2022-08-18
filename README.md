@@ -1,5 +1,13 @@
 # Daily Extensions
 
+This repo is being restructured! For now, check out the following folders for the relevant pieces:
+
+- `/server` for the Daily Extensions Server code that powers `pounce`, `door`, and various `socketiostate`-backed Extensions
+- `/core` for the Core module necessary for any app using Extensions
+- `/extensions` for the Extensions themselves
+
+---
+
 Extensions are JavaScript modules that extend the functionality of [Daily Prebuilt](https://docs.daily.co/guides/products/prebuilt). Want to put a whiteboard next to Prebuilt in your app? Try the Miro or Whiteboard.chat extension. Want to use CometChat instead of Daily's built-in chat? There's an extension for that (soon).
 
 ## Try them now
