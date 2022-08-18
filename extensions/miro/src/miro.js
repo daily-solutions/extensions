@@ -1,6 +1,6 @@
-import daily from "./core.js";
-import iframe from "./iframe.js";
-import callstate from "./callstate.js";
+import daily from "../../../core/src/core.js";
+import iframe from "../../../core/src/iframe.js";
+import callstate from "../../../core/src/callstate.js";
 
 let fp, iframeEl, call;
 

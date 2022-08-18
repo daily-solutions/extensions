@@ -1,4 +1,4 @@
-import daily from "./core.js";
+//import daily from "./core.js";
 import flexpanel from "./flexpanel.js";
 import callstate from "./callstate.js";
 
@@ -24,6 +24,8 @@ const props = {
 /* Public interface */
 let self;
 export default self = {
+  beforeCreateFrame,
+  afterCreateFrame,
   configure: function (p) {
     Object.assign(props, p);
   },
@@ -31,34 +33,34 @@ export default self = {
     // sets a new URL for the iframe and opens
     props.url = url;
     open = true;
-    callstate.updateCallState("iframe", { url, open });
+    callstate.updateCallState("iframe", { url, open }, true, call);
   },
   close: function () {
     // closes the iframe and clears URL
     props.url = "about:blank";
     open = false;
-    callstate.updateCallState("iframe", { url: props.url, open });
+    callstate.updateCallState("iframe", { url: props.url, open }, true, call);
   },
   show: function () {
     // just shows the iframe (flexpanel)
     open = true;
-    callstate.updateCallState("iframe", { open });
+    callstate.updateCallState("iframe", { open }, true, call);
   },
   hide: function () {
     // just hides without removing URL
     open = false;
-    callstate.updateCallState("iframe", { open });
+    callstate.updateCallState("iframe", { open }, true, call);
   },
   setUrl: function (url) {
     // updates URL without changing
     // show/hide state
     props.url = url;
-    callstate.updateCallState("iframe", { url: props.url });
+    callstate.updateCallState("iframe", { url: props.url }, true, call);
   },
 };
 
 /* Daily configuration */
-daily.beforeCreateFrame((parentEl, properties) => {
+function beforeCreateFrame(parentEl, properties) {
   // TODO: maybe namespace shared resources like tray buttons?
   if (!properties.customTrayButtons) {
     properties.customTrayButtons = {};
@@ -97,9 +99,9 @@ daily.beforeCreateFrame((parentEl, properties) => {
   // hang on to the iframe created by the flexpanel
 
   return [parentEl, properties];
-});
+}
 
-daily.afterCreateFrame(async (c) => {
+async function afterCreateFrame(c) {
   call = c;
 
   callstate.onCallStateUpdate("iframe", (state) => {
@@ -110,7 +112,6 @@ daily.afterCreateFrame(async (c) => {
       state.open === true ? handleShow() : handleHide();
     }
   });
-
   call.on("custom-button-click", (e) => {
     switch (e.button_id) {
       case "selectUrl":
@@ -121,14 +122,17 @@ daily.afterCreateFrame(async (c) => {
         break;
     }
   });
-});
+
+  // TODO-CB: Hmm, I don't love this
+  flexpanel.afterCreateFrame(c);
+}
 
 /* Private implementation */
 
 // overloading the "selectUrl" button to work around a bug with updateCustomTrayButtons for now
 function handleSelectButton() {
   if (callstate.state.iframe?.open === true) {
-    callstate.updateCallState("iframe", { open: false });
+    callstate.updateCallState("iframe", { open: false }, true, call);
   } else {
     selectUrl();
   }

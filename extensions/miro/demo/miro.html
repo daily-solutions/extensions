@@ -30,8 +30,8 @@
       const clientId = urlParams.get("clientId") || "3458764524487567450";
       const anonymous = urlParams.get("anonymous")?.toLowerCase() === "true";
 
-      import daily from "../extensions/core.js";
-      import miro from "../extensions/miro.js";
+      import daily from "../../../core/src/core.js";
+      import miro from "../src/miro.js";
 
       miro.configure({ clientId, anonymous });
 

@@ -1,4 +1,4 @@
-import daily from "./core.js";
+//import daily from "./core.js";
 
 let fpEl, leftEl, rightEl, grabberEl, wrapperEl;
 let call;
@@ -7,11 +7,14 @@ let flexpanelOpen = false;
 let activeSpeakerWas;
 
 /* Daily configuration */
-daily.afterCreateFrame((c) => (call = c));
+function afterCreateFrame(c) {
+  call = c;
+}
 
 /* Public interface */
 let self;
 export default self = {
+  afterCreateFrame,
   create: function ({ leftNode, rightNode, button }) {
     // currently designed for an iframe on the left
     // and a node (the Daily iframe) on the right.
@@ -23,6 +26,10 @@ export default self = {
 
     leftEl = document.createElement("div");
     rightEl = document.createElement("div");
+    /* cb: figure out how to restructure this to move the 'before' and
+    'after' to top-level functions for new module structure... but these
+    are only used if we pass 'button', and I don't think we actually
+    pass 'button' anywhere?
     daily.beforeCreateFrame((parentEl, properties) => {
       // TODO: maybe namespace shared resources like tray buttons?
       if (button) {
@@ -46,6 +53,7 @@ export default self = {
         });
       }
     });
+    */
 
     // add some styles that control behavior of the flexpanel
     const styleEl = document.createElement("style");
@@ -129,12 +137,6 @@ export default self = {
         );
 
         isHandlerDragging = true;
-        console.log(
-          "leftElIframe",
-          leftElIframe,
-          "rightElIframe",
-          rightElIframe
-        );
 
         if (leftElIframe) {
           leftElIframe.style.pointerEvents = "none";

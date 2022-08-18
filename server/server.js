@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // @ts-check
 const express = require("express");
 const cors = require("cors");

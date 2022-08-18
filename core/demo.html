@@ -1,0 +1,36 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Extensions Demo</title>
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer"></div>
+
+    <script type="module">
+      import DailyIframe from "./dist/core.js.js";
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "hush";
+      const room = urlParams.get("room") || "breakout1";
+      const hostname = urlParams.get("hostname") || "localhost";
+      const hostnameWithPort =
+        hostname + (window.location.port ? ":" + window.location.port : "");
+
+      //import breakout from "../extensions/breakout.js";
+      //import eventlogger from "../../extensions/eventlogger.js";
+
+      window.main = async function main() {
+        const parentEl = document.getElementById("dailyContainer");
+        const call = DailyIframe.createFrame(parentEl, {
+          url: `https://${domain}.daily.co/${room}`,
+          dailyConfig: {
+            experimentalChromeVideoMuteLightOff: true,
+            extensions: [DailyIframe.iframe],
+          },
+        });
+        console.log("call is: ", call);
+        await call.join();
+      };
+    </script>
+  </body>
+</html>

@@ -1,5 +1,14 @@
 import DailyIframe, { DailyCall, DailyCallOptions } from "@daily-co/daily-js";
 
+//@ts-ignore
+import callstate from "./callstate.js";
+//@ts-ignore
+import flexpanel from "./flexpanel.js";
+//@ts-ignore
+import iframe from "./iframe.js";
+//@ts-ignore
+import socketiostate from "./socketiostate.js";
+
 type DailyExtension = {
   configure?: (options: any) => void;
   beforeCreateFrame?: (
@@ -31,8 +40,6 @@ function createFrame(parentEl: HTMLElement, properties: ExtensionCallOptions) {
   console.log("extensions: ", extensions);
 
   extensions.forEach((extension) => {
-    console.log("beforeCreateFrame: ", extension);
-
     const ext = "extension" in extension ? extension.extension : extension;
 
     if ("config" in extension && ext.configure) {
@@ -48,7 +55,6 @@ function createFrame(parentEl: HTMLElement, properties: ExtensionCallOptions) {
 
   extensions.forEach((extension) => {
     const ext = "extension" in extension ? extension.extension : extension;
-    console.log("afterCreateFrame: ", ext);
 
     if (ext.afterCreateFrame) {
       ext.afterCreateFrame(call);
@@ -60,4 +66,8 @@ function createFrame(parentEl: HTMLElement, properties: ExtensionCallOptions) {
 
 export default {
   createFrame,
+  callstate,
+  flexpanel,
+  iframe,
+  socketiostate,
 };
