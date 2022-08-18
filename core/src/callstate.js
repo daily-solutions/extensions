@@ -18,6 +18,7 @@ export default {
   updateCallState: function (key, newState, broadcast = true, call = call) {
     // used for an extension to request a state update,
     // which will also get broadcast to everybody else on the call.
+    console.log("i got a updatecallstate", newState, call);
     applyStateUpdate(key, newState);
     if (broadcast) {
       broadcastStateUpdate(key, newState, call);

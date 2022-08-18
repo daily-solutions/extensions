@@ -311,7 +311,7 @@ var v = function(e) {
       o(void 0);
     });
   };
-}, R = function(e, t) {
+}, N = function(e, t) {
   if (!(e instanceof t))
     throw new TypeError("Cannot call a class as a function");
 }, F = function(e) {
@@ -325,7 +325,7 @@ function Bt(e, t) {
     r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
   }
 }
-var D = function(e, t, n) {
+var B = function(e, t, n) {
   return t && Bt(e.prototype, t), n && Bt(e, n), e;
 }, Ee = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
 function X(e, t) {
@@ -353,7 +353,7 @@ var St = X(function(e) {
   e.exports = t;
 }), Ge = function(e, t) {
   return !t || O(t) !== "object" && typeof t != "function" ? F(e) : t;
-}, V = X(function(e) {
+}, U = X(function(e) {
   function t(n) {
     return e.exports = t = Object.setPrototypeOf ? Object.getPrototypeOf : function(r) {
       return r.__proto__ || Object.getPrototypeOf(r);
@@ -474,7 +474,7 @@ var St = X(function(e) {
 Ie(function() {
   return ke;
 });
-const Un = { "Amazon Silk": "amazon_silk", "Android Browser": "android", Bada: "bada", BlackBerry: "blackberry", Chrome: "chrome", Chromium: "chromium", Electron: "electron", Epiphany: "epiphany", Firefox: "firefox", Focus: "focus", Generic: "generic", "Google Search": "google_search", Googlebot: "googlebot", "Internet Explorer": "ie", "K-Meleon": "k_meleon", Maxthon: "maxthon", "Microsoft Edge": "edge", "MZ Browser": "mz", "NAVER Whale Browser": "naver", Opera: "opera", "Opera Coast": "opera_coast", PhantomJS: "phantomjs", Puffin: "puffin", QupZilla: "qupzilla", QQ: "qq", QQLite: "qqlite", Safari: "safari", Sailfish: "sailfish", "Samsung Internet for Android": "samsung_internet", SeaMonkey: "seamonkey", Sleipnir: "sleipnir", Swing: "swing", Tizen: "tizen", "UC Browser": "uc", Vivaldi: "vivaldi", "WebOS Browser": "webos", WeChat: "wechat", "Yandex Browser": "yandex", Roku: "roku" }, Dr = { amazon_silk: "Amazon Silk", android: "Android Browser", bada: "Bada", blackberry: "BlackBerry", chrome: "Chrome", chromium: "Chromium", electron: "Electron", epiphany: "Epiphany", firefox: "Firefox", focus: "Focus", generic: "Generic", googlebot: "Googlebot", google_search: "Google Search", ie: "Internet Explorer", k_meleon: "K-Meleon", maxthon: "Maxthon", edge: "Microsoft Edge", mz: "MZ Browser", naver: "NAVER Whale Browser", opera: "Opera", opera_coast: "Opera Coast", phantomjs: "PhantomJS", puffin: "Puffin", qupzilla: "QupZilla", qq: "QQ Browser", qqlite: "QQ Browser Lite", safari: "Safari", sailfish: "Sailfish", samsung_internet: "Samsung Internet for Android", seamonkey: "SeaMonkey", sleipnir: "Sleipnir", swing: "Swing", tizen: "Tizen", uc: "UC Browser", vivaldi: "Vivaldi", webos: "WebOS Browser", wechat: "WeChat", yandex: "Yandex Browser" }, M = { tablet: "tablet", mobile: "mobile", desktop: "desktop", tv: "tv" }, P = { WindowsPhone: "Windows Phone", Windows: "Windows", MacOS: "macOS", iOS: "iOS", Android: "Android", WebOS: "WebOS", BlackBerry: "BlackBerry", Bada: "Bada", Tizen: "Tizen", Linux: "Linux", ChromeOS: "Chrome OS", PlayStation4: "PlayStation 4", Roku: "Roku" }, q = { EdgeHTML: "EdgeHTML", Blink: "Blink", Trident: "Trident", Presto: "Presto", Gecko: "Gecko", WebKit: "WebKit" };
+const Un = { "Amazon Silk": "amazon_silk", "Android Browser": "android", Bada: "bada", BlackBerry: "blackberry", Chrome: "chrome", Chromium: "chromium", Electron: "electron", Epiphany: "epiphany", Firefox: "firefox", Focus: "focus", Generic: "generic", "Google Search": "google_search", Googlebot: "googlebot", "Internet Explorer": "ie", "K-Meleon": "k_meleon", Maxthon: "maxthon", "Microsoft Edge": "edge", "MZ Browser": "mz", "NAVER Whale Browser": "naver", Opera: "opera", "Opera Coast": "opera_coast", PhantomJS: "phantomjs", Puffin: "puffin", QupZilla: "qupzilla", QQ: "qq", QQLite: "qqlite", Safari: "safari", Sailfish: "sailfish", "Samsung Internet for Android": "samsung_internet", SeaMonkey: "seamonkey", Sleipnir: "sleipnir", Swing: "swing", Tizen: "tizen", "UC Browser": "uc", Vivaldi: "vivaldi", "WebOS Browser": "webos", WeChat: "wechat", "Yandex Browser": "yandex", Roku: "roku" }, Dr = { amazon_silk: "Amazon Silk", android: "Android Browser", bada: "Bada", blackberry: "BlackBerry", chrome: "Chrome", chromium: "Chromium", electron: "Electron", epiphany: "Epiphany", firefox: "Firefox", focus: "Focus", generic: "Generic", googlebot: "Googlebot", google_search: "Google Search", ie: "Internet Explorer", k_meleon: "K-Meleon", maxthon: "Maxthon", edge: "Microsoft Edge", mz: "MZ Browser", naver: "NAVER Whale Browser", opera: "Opera", opera_coast: "Opera Coast", phantomjs: "PhantomJS", puffin: "Puffin", qupzilla: "QupZilla", qq: "QQ Browser", qqlite: "QQ Browser Lite", safari: "Safari", sailfish: "Sailfish", samsung_internet: "Samsung Internet for Android", seamonkey: "SeaMonkey", sleipnir: "Sleipnir", swing: "Swing", tizen: "Tizen", uc: "UC Browser", vivaldi: "Vivaldi", webos: "WebOS Browser", wechat: "WeChat", yandex: "Yandex Browser" }, M = { tablet: "tablet", mobile: "mobile", desktop: "desktop", tv: "tv" }, P = { WindowsPhone: "Windows Phone", Windows: "Windows", MacOS: "macOS", iOS: "iOS", Android: "Android", WebOS: "WebOS", BlackBerry: "BlackBerry", Bada: "Bada", Tizen: "Tizen", Linux: "Linux", ChromeOS: "Chrome OS", PlayStation4: "PlayStation 4", Roku: "Roku" }, W = { EdgeHTML: "EdgeHTML", Blink: "Blink", Trident: "Trident", Presto: "Presto", Gecko: "Gecko", WebKit: "WebKit" };
 class l {
   static getFirstMatch(t, n) {
     const r = n.match(t);
@@ -789,23 +789,23 @@ var Wn = [{ test: [/Roku\/DVP/], describe(e) {
   return e.getOSName(!0) === "android" && t >= 3;
 }, describe: () => ({ type: M.tablet }) }, { test: (e) => e.getOSName(!0) === "android", describe: () => ({ type: M.mobile }) }, { test: (e) => e.getOSName(!0) === "macos", describe: () => ({ type: M.desktop, vendor: "Apple" }) }, { test: (e) => e.getOSName(!0) === "windows", describe: () => ({ type: M.desktop }) }, { test: (e) => e.getOSName(!0) === "linux", describe: () => ({ type: M.desktop }) }, { test: (e) => e.getOSName(!0) === "playstation 4", describe: () => ({ type: M.tv }) }, { test: (e) => e.getOSName(!0) === "roku", describe: () => ({ type: M.tv }) }], zn = [{ test: (e) => e.getBrowserName(!0) === "microsoft edge", describe(e) {
   if (/\sedg\//i.test(e))
-    return { name: q.Blink };
+    return { name: W.Blink };
   const t = l.getFirstMatch(/edge\/(\d+(\.?_?\d+)+)/i, e);
-  return { name: q.EdgeHTML, version: t };
+  return { name: W.EdgeHTML, version: t };
 } }, { test: [/trident/i], describe(e) {
-  const t = { name: q.Trident }, n = l.getFirstMatch(/trident\/(\d+(\.?_?\d+)+)/i, e);
+  const t = { name: W.Trident }, n = l.getFirstMatch(/trident\/(\d+(\.?_?\d+)+)/i, e);
   return n && (t.version = n), t;
 } }, { test: (e) => e.test(/presto/i), describe(e) {
-  const t = { name: q.Presto }, n = l.getFirstMatch(/presto\/(\d+(\.?_?\d+)+)/i, e);
+  const t = { name: W.Presto }, n = l.getFirstMatch(/presto\/(\d+(\.?_?\d+)+)/i, e);
   return n && (t.version = n), t;
 } }, { test(e) {
   const t = e.test(/gecko/i), n = e.test(/like gecko/i);
   return t && !n;
 }, describe(e) {
-  const t = { name: q.Gecko }, n = l.getFirstMatch(/gecko\/(\d+(\.?_?\d+)+)/i, e);
+  const t = { name: W.Gecko }, n = l.getFirstMatch(/gecko\/(\d+(\.?_?\d+)+)/i, e);
   return n && (t.version = n), t;
-} }, { test: [/(apple)?webkit\/537\.36/i], describe: () => ({ name: q.Blink }) }, { test: [/(apple)?webkit/i], describe(e) {
-  const t = { name: q.WebKit }, n = l.getFirstMatch(/webkit\/(\d+(\.?_?\d+)+)/i, e);
+} }, { test: [/(apple)?webkit\/537\.36/i], describe: () => ({ name: W.Blink }) }, { test: [/(apple)?webkit/i], describe(e) {
+  const t = { name: W.WebKit }, n = l.getFirstMatch(/webkit\/(\d+(\.?_?\d+)+)/i, e);
   return n && (t.version = n), t;
 } }];
 class Kt {
@@ -959,7 +959,7 @@ class Kt {
   }
 }
 var $t = "new", tt = "loading", he = "joining-meeting", T = "joined-meeting", H = "left-meeting", G = "error", rt = "unknown", Jn = "base", Hn = "*", Qt = "available-devices-updated", ee = "fullscreen", te = "exited-fullscreen", Be = "daily-custom-track", De = { NONE: "none", BGBLUR: "background-blur", BGIMAGE: "background-image" }, pt = { PLAY: "play", PAUSE: "pause" }, Gn = "playing", Kn = "paused", Zt = 10, nt = ["jpg", "png", "jpeg"], $n = "add-endpoints", Qn = "remove-endpoints";
-function N() {
+function D() {
   return !k() && typeof window < "u" && window.navigator && window.navigator.userAgent ? window.navigator.userAgent : "";
 }
 function k() {
@@ -993,7 +993,7 @@ function Zn() {
         return function() {
           var e = 0, t = 0;
           if (typeof window < "u") {
-            var n = N(), r = n.match(/Edge\/(\d+).(\d+)/);
+            var n = D(), r = n.match(/Edge\/(\d+).(\d+)/);
             if (r)
               try {
                 e = parseInt(r[1]), t = parseInt(r[2]);
@@ -1014,8 +1014,8 @@ function Xt() {
 var Xn = ["Chrome", "Firefox"];
 function Yn() {
   return !k() && !function() {
-    var e = N();
-    if (e.match(/Mobi/) || e.match(/Android/) || N().match(/DailyAnd\//))
+    var e = D();
+    if (e.match(/Mobi/) || e.match(/Android/) || D().match(/DailyAnd\//))
       return !0;
   }() && Xn.includes(We());
 }
@@ -1025,7 +1025,7 @@ function Rr() {
 function Ur() {
   return Nr() && !function() {
     var e, t = We();
-    if (!N())
+    if (!D())
       return !0;
     switch (t) {
       case "Chrome":
@@ -1041,14 +1041,14 @@ function Ur() {
 }
 function We() {
   if (typeof window < "u") {
-    var e = N();
+    var e = D();
     return Wr() ? "Safari" : e.indexOf("Edge") > -1 ? "Edge" : e.match(/Chrome\//) ? "Chrome" : e.indexOf("Safari") > -1 ? "Safari" : e.indexOf("Firefox") > -1 ? "Firefox" : e.indexOf("MSIE") > -1 || e.indexOf(".NET") > -1 ? "IE" : "Unknown Browser";
   }
 }
 function Vr() {
   var e = 0, t = 0, n = 0, r = 0, i = !1;
   if (typeof window < "u") {
-    var a = N(), o = a.match(/Chrome\/(\d+).(\d+).(\d+).(\d+)/);
+    var a = D(), o = a.match(/Chrome\/(\d+).(\d+).(\d+).(\d+)/);
     if (o)
       try {
         e = parseInt(o[1]), t = parseInt(o[2]), n = parseInt(o[3]), r = parseInt(o[4]), i = a.indexOf("OPR/") > -1;
@@ -1058,12 +1058,12 @@ function Vr() {
   return { major: e, minor: t, build: n, patch: r, opera: i };
 }
 function Wr() {
-  return !!N().match(/iPad|iPhone|iPod/i) && Nr();
+  return !!D().match(/iPad|iPhone|iPod/i) && Nr();
 }
 function qr() {
   var e = 0, t = 0, n = 0;
   if (typeof window < "u") {
-    var r = N().match(/Version\/(\d+).(\d+)(.(\d+))?/);
+    var r = D().match(/Version\/(\d+).(\d+)(.(\d+))?/);
     if (r)
       try {
         e = parseInt(r[1]), t = parseInt(r[2]), n = parseInt(r[4]);
@@ -1077,7 +1077,7 @@ function qr() {
 function zr() {
   var e = 0, t = 0;
   if (typeof window < "u") {
-    var n = N().match(/Firefox\/(\d+).(\d+)/);
+    var n = D().match(/Firefox\/(\d+).(\d+)/);
     if (n)
       try {
         e = parseInt(n[1]), t = parseInt(n[2]);
@@ -1115,9 +1115,9 @@ function ht(e) {
 }
 var Jr = function() {
   function e() {
-    R(this, e);
+    N(this, e);
   }
-  return D(e, [{ key: "addListenerForMessagesFromCallMachine", value: function(t, n, r) {
+  return B(e, [{ key: "addListenerForMessagesFromCallMachine", value: function(t, n, r) {
     ve();
   } }, { key: "addListenerForMessagesFromDailyJs", value: function(t, n, r) {
     ve();
@@ -1164,9 +1164,9 @@ function ei(e) {
     }
   }();
   return function() {
-    var n, r = V(e);
+    var n, r = U(e);
     if (t) {
-      var i = V(this).constructor;
+      var i = U(this).constructor;
       n = Reflect.construct(r, arguments, i);
     } else
       n = r.apply(this, arguments);
@@ -1178,9 +1178,9 @@ var ti = function(e) {
   var t = ei(n);
   function n() {
     var r;
-    return R(this, n), (r = t.call(this))._wrappedListeners = {}, r._messageCallbacks = {}, r;
+    return N(this, n), (r = t.call(this))._wrappedListeners = {}, r._messageCallbacks = {}, r;
   }
-  return D(n, [{ key: "addListenerForMessagesFromCallMachine", value: function(r, i, a) {
+  return B(n, [{ key: "addListenerForMessagesFromCallMachine", value: function(r, i, a) {
     var o = this, s = function(c) {
       if (c.data && c.data.what === "iframe-call-message" && (!c.data.callFrameId || c.data.callFrameId === i) && (!c.data.from || c.data.from !== "module")) {
         var u = it({}, c.data);
@@ -1242,9 +1242,9 @@ function ri(e) {
     }
   }();
   return function() {
-    var n, r = V(e);
+    var n, r = U(e);
     if (t) {
-      var i = V(this).constructor;
+      var i = U(this).constructor;
       n = Reflect.construct(r, arguments, i);
     } else
       n = r.apply(this, arguments);
@@ -1256,9 +1256,9 @@ var ni = function(e) {
   var t = ri(n);
   function n() {
     var r;
-    return R(this, n), r = t.call(this), global.callMachineToDailyJsEmitter = global.callMachineToDailyJsEmitter || new z.exports.EventEmitter(), global.dailyJsToCallMachineEmitter = global.dailyJsToCallMachineEmitter || new z.exports.EventEmitter(), r._wrappedListeners = {}, r._messageCallbacks = {}, r;
+    return N(this, n), r = t.call(this), global.callMachineToDailyJsEmitter = global.callMachineToDailyJsEmitter || new z.exports.EventEmitter(), global.dailyJsToCallMachineEmitter = global.dailyJsToCallMachineEmitter || new z.exports.EventEmitter(), r._wrappedListeners = {}, r._messageCallbacks = {}, r;
   }
-  return D(n, [{ key: "addListenerForMessagesFromCallMachine", value: function(r, i, a) {
+  return B(n, [{ key: "addListenerForMessagesFromCallMachine", value: function(r, i, a) {
     this._addListener(r, global.callMachineToDailyJsEmitter, a, "received call machine message");
   } }, { key: "addListenerForMessagesFromDailyJs", value: function(r, i, a) {
     this._addListener(r, global.dailyJsToCallMachineEmitter, a, "received daily-js message");
@@ -1322,7 +1322,7 @@ var ni = function(e) {
         r.set(i, a);
       }
       function a() {
-        return oi(i, arguments, V(this).constructor);
+        return oi(i, arguments, U(this).constructor);
       }
       return a.prototype = Object.create(i.prototype, { constructor: { value: a, enumerable: !1, writable: !0, configurable: !0 } }), St(a, i);
     }, t(n);
@@ -1343,9 +1343,9 @@ function ci(e) {
     }
   }();
   return function() {
-    var n, r = V(e);
+    var n, r = U(e);
     if (t) {
-      var i = V(this).constructor;
+      var i = U(this).constructor;
       n = Reflect.construct(r, arguments, i);
     } else
       n = r.apply(this, arguments);
@@ -1354,9 +1354,9 @@ function ci(e) {
 }
 var ui = function() {
   function e() {
-    R(this, e), this._currentLoad = null;
+    N(this, e), this._currentLoad = null;
   }
-  return D(e, [{ key: "load", value: function(t, n, r, i, a) {
+  return B(e, [{ key: "load", value: function(t, n, r, i, a) {
     if (this.loaded)
       return window._dailyCallObjectSetup(n), void i(!0);
     (function(o, s) {
@@ -1371,9 +1371,9 @@ var ui = function() {
   } }]), e;
 }(), li = 3, di = function() {
   function e(t, n, r) {
-    R(this, e), this._attemptsRemaining = li, this._currentAttempt = null, this._meetingOrBaseUrl = t, this._successCallback = n, this._failureCallback = r;
+    N(this, e), this._attemptsRemaining = li, this._currentAttempt = null, this._meetingOrBaseUrl = t, this._successCallback = n, this._failureCallback = r;
   }
-  return D(e, [{ key: "start", value: function() {
+  return B(e, [{ key: "start", value: function() {
     var t = this;
     this._currentAttempt || (this._currentAttempt = new er(this._meetingOrBaseUrl, this._successCallback, function n(r) {
       t._currentAttempt.cancelled || (t._attemptsRemaining--, t._failureCallback(r, t._attemptsRemaining > 0), t._attemptsRemaining <= 0 || setTimeout(function() {
@@ -1391,14 +1391,14 @@ var ui = function() {
   He(n, e);
   var t = ci(n);
   function n() {
-    return R(this, n), t.apply(this, arguments);
+    return N(this, n), t.apply(this, arguments);
   }
   return n;
 }(si(Error)), er = function() {
   function e(t, n, r) {
-    R(this, e), this._loadAttemptImpl = k() || !_dailyConfig.avoidEval ? new fi(t, n, r) : new pi(t, n, r);
+    N(this, e), this._loadAttemptImpl = k() || !_dailyConfig.avoidEval ? new fi(t, n, r) : new pi(t, n, r);
   }
-  return D(e, [{ key: "start", value: function() {
+  return B(e, [{ key: "start", value: function() {
     var t = v(function* () {
       return this._loadAttemptImpl.start();
     });
@@ -1414,9 +1414,9 @@ var ui = function() {
   } }]), e;
 }(), fi = function() {
   function e(t, n, r) {
-    R(this, e), this.cancelled = !1, this.succeeded = !1, this._networkTimedOut = !1, this._networkTimeout = null, this._iosCache = typeof iOSCallObjectBundleCache < "u" && iOSCallObjectBundleCache, this._refetchHeaders = null, this._meetingOrBaseUrl = t, this._successCallback = n, this._failureCallback = r;
+    N(this, e), this.cancelled = !1, this.succeeded = !1, this._networkTimedOut = !1, this._networkTimeout = null, this._iosCache = typeof iOSCallObjectBundleCache < "u" && iOSCallObjectBundleCache, this._refetchHeaders = null, this._meetingOrBaseUrl = t, this._successCallback = n, this._failureCallback = r;
   }
-  return D(e, [{ key: "start", value: function() {
+  return B(e, [{ key: "start", value: function() {
     var t = v(function* () {
       var n;
       try {
@@ -1482,9 +1482,9 @@ var ui = function() {
   }() }]), e;
 }(), pi = function() {
   function e(t, n, r) {
-    R(this, e), this.cancelled = !1, this.succeeded = !1, this._meetingOrBaseUrl = t, this._successCallback = n, this._failureCallback = r, this._attemptId = Ke(), this._networkTimeout = null, this._scriptElement = null;
+    N(this, e), this.cancelled = !1, this.succeeded = !1, this._meetingOrBaseUrl = t, this._successCallback = n, this._failureCallback = r, this._attemptId = Ke(), this._networkTimeout = null, this._scriptElement = null;
   }
-  return D(e, [{ key: "start", value: function() {
+  return B(e, [{ key: "start", value: function() {
     var t = v(function* () {
       var n;
       window._dailyCallMachineLoadWaitlist || (window._dailyCallMachineLoadWaitlist = /* @__PURE__ */ new Set());
@@ -1542,7 +1542,7 @@ var ui = function() {
   for (var n = -1, r = Array(e); ++n < e; )
     r[n] = t(n);
   return r;
-}, Gr = typeof Ee == "object" && Ee && Ee.Object === Object && Ee, mi = typeof self == "object" && self && self.Object === Object && self, W = Gr || mi || Function("return this")(), J = W.Symbol, Kr = Object.prototype, gi = Kr.hasOwnProperty, yi = Kr.toString, me = J ? J.toStringTag : void 0, bi = function(e) {
+}, Gr = typeof Ee == "object" && Ee && Ee.Object === Object && Ee, mi = typeof self == "object" && self && self.Object === Object && self, V = Gr || mi || Function("return this")(), J = V.Symbol, Kr = Object.prototype, gi = Kr.hasOwnProperty, yi = Kr.toString, me = J ? J.toStringTag : void 0, bi = function(e) {
   var t = gi.call(e, me), n = e[me];
   try {
     e[me] = void 0;
@@ -1566,7 +1566,7 @@ var ui = function() {
 }, E = Array.isArray, Oi = function() {
   return !1;
 }, vt = X(function(e, t) {
-  var n = t && !t.nodeType && t, r = n && e && !e.nodeType && e, i = r && r.exports === n ? W.Buffer : void 0, a = (i ? i.isBuffer : void 0) || Oi;
+  var n = t && !t.nodeType && t, r = n && e && !e.nodeType && e, i = r && r.exports === n ? V.Buffer : void 0, a = (i ? i.isBuffer : void 0) || Oi;
   e.exports = a;
 }), ji = 9007199254740991, Pi = /^(?:0|[1-9]\d*)$/, Zr = function(e, t) {
   var n = typeof e;
@@ -1676,7 +1676,7 @@ var Qe = ne, Qi = function() {
   return this.__data__.get(e);
 }, ar, Yi = function(e) {
   return this.__data__.has(e);
-}, ot = W["__core-js_shared__"], or = (ar = /[^.]+$/.exec(ot && ot.keys && ot.keys.IE_PROTO || "")) ? "Symbol(src)_1." + ar : "", ea = function(e) {
+}, ot = V["__core-js_shared__"], or = (ar = /[^.]+$/.exec(ot && ot.keys && ot.keys.IE_PROTO || "")) ? "Symbol(src)_1." + ar : "", ea = function(e) {
   return !!or && or in e;
 }, ta = Function.prototype.toString, Y = function(e) {
   if (e != null) {
@@ -1697,7 +1697,7 @@ var Qe = ne, Qi = function() {
 }, fe = function(e, t) {
   var n = ua(e, t);
   return ca(n) ? n : void 0;
-}, Me = fe(W, "Map"), Se = fe(Object, "create"), la = function() {
+}, Me = fe(V, "Map"), Se = fe(Object, "create"), la = function() {
   this.__data__ = Se ? Se(null) : {}, this.size = 0;
 }, da = function(e) {
   var t = this.has(e) && delete this.__data__[e];
@@ -1816,7 +1816,7 @@ var Ea = Re, Aa = function(e, t) {
     }
   }
   return a.delete(e), a.delete(t), f;
-}, cr = W.Uint8Array, Ia = function(e) {
+}, cr = V.Uint8Array, Ia = function(e) {
   var t = -1, n = Array(e.size);
   return e.forEach(function(r, i) {
     n[++t] = [i, r];
@@ -1904,7 +1904,7 @@ var Ea = Re, Aa = function(e, t) {
     h != je && "constructor" in e && "constructor" in t && !(typeof h == "function" && h instanceof h && typeof je == "function" && je instanceof je) && (p = !1);
   }
   return a.delete(e), a.delete(t), p;
-}, mt = fe(W, "DataView"), gt = fe(W, "Promise"), yt = fe(W, "Set"), bt = fe(W, "WeakMap"), ao = Y(mt), oo = Y(Me), so = Y(gt), co = Y(yt), uo = Y(bt), Z = de;
+}, mt = fe(V, "DataView"), gt = fe(V, "Promise"), yt = fe(V, "Set"), bt = fe(V, "WeakMap"), ao = Y(mt), oo = Y(Me), so = Y(gt), co = Y(yt), uo = Y(bt), Z = de;
 (mt && Z(new mt(new ArrayBuffer(1))) != "[object DataView]" || Me && Z(new Me()) != "[object Map]" || gt && Z(gt.resolve()) != "[object Promise]" || yt && Z(new yt()) != "[object Set]" || bt && Z(new bt()) != "[object WeakMap]") && (Z = function(e) {
   var t = de(e), n = t == "[object Object]" ? e.constructor : void 0, r = n ? Y(n) : "";
   if (r)
@@ -2267,9 +2267,9 @@ function Zo(e) {
     }
   }();
   return function() {
-    var n, r = V(e);
+    var n, r = U(e);
     if (t) {
-      var i = V(this).constructor;
+      var i = U(this).constructor;
       n = Reflect.construct(r, arguments, i);
     } else
       n = r.apply(this, arguments);
@@ -2494,7 +2494,7 @@ const es = function(e) {
   var t = Zo(n);
   function n(r) {
     var i, a = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
-    if (R(this, n), i = t.call(this), x(F(i), "startListeningForDeviceChanges", function() {
+    if (N(this, n), i = t.call(this), x(F(i), "startListeningForDeviceChanges", function() {
       navigator.mediaDevices.ondevicechange !== void 0 || k() ? navigator.mediaDevices.addEventListener("devicechange", i.deviceChangeListener) : i.startPollingForDeviceChanges();
     }), x(F(i), "stopListeningForDeviceChanges", function() {
       navigator.mediaDevices.ondevicechange !== void 0 || k() ? navigator.mediaDevices.removeEventListener("devicechange", i.deviceChangeListener) : i.stopPollingForDeviceChanges();
@@ -2524,7 +2524,7 @@ const es = function(e) {
     }
     return i._callObjectMode && i.startListeningForDeviceChanges(), i._messageChannel.addListenerForMessagesFromCallMachine(i.handleMessageFromCallMachine, i._callFrameId, F(i)), i;
   }
-  return D(n, null, [{ key: "supportedBrowser", value: function() {
+  return B(n, null, [{ key: "supportedBrowser", value: function() {
     if (k())
       return { supported: !0, mobile: !0, name: "React Native", version: null, supportsScreenShare: !1, supportsSfu: !0, supportsVideoProcessing: !1 };
     var r = class {
@@ -2540,7 +2540,7 @@ const es = function(e) {
         return Dr;
       }
       static get ENGINE_MAP() {
-        return q;
+        return W;
       }
       static get OS_MAP() {
         return P;
@@ -2548,7 +2548,7 @@ const es = function(e) {
       static get PLATFORMS_MAP() {
         return M;
       }
-    }.getParser(N());
+    }.getParser(D());
     return { supported: !!Ur(), mobile: r.getPlatformType() === "mobile", name: r.getBrowserName(), version: r.getBrowserVersion(), supportsFullscreen: !!Xt(), supportsScreenShare: !!Zn(), supportsSfu: !!Rr(), supportsVideoProcessing: Yn() };
   } }, { key: "version", value: function() {
     return "0.29.0-alpha.1";
@@ -2587,7 +2587,7 @@ const es = function(e) {
       border: 0;
       pointer-events: none;
     `, document.body.appendChild(i), r.layout || (r.layout = "custom-v1"), n.wrap(i, r);
-  } }]), D(n, [{ key: "destroy", value: function() {
+  } }]), B(n, [{ key: "destroy", value: function() {
     var r = v(function* () {
       try {
         [T, tt].includes(this._meetingState) && (yield this.leave());
@@ -3711,12 +3711,12 @@ const es = function(e) {
   } }]), n;
 }();
 let Ue = {}, ue = [];
-const ts = "update-call-state", U = {
+const ts = "update-call-state", R = {
   onCallStateUpdate: function(e, t) {
     ue[e] || (ue[e] = []), ue[e].push(t);
   },
   updateCallState: function(e, t, n = !0, r = r) {
-    rs(e, t), n && ns(e, t, r);
+    console.log("i got a updatecallstate", t, r), rs(e, t), n && ns(e, t, r);
   },
   state: Ue
 };
@@ -3732,12 +3732,12 @@ function ns(e, t, n) {
 }
 let $, A, Q, re, Ve, ut = !1, lt = !1, jr;
 function is(e) {
-  console.log("i am inside the flexpanel aftercreateframe"), Ve = e;
+  Ve = e;
 }
 const Oe = {
   afterCreateFrame: is,
   create: function({ leftNode: e, rightNode: t, button: n }) {
-    console.log("i am creating a flexpanel"), A = document.createElement("div"), Q = document.createElement("div");
+    A = document.createElement("div"), Q = document.createElement("div");
     const r = document.createElement("style");
     return r.innerHTML = `body {
         margin: 0px;
@@ -3794,12 +3794,7 @@ const Oe = {
         ), o = document.querySelector(
           "iframe.leftContainer, .leftContainer iframe"
         );
-        ut = !0, console.log(
-          "leftElIframe",
-          o,
-          "rightElIframe",
-          a
-        ), o && (o.style.pointerEvents = "none"), a && (a.style.pointerEvents = "none");
+        ut = !0, o && (o.style.pointerEvents = "none"), a && (a.style.pointerEvents = "none");
       }
     }), document.addEventListener("mousemove", function(i) {
       if (!ut)
@@ -3829,7 +3824,7 @@ const Oe = {
     lt === !0 ? this.close() : this.open();
   }
 };
-let we, _e, B, I = !1;
+let we, _e, q, I = !1;
 const as = {
   selectUrl: {
     iconPath: "https://www.svgrepo.com/show/107601/globe.svg",
@@ -3849,23 +3844,23 @@ const os = At = {
     Object.assign(L, e);
   },
   open: function(e) {
-    L.url = e, I = !0, console.log("about to call open, in here call is ", B), U.updateCallState("iframe", { url: e, open: I }, !0, B);
+    L.url = e, I = !0, R.updateCallState("iframe", { url: e, open: I }, !0, q);
   },
   close: function() {
-    L.url = "about:blank", I = !1, U.updateCallState("iframe", { url: L.url, open: I }, !0, B);
+    L.url = "about:blank", I = !1, R.updateCallState("iframe", { url: L.url, open: I }, !0, q);
   },
   show: function() {
-    I = !0, U.updateCallState("iframe", { open: I }, !0, B);
+    I = !0, R.updateCallState("iframe", { open: I }, !0, q);
   },
   hide: function() {
-    I = !1, U.updateCallState("iframe", { open: I }, !0, B);
+    I = !1, R.updateCallState("iframe", { open: I }, !0, q);
   },
   setUrl: function(e) {
-    L.url = e, U.updateCallState("iframe", { url: L.url }, !0, B);
+    L.url = e, R.updateCallState("iframe", { url: L.url }, !0, q);
   }
 };
 function ss(e, t) {
-  console.log("hello, i am the iframe beforecreateframe"), t.customTrayButtons || (t.customTrayButtons = {}), Object.assign(t.customTrayButtons, L.buttons);
+  t.customTrayButtons || (t.customTrayButtons = {}), Object.assign(t.customTrayButtons, L.buttons);
   let n = document.createElement("div");
   return n.style = `
   position: relative;
@@ -3884,10 +3879,10 @@ function ss(e, t) {
   }), [e, t];
 }
 async function cs(e) {
-  console.log("hello, i am the iframe aftercreateframe"), B = e, U.onCallStateUpdate("iframe", (t) => {
+  q = e, R.onCallStateUpdate("iframe", (t) => {
     "url" in t && ds(t.url), "open" in t && (t.open === !0 ? fs() : ps());
-  }), B.on("custom-button-click", (t) => {
-    switch (console.log("custom button click handler, e is", t), t.button_id) {
+  }), q.on("custom-button-click", (t) => {
+    switch (t.button_id) {
       case "selectUrl":
         us();
         break;
@@ -3899,7 +3894,7 @@ async function cs(e) {
 }
 function us() {
   var e;
-  console.log("inside handleselectbutton, call is", B), ((e = U.state.iframe) == null ? void 0 : e.open) === !0 ? U.updateCallState("iframe", { open: !1 }, !0, B) : ls();
+  ((e = R.state.iframe) == null ? void 0 : e.open) === !0 ? R.updateCallState("iframe", { open: !1 }, !0, q) : ls();
 }
 function ls() {
   let e = prompt("Enter a URL", L.url);
@@ -3943,26 +3938,22 @@ Te = new WeakSet(), Mt = function(t) {
 }, ze = new WeakSet(), yn = function(t) {
   this.socket.emit("update", t);
 };
-console.log("i am the core.ts module, nice to meet you");
 function vs(e, t) {
   var a;
-  const { dailyConfig: n = {} } = t;
-  console.log("inside module createframe");
-  const r = Array.isArray(n.extensions) ? n.extensions : [];
+  const { dailyConfig: n = {} } = t, r = Array.isArray(n.extensions) ? n.extensions : [];
   (a = t.dailyConfig) == null || delete a.extensions, console.log("extensions: ", r), r.forEach((o) => {
-    console.log("beforeCreateFrame: ", o);
     const s = "extension" in o ? o.extension : o;
     "config" in o && s.configure && s.configure(o.config), s.beforeCreateFrame && ([e, t] = s.beforeCreateFrame(e, t));
   });
   const i = es.createFrame(e, t);
   return r.forEach((o) => {
     const s = "extension" in o ? o.extension : o;
-    console.log("afterCreateFrame: ", s), s.afterCreateFrame && s.afterCreateFrame(i);
+    s.afterCreateFrame && s.afterCreateFrame(i);
   }), i;
 }
 const ys = {
   createFrame: vs,
-  callstate: U,
+  callstate: R,
   flexpanel: Oe,
   iframe: os,
   socketiostate: hs

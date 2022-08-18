@@ -1,6 +1,6 @@
-import daily from "../../../core/src/core.js";
-import iframe from "../../../core/src/iframe.js";
-import callstate from "../../../core/src/callstate.js";
+import Daily from "@daily-labs/extensions";
+let iframe = Daily.iframe;
+let callstate = Daily.callstate;
 
 let fp, iframeEl, call;
 
@@ -10,12 +10,9 @@ const props = {};
 // don't use the iframe extension's button
 iframe.configure({ url: "about:blank", buttons: {}, showUrl: false });
 
-/* Public interface */
-export default {
-  configure: function (p) {
-    Object.assign(props, p);
-  },
-};
+function configure(config) {
+  Object.assign(props, config);
+}
 
 /* Private implementation */
 
@@ -26,29 +23,46 @@ async function getTokenFromServer() {
 }
 
 function handleMiroButton() {
+  console.log("inside handlemirobutton");
   if (callstate.state.iframe?.open === true) {
-    callstate.updateCallState("iframe", {
-      open: false,
-    });
+    callstate.updateCallState(
+      "iframe",
+      {
+        open: false,
+      },
+      true,
+      call
+    );
   } else if (
     callstate.state.iframe?.url &&
     callstate.state.iframe?.url !== "about:blank"
   ) {
     // then we already have a board picked; show it again
-    callstate.updateCallState("iframe", {
-      open: true,
-    });
+    callstate.updateCallState(
+      "iframe",
+      {
+        open: true,
+      },
+      true,
+      call
+    );
   } else {
+    console.log("let's pick a board, call is: ", call);
     const boardProps = {
       clientId: props.clientId,
       getAnonymousUserToken: () => getTokenFromServer(),
       action: "access-link",
       success: (result) => {
         console.log("picked board: ", result);
-        callstate.updateCallState("iframe", {
-          open: true,
-          url: result.accessLink,
-        });
+        callstate.updateCallState(
+          "iframe",
+          {
+            open: true,
+            url: result.accessLink,
+          },
+          true,
+          call
+        );
       },
     };
     if (props.anonymous === true) {
@@ -58,8 +72,9 @@ function handleMiroButton() {
   }
 }
 
-daily.beforeCreateFrame((parentEl, properties) => {
-  // TODO: maybe namespace shared resources like tray buttons?
+function beforeCreateFrame(parentEl, properties) {
+  //TODO: can we avoid this somehow?
+  [parentEl, properties] = iframe.beforeCreateFrame(parentEl, properties);
   if (!properties.customTrayButtons) {
     properties.customTrayButtons = {};
   }
@@ -70,11 +85,12 @@ daily.beforeCreateFrame((parentEl, properties) => {
   };
 
   return [parentEl, properties];
-});
+}
 
-daily.afterCreateFrame(async (c) => {
+function afterCreateFrame(c) {
   call = c;
-
+  //TODO: Can we avoid this somehow?
+  iframe.afterCreateFrame(c);
   call.on("custom-button-click", (e) => {
     switch (e.button_id) {
       case "miro":
@@ -82,4 +98,10 @@ daily.afterCreateFrame(async (c) => {
         break;
     }
   });
-});
+}
+
+export default {
+  afterCreateFrame,
+  beforeCreateFrame,
+  configure,
+};
