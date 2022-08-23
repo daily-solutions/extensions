@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Daily.co Breakout Demo</title>
-    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <script crossorigin src="http://localhost:3000/daily-iframe.js"></script>
 
     <!--
     This demo shows how you can implement a "breakout room" in a Daily Prebuilt room.
@@ -32,6 +32,18 @@
             },
           },
         });
+
+        window.call = call;
+
+        function handleParticipantData(data) {
+          console.log("handleParticipantData:", data);
+        }
+        call.on("participant-updated", handleParticipantData);
+
+        function handleAppMessage(data) {
+          console.log("handleAppMessage:", data);
+        }
+        call.on("app-message", handleAppMessage);
 
         await call.join();
         breakout.connect({ call, domain, room });

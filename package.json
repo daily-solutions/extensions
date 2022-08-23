@@ -11,7 +11,8 @@
     "express": "^4.18.1",
     "node-fetch": "^2.6.7",
     "serve-index": "^1.9.1",
-    "socket.io": "^4.5.1"
+    "socket.io": "^4.5.1",
+    "@daily-co/daily-js": "0.30.x"
   },
   "engines": {
     "node": "18.x"

@@ -46,7 +46,11 @@ export function connect({ room = "", domain = "", call }) {
   });
 }
 
-function randomizeParticipants(participants = {}, roomUrls = []) {
+function randomizeParticipants(
+  participants = {},
+  roomUrls = [],
+  initialRoomUrl = state.initialRoomUrl
+) {
   return Object.entries(participants)
     .map((value) => ({ value, sort: Math.random() })) // shuffle participants
     .sort((a, b) => a.sort - b.sort)
@@ -54,7 +58,7 @@ function randomizeParticipants(participants = {}, roomUrls = []) {
     .map(([_, participant], index) => {
       // Evenly split into two rooms
       const roomUrl = index % 2 === 0 ? roomUrls[0] : roomUrls[1];
-      return { roomUrl, user_name: participant.user_name };
+      return { roomUrl, user_name: participant.user_name, initialRoomUrl };
     });
 }
 
@@ -70,13 +74,19 @@ async function start(call) {
   const { roomUrls } = await response.json();
 
   // Randomize participants
-  const participants = randomizeParticipants(call.participants(), roomUrls);
+  const participants = randomizeParticipants(
+    call.participants(),
+    roomUrls,
+    state.initialRoomUrl
+  );
+
+  call.sendAppMessage({ breakoutStarted: true, participants }, "*");
 
   // Send state to all clients
-  socket.updateState({
-    participants,
-    breakoutStarted: true,
-  });
+  // socket.updateState({
+  //   participants,
+  //   breakoutStarted: true,
+  // });
 }
 
 function end() {
