@@ -7,8 +7,8 @@
   "module": "dist/miro.js.js",
   "exports": {
     ".": {
-      "import": "./dist/miro.js.js",
-      "require": "./dist/miro.js.umd.cjs"
+      "import": "./dist/miro.js",
+      "require": "./dist/miro.umd.cjs"
     }
   },
   "scripts": {

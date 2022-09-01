@@ -7,13 +7,13 @@
   "module": "dist/core.js.js",
   "exports": {
     ".": {
-      "import": "./dist/core.js.js",
-      "require": "./dist/core.js.umd.cjs"
+      "import": "./dist/core.js",
+      "require": "./dist/core.umd.cjs"
     }
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "devDependencies": {

@@ -6,27 +6,8 @@ import callstate from "./callstate.js";
 import flexpanel from "./flexpanel.js";
 //@ts-ignore
 import iframe from "./iframe.js";
-//@ts-ignore
-import socketiostate from "./socketiostate.js";
 
-type DailyExtension = {
-  configure?: (options: any) => void;
-  beforeCreateFrame?: (
-    parentEl: HTMLElement,
-    properties: any
-  ) => [HTMLElement, any];
-  afterCreateFrame?: (dailyCall: DailyCall) => void;
-};
-
-type DailyExtensionConfig =
-  | DailyExtension
-  | { extension: DailyExtension; config: any };
-
-type ExtensionCallOptions = DailyCallOptions & {
-  dailyConfig?: { extensions?: [] | DailyExtensionConfig[] };
-};
-
-function createFrame(parentEl: HTMLElement, properties: ExtensionCallOptions) {
+function createFrame(parentEl, properties) {
   const { dailyConfig = {} } = properties;
 
   const extensions = Array.isArray(dailyConfig.extensions)
@@ -39,6 +20,10 @@ function createFrame(parentEl: HTMLElement, properties: ExtensionCallOptions) {
 
   console.log("extensions: ", extensions);
 
+  // configure core components
+  [parentEl, properties] = iframe.beforeCreateFrame(parentEl, properties);
+
+  // now handle registered extensions
   extensions.forEach((extension) => {
     const ext = "extension" in extension ? extension.extension : extension;
 
@@ -51,23 +36,27 @@ function createFrame(parentEl: HTMLElement, properties: ExtensionCallOptions) {
     }
   });
 
-  const call = DailyIframe.createFrame(parentEl, properties);
+  const dailyCall = DailyIframe.createFrame(parentEl, properties);
+
+  // configure core components
+  callstate.afterCreateFrame(dailyCall);
+  flexpanel.afterCreateFrame(dailyCall);
+  iframe.afterCreateFrame(dailyCall);
 
   extensions.forEach((extension) => {
     const ext = "extension" in extension ? extension.extension : extension;
 
     if (ext.afterCreateFrame) {
-      ext.afterCreateFrame(call);
+      ext.afterCreateFrame(dailyCall);
     }
   });
 
-  return call;
+  Object.assign(dailyCall, callstate.instanceMethods);
+  Object.assign(dailyCall, iframe.instanceMethods);
+
+  return dailyCall;
 }
 
 export default {
   createFrame,
-  callstate,
-  flexpanel,
-  iframe,
-  socketiostate,
 };

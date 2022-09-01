@@ -8,7 +8,7 @@ export default defineConfig({
       entry: resolve(__dirname, "src/miro.js"),
       name: "core",
       // the proper extensions will be added
-      fileName: "miro.js",
+      fileName: "miro",
     },
   },
 });

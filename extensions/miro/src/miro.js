@@ -7,8 +7,6 @@ let fp, iframeEl, call;
 const props = {};
 
 /* Extension configuration */
-// don't use the iframe extension's button
-iframe.configure({ url: "about:blank", buttons: {}, showUrl: false });
 
 function configure(config) {
   Object.assign(props, config);
@@ -23,46 +21,22 @@ async function getTokenFromServer() {
 }
 
 function handleMiroButton() {
-  console.log("inside handlemirobutton");
-  if (callstate.state.iframe?.open === true) {
-    callstate.updateCallState(
-      "iframe",
-      {
-        open: false,
-      },
-      true,
-      call
-    );
-  } else if (
-    callstate.state.iframe?.url &&
-    callstate.state.iframe?.url !== "about:blank"
-  ) {
+  const s = call.iframeState();
+  if (s.open === true) {
+    // we have a board picked; just hide it
+    call.hideIframe();
+  } else if (s.url !== "about:blank") {
     // then we already have a board picked; show it again
-    callstate.updateCallState(
-      "iframe",
-      {
-        open: true,
-      },
-      true,
-      call
-    );
+    call.showIframe();
   } else {
-    console.log("let's pick a board, call is: ", call);
+    console.log("Selecting Miro board...");
     const boardProps = {
       clientId: props.clientId,
       getAnonymousUserToken: () => getTokenFromServer(),
       action: "access-link",
       success: (result) => {
-        console.log("picked board: ", result);
-        callstate.updateCallState(
-          "iframe",
-          {
-            open: true,
-            url: result.accessLink,
-          },
-          true,
-          call
-        );
+        console.log("Selected Miro board: ", result);
+        call.openIframe(result.accessLink);
       },
     };
     if (props.anonymous === true) {
@@ -74,7 +48,6 @@ function handleMiroButton() {
 
 function beforeCreateFrame(parentEl, properties) {
   //TODO: can we avoid this somehow?
-  [parentEl, properties] = iframe.beforeCreateFrame(parentEl, properties);
   if (!properties.customTrayButtons) {
     properties.customTrayButtons = {};
   }
@@ -90,7 +63,6 @@ function beforeCreateFrame(parentEl, properties) {
 function afterCreateFrame(c) {
   call = c;
   //TODO: Can we avoid this somehow?
-  iframe.afterCreateFrame(c);
   call.on("custom-button-click", (e) => {
     switch (e.button_id) {
       case "miro":

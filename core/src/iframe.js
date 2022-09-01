@@ -6,7 +6,8 @@ let fp, iframeEl, locationEl, call;
 let open = false;
 
 /* Defaults */
-const defaultButtons = {
+
+const defaultButton = {
   selectUrl: {
     iconPath: "https://www.svgrepo.com/show/107601/globe.svg",
     label: "Iframe",
@@ -16,7 +17,7 @@ const defaultButtons = {
 
 const props = {
   url: "about:blank", // used to set the initial URL for the iframe.
-  buttons: defaultButtons, // used to change the button names and/or icons.
+  buttons: {}, // used to change the button names and/or icons.
   showUrl: false, // controls whether to display the active iframe URL as a pseudo-address-bar
   // above the iframe content.
 };
@@ -29,33 +30,54 @@ export default self = {
   configure: function (p) {
     Object.assign(props, p);
   },
-  open: function (url) {
-    // sets a new URL for the iframe and opens
-    props.url = url;
-    open = true;
-    callstate.updateCallState("iframe", { url, open }, true, call);
-  },
-  close: function () {
-    // closes the iframe and clears URL
-    props.url = "about:blank";
-    open = false;
-    callstate.updateCallState("iframe", { url: props.url, open }, true, call);
-  },
-  show: function () {
-    // just shows the iframe (flexpanel)
-    open = true;
-    callstate.updateCallState("iframe", { open }, true, call);
-  },
-  hide: function () {
-    // just hides without removing URL
-    open = false;
-    callstate.updateCallState("iframe", { open }, true, call);
-  },
-  setUrl: function (url) {
-    // updates URL without changing
-    // show/hide state
-    props.url = url;
-    callstate.updateCallState("iframe", { url: props.url }, true, call);
+  instanceMethods: {
+    iframeState: function () {
+      const defaultState = { url: props.url, open };
+      return callstate.instanceMethods.callState["iframe"] || defaultState;
+    },
+    openIframe: function (url) {
+      // sets a new URL for the iframe and opens
+      props.url = url;
+      open = true;
+      callstate.instanceMethods.updateCallState(
+        "iframe",
+        { url, open },
+        true,
+        call
+      );
+    },
+    closeIframe: function () {
+      // closes the iframe and clears URL
+      props.url = "about:blank";
+      open = false;
+      callstate.instanceMethods.updateCallState(
+        "iframe",
+        { url: props.url, open },
+        true,
+        call
+      );
+    },
+    showIframe: function () {
+      // just shows the iframe (flexpanel)
+      open = true;
+      callstate.instanceMethods.updateCallState("iframe", { open }, true, call);
+    },
+    hideIframe: function () {
+      // just hides without removing URL
+      open = false;
+      callstate.instanceMethods.updateCallState("iframe", { open }, true, call);
+    },
+    setIframeUrl: function (url) {
+      // updates URL without changing
+      // show/hide state
+      props.url = url;
+      callstate.instanceMethods.updateCallState(
+        "iframe",
+        { url: props.url },
+        true,
+        call
+      );
+    },
   },
 };
 
@@ -104,7 +126,7 @@ function beforeCreateFrame(parentEl, properties) {
 async function afterCreateFrame(c) {
   call = c;
 
-  callstate.onCallStateUpdate("iframe", (state) => {
+  callstate.instanceMethods.onCallStateUpdate("iframe", (state) => {
     if ("url" in state) {
       handleUrlUpdate(state.url);
     }
@@ -132,7 +154,12 @@ async function afterCreateFrame(c) {
 // overloading the "selectUrl" button to work around a bug with updateCustomTrayButtons for now
 function handleSelectButton() {
   if (callstate.state.iframe?.open === true) {
-    callstate.updateCallState("iframe", { open: false }, true, call);
+    callstate.instanceMethods.updateCallState(
+      "iframe",
+      { open: false },
+      true,
+      call
+    );
   } else {
     selectUrl();
   }

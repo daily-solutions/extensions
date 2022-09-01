@@ -8,29 +8,32 @@ const REQUEST_MSG = "request-call-state";
 
 /* Public interface */
 export default {
-  onCallStateUpdate: function (key, callback) {
-    if (!updateHandlers[key]) {
-      updateHandlers[key] = [];
-    }
-    updateHandlers[key].push(callback);
-  },
+  afterCreateFrame,
+  instanceMethods: {
+    onCallStateUpdate: function (key, callback) {
+      if (!updateHandlers[key]) {
+        updateHandlers[key] = [];
+      }
+      updateHandlers[key].push(callback);
+    },
 
-  updateCallState: function (key, newState, broadcast = true, call = call) {
-    // used for an extension to request a state update,
-    // which will also get broadcast to everybody else on the call.
-    console.log("i got a updatecallstate", newState, call);
-    applyStateUpdate(key, newState);
-    if (broadcast) {
-      broadcastStateUpdate(key, newState, call);
-    }
-  },
+    updateCallState: function (key, newState, broadcast = true) {
+      // used for an extension to request a state update,
+      // which will also get broadcast to everybody else on the call.
+      console.log("Updating call state:", newState);
+      applyStateUpdate(key, newState);
+      if (broadcast) {
+        broadcastStateUpdate(key, newState);
+      }
+    },
 
-  state,
+    callState: state,
+  },
 };
 
 /* Private implementation */
 
-export function afterCreateFrame(c) {
+function afterCreateFrame(c) {
   call = c;
   // listen for requests for state from new peers
   call.on("app-message", (e) => {
@@ -96,7 +99,7 @@ function applyStateUpdate(key = "", newState) {
   }
 }
 
-function broadcastStateUpdate(key, newState, call) {
+function broadcastStateUpdate(key, newState) {
   const ns = {};
   ns[key] = newState;
   call.sendAppMessage({ message: UPDATE_MSG, state: ns });
@@ -123,7 +126,7 @@ async function requestState() {
 
   const randomIdx = Math.floor(mentors.length * Math.random());
   const randomId = mentors[randomIdx];
-  console.log("requesting call state from", randomId);
+  console.log("Requesting call state from: ", randomId);
   call.sendAppMessage(
     {
       message: "request-call-state",

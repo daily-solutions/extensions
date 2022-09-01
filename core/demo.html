@@ -7,7 +7,7 @@
     <div id="dailyContainer"></div>
 
     <script type="module">
-      import DailyIframe from "./dist/core.js.js";
+      import DailyIframe from "./dist/core.js";
 
       const urlParams = new URLSearchParams(window.location.search);
       const domain = urlParams.get("domain") || "hush";
@@ -16,19 +16,17 @@
       const hostnameWithPort =
         hostname + (window.location.port ? ":" + window.location.port : "");
 
-      //import breakout from "../extensions/breakout.js";
-      //import eventlogger from "../../extensions/eventlogger.js";
+      // try call.openIframe("https://daringfireball.net") from the console
 
       window.main = async function main() {
         const parentEl = document.getElementById("dailyContainer");
-        const call = DailyIframe.createFrame(parentEl, {
+        window.call = DailyIframe.createFrame(parentEl, {
           url: `https://${domain}.daily.co/${room}`,
           dailyConfig: {
             experimentalChromeVideoMuteLightOff: true,
-            extensions: [DailyIframe.iframe],
           },
         });
-        console.log("call is: ", call);
+
         await call.join();
       };
     </script>
