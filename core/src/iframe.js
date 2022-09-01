@@ -134,43 +134,11 @@ async function afterCreateFrame(c) {
       state.open === true ? handleShow() : handleHide();
     }
   });
-  call.on("custom-button-click", (e) => {
-    switch (e.button_id) {
-      case "selectUrl":
-        handleSelectButton();
-        break;
-      case "close":
-        self.close();
-        break;
-    }
-  });
-
-  // TODO-CB: Hmm, I don't love this
-  flexpanel.afterCreateFrame(c);
 }
 
 /* Private implementation */
 
 // overloading the "selectUrl" button to work around a bug with updateCustomTrayButtons for now
-function handleSelectButton() {
-  if (callstate.state.iframe?.open === true) {
-    callstate.instanceMethods.updateCallState(
-      "iframe",
-      { open: false },
-      true,
-      call
-    );
-  } else {
-    selectUrl();
-  }
-}
-
-function selectUrl() {
-  let url = prompt("Enter a URL", props.url);
-  if (url) {
-    self.open(url);
-  }
-}
 
 function handleUrlUpdate(url) {
   props.url = url;

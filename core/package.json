@@ -1,10 +1,9 @@
 {
-  "name": "@daily-labs/extensions",
-  "private": true,
-  "version": "0.1.0",
+  "name": "@daily-labs/daily",
+  "version": "0.1.2",
   "type": "module",
-  "main": "dist/core.js.umd.cjs",
-  "module": "dist/core.js.js",
+  "main": "dist/core.umd.cjs",
+  "module": "dist/core.js",
   "exports": {
     ".": {
       "import": "./dist/core.js",

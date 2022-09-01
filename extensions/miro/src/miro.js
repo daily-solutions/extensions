@@ -1,18 +1,11 @@
 import Daily from "@daily-labs/extensions";
-let iframe = Daily.iframe;
-let callstate = Daily.callstate;
 
-let fp, iframeEl, call;
-
+let call;
 const props = {};
-
-/* Extension configuration */
 
 function configure(config) {
   Object.assign(props, config);
 }
-
-/* Private implementation */
 
 async function getTokenFromServer() {
   const response = await fetch("https://daily-miro.glitch.me/jwt");

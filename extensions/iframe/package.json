@@ -1,14 +1,14 @@
 {
-  "name": "@daily-labs/miro-extension",
+  "name": "@daily-labs/iframe-extension",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "main": "dist/miro.js.umd.cjs",
-  "module": "dist/miro.js.js",
+  "main": "dist/iframe.umd.cjs",
+  "module": "dist/iframe.js",
   "exports": {
     ".": {
-      "import": "./dist/miro.js",
-      "require": "./dist/miro.umd.cjs"
+      "import": "./dist/iframe.js",
+      "require": "./dist/iframe.umd.cjs"
     }
   },
   "scripts": {
