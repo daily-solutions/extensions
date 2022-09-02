@@ -1,5 +1,3 @@
-import Daily from "@daily-labs/daily";
-
 let call;
 const props = {};
 

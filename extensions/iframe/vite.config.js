@@ -10,5 +10,11 @@ export default defineConfig({
       // the proper extensions will be added
       fileName: "iframe",
     },
+    rollupOptions: {
+      external: ["@daily-labs/daily"],
+      output: {
+        globals: { "@daily-labs/daily": "DailyIframe" },
+      },
+    },
   },
 });
