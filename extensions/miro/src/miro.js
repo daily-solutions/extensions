@@ -1,4 +1,4 @@
-import Daily from "@daily-labs/extensions";
+import Daily from "@daily-labs/daily";
 
 let call;
 const props = {};

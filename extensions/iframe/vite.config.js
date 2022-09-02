@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "src/iframe.js"),
-      name: "core",
+      name: "IframeExtension",
       // the proper extensions will be added
       fileName: "iframe",
     },

@@ -1,14 +1,13 @@
 {
   "name": "@daily-labs/iframe-extension",
-  "private": true,
-  "version": "0.1.0",
-  "type": "module",
-  "main": "dist/iframe.umd.cjs",
-  "module": "dist/iframe.js",
+  "version": "0.1.1",
+  "main": "dist/iframe.umd.js",
+  "module": "dist/iframe.mjs",
+  "files": "dist",
   "exports": {
     ".": {
-      "import": "./dist/iframe.js",
-      "require": "./dist/iframe.umd.cjs"
+      "import": "./dist/iframe.mjs",
+      "require": "./dist/iframe.umd.js"
     }
   },
   "scripts": {
@@ -20,7 +19,5 @@
     "typescript": "^4.7.4",
     "vite": "^3.0.0"
   },
-  "dependencies": {
-    "@daily-labs/extensions": "file:../../core"
-  }
+  "dependencies": {}
 }

@@ -28,6 +28,8 @@
         });
 
         await call.join();
+        console.log("call state: ", call.callState);
+        call.openIframe("https://daringfireball.net");
       };
     </script>
   </body>

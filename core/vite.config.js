@@ -6,7 +6,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "src/core.js"),
-      name: "core",
+      name: "DailyIframe",
+      //formats: ["umd"],
       // the proper extensions will be added
       fileName: "core",
     },

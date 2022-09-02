@@ -1,14 +1,13 @@
 {
   "name": "@daily-labs/miro-extension",
-  "private": true,
   "version": "0.1.0",
-  "type": "module",
-  "main": "dist/miro.js.umd.cjs",
-  "module": "dist/miro.js.js",
+  "main": "dist/miro.umd.js",
+  "module": "dist/miro.mjs",
+  "files": "dist",
   "exports": {
     ".": {
-      "import": "./dist/miro.js",
-      "require": "./dist/miro.umd.cjs"
+      "import": "./dist/miro.mjs",
+      "require": "./dist/miro.umd.js"
     }
   },
   "scripts": {
@@ -21,6 +20,6 @@
     "vite": "^3.0.0"
   },
   "dependencies": {
-    "@daily-labs/extensions": "file:../../core"
+    "@daily-labs/daily": "^0.1.6"
   }
 }

@@ -6,9 +6,15 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "src/miro.js"),
-      name: "core",
+      name: "MiroExtension",
       // the proper extensions will be added
       fileName: "miro",
+    },
+    rollupOptions: {
+      external: ["@daily-labs/daily"],
+      output: {
+        globals: { "@daily-labs/daily": "DailyIframe" },
+      },
     },
   },
 });

@@ -1,13 +1,13 @@
 {
   "name": "@daily-labs/daily",
-  "version": "0.1.2",
-  "type": "module",
-  "main": "dist/core.umd.cjs",
-  "module": "dist/core.js",
+  "version": "0.1.6",
+  "main": "dist/core.umd.js",
+  "module": "dist/core.mjs",
+  "files": "dist",
   "exports": {
     ".": {
-      "import": "./dist/core.js",
-      "require": "./dist/core.umd.cjs"
+      "import": "./dist/core.mjs",
+      "require": "./dist/core.umd.js"
     }
   },
   "scripts": {
