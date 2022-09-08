@@ -134,11 +134,7 @@ function beforeCreateFrame(parentEl, properties) {
 async function afterCreateFrame(c) {
   call = c;
 
-<<<<<<< HEAD:core/src/iframe.js
   callstate.instanceMethods.onCallStateUpdate("iframe", (state) => {
-=======
-  state.onCallStateUpdate("iframe", (state) => {
->>>>>>> main:public/extensions/iframe.js
     if ("url" in state) {
       handleUrlUpdate(state.url);
     }
@@ -147,27 +143,6 @@ async function afterCreateFrame(c) {
     }
   });
 }
-
-/* Private implementation */
-
-// overloading the "selectUrl" button to work around a bug with updateCustomTrayButtons for now
-<<<<<<< HEAD:core/src/iframe.js
-=======
-function handleSelectButton() {
-  if (state.state.iframe?.open === true) {
-    state.updateCallState("iframe", { open: false });
-  } else {
-    selectUrl();
-  }
-}
-
-function selectUrl() {
-  let url = prompt("Enter a URL", props.url);
-  if (url) {
-    self.open(url);
-  }
-}
->>>>>>> main:public/extensions/iframe.js
 
 function handleUrlUpdate(url) {
   props.url = url;
