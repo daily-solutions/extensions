@@ -1,11 +1,11 @@
 {
-  "name": "daily-extensions",
+  "name": "@daily-labs/ext-server",
   "version": "0.1.0",
-  "description": "A variety of tools for exending the functionality of the Daily platform",
+  "description": "A simple shared-state server backend for Daily Labs",
   "main": "server.js",
+  "bin": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "format": "prettier --write ."
+    "start": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

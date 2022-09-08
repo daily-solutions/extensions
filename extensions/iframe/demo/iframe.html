@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <title>Daily.co Iframe Demo</title>
+    <script
+      type="text/javascript"
+      src="https://miro.com/app/static/boardsPicker.1.0.js"
+    ></script>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <!--
+	This demo shows how you can open a shared Iframe in a Daily Prebuilt room.
+	
+	You can use this extension with your own Daily domain and room with query params. Y
+	`iframe.html?domain=yourdomain&room=yourroom`
+	
+	To try it, open this page in a browser tab, then click the "Iframe" button in the toolbar. You
+	should see a popup asking for a URL. Enter a URL and click "OK" to open it next to the call.
+	-->
+  </head>
+  <body onload="main()">
+    <div id="dailyContainer"></div>
+
+    <script type="module">
+      import DailyIframe from "../../../core/dist/core.mjs";
+      import iframe from "../dist/iframe.mjs";
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const domain = urlParams.get("domain") || "chad-hq";
+      const room = urlParams.get("room") || "extensions";
+
+      window.main = async function () {
+        window.call = DailyIframe.createFrame(dailyContainer, {
+          url: `https://${domain}.daily.co/${room}`,
+          dailyConfig: {
+            experimentalChromeVideoMuteLightOff: true,
+            extensions: [
+              {
+                extension: iframe,
+                config: { url: "https://daringfireball.net" },
+              },
+            ],
+          },
+        });
+
+        await call.join();
+      };
+    </script>
+  </body>
+</html>

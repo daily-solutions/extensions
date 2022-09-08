@@ -1,38 +1,36 @@
-import daily from "./core.js";
-
 let state = {};
 let updateHandlers = [];
-let call = {};
 let waitingForSync = false;
+let call = null;
 const SYNC_MAX_WAITING_TIME = 7000;
 const UPDATE_MSG = "update-call-state";
 const REQUEST_MSG = "request-call-state";
 
-/* Public interface */
 export default {
-  onCallStateUpdate: function (key, callback) {
-    if (!updateHandlers[key]) {
-      updateHandlers[key] = [];
-    }
-    updateHandlers[key].push(callback);
-  },
+  afterCreateFrame,
+  instanceMethods: {
+    onCallStateUpdate: function (key, callback) {
+      if (!updateHandlers[key]) {
+        updateHandlers[key] = [];
+      }
+      updateHandlers[key].push(callback);
+    },
 
-  updateCallState: function (key, newState, broadcast = true) {
-    // used for an extension to request a state update,
-    // which will also get broadcast to everybody else on the call.
-    console.log("updating call state: ", key, newState, broadcast);
-    applyStateUpdate(key, newState);
-    if (broadcast === true) {
-      broadcastStateUpdate(key, newState);
-    }
-  },
+    updateCallState: function (key, newState, broadcast = true) {
+      // used for an extension to request a state update,
+      // which will also get broadcast to everybody else on the call.
+      console.log("Updating call state:", newState);
+      applyStateUpdate(key, newState);
+      if (broadcast) {
+        broadcastStateUpdate(key, newState);
+      }
+    },
 
-  state,
+    callState: state,
+  },
 };
 
-/* Private implementation */
-
-daily.afterCreateFrame((c) => {
+function afterCreateFrame(c) {
   call = c;
   // listen for requests for state from new peers
   call.on("app-message", (e) => {
@@ -71,7 +69,7 @@ daily.afterCreateFrame((c) => {
       requestState();
     }, requestDelay);
   });
-});
+}
 
 function applyStateUpdates(newState) {
   // internal handler that applies all state updates
@@ -125,7 +123,7 @@ async function requestState() {
 
   const randomIdx = Math.floor(mentors.length * Math.random());
   const randomId = mentors[randomIdx];
-  console.log("requesting call state from", randomId);
+  console.log("Requesting call state from: ", randomId);
   call.sendAppMessage(
     {
       message: "request-call-state",

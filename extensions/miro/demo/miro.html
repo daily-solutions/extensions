@@ -24,22 +24,29 @@
     <div id="dailyContainer"></div>
 
     <script type="module">
+      import DailyIframe from "../../../core/dist/core.mjs";
+      import miro from "../dist/miro.mjs";
+
       const urlParams = new URLSearchParams(window.location.search);
       const domain = urlParams.get("domain") || "chad-hq";
       const room = urlParams.get("room") || "extensions";
-      const clientId = urlParams.get("clientId") || "3458764524487567450";
+      const clientId = urlParams.get("clientId") || "3458764531539295370";
       const anonymous = urlParams.get("anonymous")?.toLowerCase() === "true";
 
-      import daily from "../extensions/core.js";
-      import miro from "../extensions/miro.js";
-
-      miro.configure({ clientId, anonymous });
-
       window.main = async function () {
-        window.call = daily.createFrame(dailyContainer, {
+        window.call = DailyIframe.createFrame(dailyContainer, {
           url: `https://${domain}.daily.co/${room}`,
           dailyConfig: {
             experimentalChromeVideoMuteLightOff: true,
+            extensions: [
+              {
+                extension: miro,
+                config: {
+                  clientId,
+                  anonymous,
+                },
+              },
+            ],
           },
         });
 

@@ -3,3 +3,4 @@
 node_modules
 .nova
 *.DS_Store
+dist/

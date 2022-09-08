@@ -1,24 +1,18 @@
-import daily from "./core.js";
+//import daily from "./core.js";
 
 let fpEl, leftEl, rightEl, grabberEl, wrapperEl;
 let call;
 let isHandlerDragging = false;
 let flexpanelOpen = false;
 let activeSpeakerWas;
-let sidebarMode;
-/* Daily configuration */
-daily.afterCreateFrame((c) => (call = c));
 
-/* Public interface */
-let self;
-export default self = {
-  create: function ({
-    contentNode,
-    dailyNode,
-    button,
-    contentSize = 80,
-    sidebar = false,
-  }) {
+function afterCreateFrame(c) {
+  call = c;
+}
+
+export default {
+  afterCreateFrame,
+  create: function ({ leftNode, rightNode, button }) {
     // currently designed for an iframe on the left
     // and a node (the Daily iframe) on the right.
     // creates a side-by-side layout that can be opened and closed
@@ -29,32 +23,6 @@ export default self = {
 
     leftEl = document.createElement("div");
     rightEl = document.createElement("div");
-    sidebarMode = sidebar;
-    let dailySize = 100 - contentSize;
-
-    daily.beforeCreateFrame((parentEl, properties) => {
-      // TODO: maybe namespace shared resources like tray buttons?
-      if (button) {
-        if (!properties.customTrayButtons) {
-          properties.customTrayButtons = {};
-        }
-        properties.customTrayButtons.fp = button;
-      }
-
-      return [parentEl, properties];
-    });
-
-    daily.afterCreateFrame((call) => {
-      if (button) {
-        call.on("custom-button-click", (e) => {
-          switch (e.button_id) {
-            case "fp":
-              self.toggle();
-              break;
-          }
-        });
-      }
-    });
 
     // add some styles that control behavior of the flexpanel
     const styleEl = document.createElement("style");
@@ -145,12 +113,6 @@ export default self = {
         );
 
         isHandlerDragging = true;
-        console.log(
-          "leftElIframe",
-          leftElIframe,
-          "rightElIframe",
-          rightElIframe
-        );
 
         if (leftElIframe) {
           leftElIframe.style.pointerEvents = "none";
