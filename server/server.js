@@ -43,63 +43,6 @@ io.of(/^\/.*$/).on("connection", (socket) => {
 });
 
 app.use(cors());
-
-// Proxy to Daily API to create rooms for breakout rooms
-app.post("/create-rooms", async (req, res) => {
-  // Add logic to check if the user is authorized to create a room
-  const isAllowed = true;
-  if (!isAllowed) {
-    return res.status(403).json({
-      error: "forbidden",
-    });
-  }
-  const dailyAPIKey = process.env.DAILY_API_KEY || "";
-  const Authorization = `Bearer ${dailyAPIKey}`;
-
-  try {
-    const headersList = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization,
-    };
-
-    // If you'd like to dynamically change the number of rooms
-    // created, change how numberOfRooms is set.
-    const numberOfRooms = 2;
-    const roomRequests = [...Array(numberOfRooms)].map(() => {
-      const bodyContent = JSON.stringify({
-        properties: {
-          // Removes the prejoin UI for breakout rooms,
-          // otherwise the prejoin UI will be shown
-          // inbetween sessions
-          enable_prejoin_ui: false,
-          exp: Math.floor(Date.now() / 1000) + 60 * 60, // expires in 1 hour
-        },
-      });
-      return fetch("https://api.daily.co/v1/rooms", {
-        method: "POST",
-        body: bodyContent,
-        headers: headersList,
-      });
-    });
-
-    const responses = await Promise.all(roomRequests);
-
-    const responseBodies = responses.map((response) => response.json());
-
-    const data = await Promise.all(responseBodies);
-
-    console.log("data:", data);
-
-    const roomUrls = data.map(({ url }) => url);
-
-    return res.status(200).json({ roomUrls });
-  } catch (error) {
-    console.error(error);
-    return res.status(400).json(error);
-  }
-});
-
 app.use("/", serveIndex(__dirname + "/public"));
 app.use(express.static(__dirname + "/public"));
 

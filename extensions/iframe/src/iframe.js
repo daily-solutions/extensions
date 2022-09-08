@@ -1,14 +1,10 @@
-let call;
-
 const props = {};
-
-/* Extension configuration */
 
 function configure(config) {
   Object.assign(props, config);
 }
 
-function handleIframeButton() {
+function handleIframeButton(call) {
   const s = call.iframeState();
   if (s.open === true) {
     call.closeIframe();
@@ -34,13 +30,12 @@ function beforeCreateFrame(parentEl, properties) {
   return [parentEl, properties];
 }
 
-function afterCreateFrame(c) {
-  call = c;
+function afterCreateFrame(call) {
   //TODO: Can we avoid this somehow?
   call.on("custom-button-click", (e) => {
     switch (e.button_id) {
       case "iframe":
-        handleIframeButton();
+        handleIframeButton(call);
         break;
     }
   });

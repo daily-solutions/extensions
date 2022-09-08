@@ -11,7 +11,7 @@ async function getTokenFromServer() {
   return token;
 }
 
-function handleMiroButton() {
+function handleMiroButton(call) {
   const s = call.iframeState();
   if (s.open === true) {
     // we have a board picked; just hide it
@@ -51,13 +51,11 @@ function beforeCreateFrame(parentEl, properties) {
   return [parentEl, properties];
 }
 
-function afterCreateFrame(c) {
-  call = c;
-  //TODO: Can we avoid this somehow?
+function afterCreateFrame(call) {
   call.on("custom-button-click", (e) => {
     switch (e.button_id) {
       case "miro":
-        handleMiroButton();
+        handleMiroButton(call);
         break;
     }
   });

@@ -6,14 +6,11 @@ let isHandlerDragging = false;
 let flexpanelOpen = false;
 let activeSpeakerWas;
 
-/* Daily configuration */
 function afterCreateFrame(c) {
   call = c;
 }
 
-/* Public interface */
-let self;
-export default self = {
+export default {
   afterCreateFrame,
   create: function ({ leftNode, rightNode, button }) {
     // currently designed for an iframe on the left
@@ -26,34 +23,6 @@ export default self = {
 
     leftEl = document.createElement("div");
     rightEl = document.createElement("div");
-    /* cb: figure out how to restructure this to move the 'before' and
-    'after' to top-level functions for new module structure... but these
-    are only used if we pass 'button', and I don't think we actually
-    pass 'button' anywhere?
-    daily.beforeCreateFrame((parentEl, properties) => {
-      // TODO: maybe namespace shared resources like tray buttons?
-      if (button) {
-        if (!properties.customTrayButtons) {
-          properties.customTrayButtons = {};
-        }
-        properties.customTrayButtons.fp = button;
-      }
-
-      return [parentEl, properties];
-    });
-
-    daily.afterCreateFrame((call) => {
-      if (button) {
-        call.on("custom-button-click", (e) => {
-          switch (e.button_id) {
-            case "fp":
-              self.toggle();
-              break;
-          }
-        });
-      }
-    });
-    */
 
     // add some styles that control behavior of the flexpanel
     const styleEl = document.createElement("style");

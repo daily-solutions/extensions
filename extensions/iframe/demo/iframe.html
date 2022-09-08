@@ -20,8 +20,8 @@
     <div id="dailyContainer"></div>
 
     <script type="module">
-      import DailyIframe from "../../../core/dist/core.js";
-      import iframe from "../dist/iframe.js";
+      import DailyIframe from "../../../core/dist/core.mjs";
+      import iframe from "../dist/iframe.mjs";
 
       const urlParams = new URLSearchParams(window.location.search);
       const domain = urlParams.get("domain") || "chad-hq";

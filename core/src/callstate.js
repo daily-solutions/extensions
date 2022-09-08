@@ -6,7 +6,6 @@ const SYNC_MAX_WAITING_TIME = 7000;
 const UPDATE_MSG = "update-call-state";
 const REQUEST_MSG = "request-call-state";
 
-/* Public interface */
 export default {
   afterCreateFrame,
   instanceMethods: {
@@ -30,8 +29,6 @@ export default {
     callState: state,
   },
 };
-
-/* Private implementation */
 
 function afterCreateFrame(c) {
   call = c;

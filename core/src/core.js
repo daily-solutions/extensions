@@ -1,10 +1,7 @@
 import DailyIframe, { DailyCall, DailyCallOptions } from "@daily-co/daily-js";
 
-//@ts-ignore
 import callstate from "./callstate.js";
-//@ts-ignore
 import flexpanel from "./flexpanel.js";
-//@ts-ignore
 import iframe from "./iframe.js";
 
 function createFrame(parentEl, properties) {
