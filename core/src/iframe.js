@@ -1,8 +1,9 @@
 //import daily from "./core.js";
 import flexpanel from "./flexpanel.js";
 import callstate from "./callstate.js";
+import localstate from "./localstate.js";
 
-let fp, iframeEl, locationEl, call;
+let fp, iframeEl, locationEl, call, state;
 let open = false;
 
 /* Defaults */
@@ -20,6 +21,9 @@ const props = {
   buttons: {}, // used to change the button names and/or icons.
   showUrl: false, // controls whether to display the active iframe URL as a pseudo-address-bar
   // above the iframe content.
+  broadcast: true, // whether to broadcast iframe updates (url and show state) to other participants.
+  leftSize: 80, // passes through to the flexpanel
+  sidebar: false, // set to 'true' to put your flexpanel on the right side
 };
 
 /* Public interface */
@@ -29,6 +33,7 @@ export default self = {
   afterCreateFrame,
   configure: function (p) {
     Object.assign(props, p);
+    state = props.broadcast === true ? callstate : localstate;
   },
   instanceMethods: {
     iframeState: function () {
@@ -114,9 +119,12 @@ function beforeCreateFrame(parentEl, properties) {
   }
   containerEl.appendChild(iframeEl);
   iframeEl.src = props.url;
+  parentEl.parentNode.appendChild(containerEl);
   fp = flexpanel.create({
-    leftNode: containerEl,
-    rightNode: parentEl,
+    contentNode: containerEl,
+    dailyNode: parentEl,
+    contentSize: props.contentSize,
+    sidebar: props.sidebar,
   });
   // hang on to the iframe created by the flexpanel
 
@@ -126,7 +134,11 @@ function beforeCreateFrame(parentEl, properties) {
 async function afterCreateFrame(c) {
   call = c;
 
+<<<<<<< HEAD:core/src/iframe.js
   callstate.instanceMethods.onCallStateUpdate("iframe", (state) => {
+=======
+  state.onCallStateUpdate("iframe", (state) => {
+>>>>>>> main:public/extensions/iframe.js
     if ("url" in state) {
       handleUrlUpdate(state.url);
     }
@@ -139,6 +151,23 @@ async function afterCreateFrame(c) {
 /* Private implementation */
 
 // overloading the "selectUrl" button to work around a bug with updateCustomTrayButtons for now
+<<<<<<< HEAD:core/src/iframe.js
+=======
+function handleSelectButton() {
+  if (state.state.iframe?.open === true) {
+    state.updateCallState("iframe", { open: false });
+  } else {
+    selectUrl();
+  }
+}
+
+function selectUrl() {
+  let url = prompt("Enter a URL", props.url);
+  if (url) {
+    self.open(url);
+  }
+}
+>>>>>>> main:public/extensions/iframe.js
 
 function handleUrlUpdate(url) {
   props.url = url;
