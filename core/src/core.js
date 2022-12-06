@@ -1,8 +1,6 @@
 import DailyIframe, { DailyCall, DailyCallOptions } from "@daily-co/daily-js";
 
 import callstate from "./callstate.js";
-import flexpanel from "./flexpanel.js";
-import iframe from "./iframe.js";
 
 function createFrame(parentEl, properties) {
   const { dailyConfig = {} } = properties;
@@ -18,7 +16,6 @@ function createFrame(parentEl, properties) {
   console.log("extensions: ", extensions);
 
   // configure core components
-  [parentEl, properties] = iframe.beforeCreateFrame(parentEl, properties);
 
   // now handle registered extensions
   extensions.forEach((extension) => {
@@ -37,8 +34,6 @@ function createFrame(parentEl, properties) {
 
   // configure core components
   callstate.afterCreateFrame(dailyCall);
-  flexpanel.afterCreateFrame(dailyCall);
-  iframe.afterCreateFrame(dailyCall);
 
   extensions.forEach((extension) => {
     const ext = "extension" in extension ? extension.extension : extension;
@@ -49,7 +44,6 @@ function createFrame(parentEl, properties) {
   });
 
   Object.assign(dailyCall, callstate.instanceMethods);
-  Object.assign(dailyCall, iframe.instanceMethods);
 
   return dailyCall;
 }

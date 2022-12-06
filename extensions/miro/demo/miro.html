@@ -5,7 +5,8 @@
       type="text/javascript"
       src="https://miro.com/app/static/boardsPicker.1.0.js"
     ></script>
-    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <!-- new <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script> -->
+    <script src="daily-iframe.js"></script>
     <!--
     This demo shows how you can use an Miro-powered whiteboard in a Daily Prebuilt room.
     
@@ -35,7 +36,8 @@
 
       window.main = async function () {
         window.call = DailyIframe.createFrame(dailyContainer, {
-          url: `https://${domain}.daily.co/${room}`,
+          //new url: `https://${domain}.daily.co/${room}`,
+          url: `https://daily-prebuilt-ui-static-2e4wet6jt-daily-co.vercel.app/${room}?domain=${domain}`,
           dailyConfig: {
             experimentalChromeVideoMuteLightOff: true,
             extensions: [
@@ -49,7 +51,7 @@
             ],
           },
         });
-
+        console.log("joining call...");
         await call.join();
       };
     </script>

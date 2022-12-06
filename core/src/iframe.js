@@ -1,7 +1,6 @@
 //import daily from "./core.js";
 import flexpanel from "./flexpanel.js";
 import callstate from "./callstate.js";
-import localstate from "./localstate.js";
 
 let fp, iframeEl, locationEl, call, state;
 let open = false;
@@ -33,7 +32,7 @@ export default self = {
   afterCreateFrame,
   configure: function (p) {
     Object.assign(props, p);
-    state = props.broadcast === true ? callstate : localstate;
+    state = callstate;
   },
   instanceMethods: {
     iframeState: function () {

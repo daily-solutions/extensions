@@ -6,6 +6,10 @@ This repo is being restructured! For now, check out the following folders for th
 - `/core` for the Core module necessary for any app using Extensions
 - `/extensions` for the Extensions themselves
 
+These can all be managed using Yarn Workspaces. To install all dependencies, just run `yarn install` from the root folder of this project.
+
+To try a particular extension, you can run its workspace `dev` script. For example, run `yarn workspaces @daily-labs/miro-extension dev` to start the dev server for the Miro extension, then visit `http://localhost:5173/demo/miro.html` to try it. (You may need a different port number, depending on what the terminal says.)
+
 ---
 
 Extensions are JavaScript modules that extend the functionality of [Daily Prebuilt](https://docs.daily.co/guides/products/prebuilt). Want to put a whiteboard next to Prebuilt in your app? Try the Miro or Whiteboard.chat extension. Want to use CometChat instead of Daily's built-in chat? There's an extension for that (soon).
