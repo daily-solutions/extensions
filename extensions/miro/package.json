@@ -20,7 +20,7 @@
     "vite": "^3.0.0"
   },
   "peerDependencies": {
-    "@daily-labs/daily": "^0.1.6"
+    "@daily-labs/daily": "*"
   },
   "dependencies": {}
 }

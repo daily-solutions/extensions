@@ -6,7 +6,7 @@
       src="https://miro.com/app/static/boardsPicker.1.0.js"
     ></script>
     <!-- new <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script> -->
-    <script src="daily-iframe.js"></script>
+    <!-- new <script src="daily-iframe.js"></script> -->
     <!--
     This demo shows how you can use an Miro-powered whiteboard in a Daily Prebuilt room.
     
@@ -31,13 +31,15 @@
       const urlParams = new URLSearchParams(window.location.search);
       const domain = urlParams.get("domain") || "chad-hq";
       const room = urlParams.get("room") || "extensions";
+      const t = urlParams.get("t");
       const clientId = urlParams.get("clientId") || "3458764531539295370";
       const anonymous = urlParams.get("anonymous")?.toLowerCase() === "true";
 
       window.main = async function () {
         window.call = DailyIframe.createFrame(dailyContainer, {
           //new url: `https://${domain}.daily.co/${room}`,
-          url: `https://daily-prebuilt-ui-static-2e4wet6jt-daily-co.vercel.app/${room}?domain=${domain}`,
+          url: `https://daily-prebuilt-ui-static-436v8ds1g-daily-co.vercel.app/${room}?domain=${domain}&t=${t}`,
+          //url: "http://localhost:3009/howdy?domain=chad-hq.staging&customHost=cb-daily-extensions.ngrok.io:8000",
           dailyConfig: {
             experimentalChromeVideoMuteLightOff: true,
             extensions: [

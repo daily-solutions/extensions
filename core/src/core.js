@@ -31,6 +31,10 @@ function createFrame(parentEl, properties) {
   });
 
   const dailyCall = DailyIframe.createFrame(parentEl, properties);
+  console.log(
+    "updateCustomIntegrations function is: ",
+    dailyCall.updateCustomIntegrations
+  );
 
   // configure core components
   callstate.afterCreateFrame(dailyCall);

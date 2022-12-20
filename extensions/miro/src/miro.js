@@ -14,13 +14,8 @@ async function getTokenFromServer() {
 
 function handleMiroButton(call) {
   if (iframeOpen === true) {
-    // we have a board picked; just hide it
-    //new call.hideIframe();
-    call.udpateCustomIntegrations({});
+    call.updateCustomIntegrations({});
     iframeOpen = false;
-    //new} else if (s.url !== "about:blank") {
-    // then we already have a board picked; show it again
-    //new  call.showIframe();
   } else {
     console.log("Selecting Miro board...");
     const boardProps = {
@@ -29,12 +24,13 @@ function handleMiroButton(call) {
       action: "access-link",
       success: (result) => {
         console.log("Selected Miro board: ", result);
-        //new call.openIframe(result.accessLink);
         call.updateCustomIntegrations({
-          location: "main",
-          name: "Miro Whiteboard",
-          shared: true,
-          src: result.accessLink,
+          miro: {
+            location: "main",
+            name: "Miro",
+            shared: true,
+            src: result.accessLink.replace("http://", "https://"),
+          },
         });
       },
     };
