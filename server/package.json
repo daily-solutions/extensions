@@ -5,7 +5,7 @@
   "main": "server.js",
   "bin": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "PORT=3005 node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

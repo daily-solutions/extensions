@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "description": "A variety of tools for exending the functionality of the Daily platform",
   "main": "server.js",
+  "private": true,
   "scripts": {
-    "start": "node server.js",
-    "format": "prettier --write ."
+    "start": "yarn workspace @daily-labs/ext-server start"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -20,6 +20,11 @@
   "repository": {
     "url": "https://github.com/daily-demos/extensions"
   },
+  "workspaces": [
+    "core",
+    "server",
+    "extensions/*"
+  ],
   "license": "BSD",
   "devDependencies": {
     "prettier": "2.7.1"
